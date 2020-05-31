@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="ha2">
 <meta property="og:description" content="1234user@ubuntu:~/workspace/pwn$ ldd b00ks 	linux-vdso.so.1 =&amp;gt;  (0x00007fff593ea000)	libc.so.6 =&amp;gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7856f38000)	/lib64/ld-linux-x86-64.so.2 (0x00007f785750">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-28T09:28:50.549Z">
+<meta property="og:updated_time" content="2019-03-28T10:34:57.927Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="加载指定libc">
 <meta name="twitter:description" content="1234user@ubuntu:~/workspace/pwn$ ldd b00ks 	linux-vdso.so.1 =&amp;gt;  (0x00007fff593ea000)	libc.so.6 =&amp;gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7856f38000)	/lib64/ld-linux-x86-64.so.2 (0x00007f785750">
@@ -335,7 +335,9 @@
 <hr>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~/workspace/pwn$ LD_PRELOAD=/home/user/workspace/pwn/libc.so.6 ./b00ks</span><br><span class="line">Welcome to ASISCTF book library</span><br><span class="line">Enter author name:</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~$ cat /proc/4000/maps</span><br><span class="line">55984bab5000-55984bab7000 r-xp 00000000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">55984bcb6000-55984bcb7000 r--p 00001000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">55984bcb7000-55984bcb8000 rw-p 00002000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">7fef0e0ec000-7fef0e2ac000 r-xp 00000000 08:01 412441                     /home/user/workspace/pwn/libc.so.6</span><br><span class="line">7fef0e2ac000-7fef0e4ac000 ---p 001c0000 08:01 412441                     /home/user/workspace/pwn/libc.so.6</span><br><span class="line">7fef0e4ac000-7fef0e4b0000 r--p 001c0000 08:01 412441                     /home/user/workspace/pwn/libc.so.6</span><br><span class="line">7fef0e4b0000-7fef0e4b2000 rw-p 001c4000 08:01 412441                     /home/user/workspace/pwn/libc.so.6</span><br><span class="line">7fef0e4b2000-7fef0e4b6000 rw-p 00000000 00:00 0 </span><br><span class="line">7fef0e4b6000-7fef0e4dc000 r-xp 00000000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7fef0e6d8000-7fef0e6db000 rw-p 00000000 00:00 0 </span><br><span class="line">7fef0e6db000-7fef0e6dc000 r--p 00025000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7fef0e6dc000-7fef0e6dd000 rw-p 00026000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7fef0e6dd000-7fef0e6de000 rw-p 00000000 00:00 0 </span><br><span class="line">7ffd24df6000-7ffd24e17000 rw-p 00000000 00:00 0                          [stack]</span><br><span class="line">7ffd24e6c000-7ffd24e6f000 r--p 00000000 00:00 0                          [vvar]</span><br><span class="line">7ffd24e6f000-7ffd24e71000 r-xp 00000000 00:00 0                          [vdso]</span><br><span class="line">ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]</span><br></pre></td></tr></table></figure>
-<h2 id="可以看得出来，确实加载了指定的libc"><a href="#可以看得出来，确实加载了指定的libc" class="headerlink" title="可以看得出来，确实加载了指定的libc"></a>可以看得出来，确实加载了指定的libc</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~/workspace/pwn$ ./b00ks</span><br><span class="line">Welcome to ASISCTF book library</span><br><span class="line">Enter author name:</span><br></pre></td></tr></table></figure>
+<p>可以看得出来，确实加载了指定的libc</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~/workspace/pwn$ ./b00ks</span><br><span class="line">Welcome to ASISCTF book library</span><br><span class="line">Enter author name:</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~$ cat /proc/4017/maps</span><br><span class="line">55ebdcb5e000-55ebdcb60000 r-xp 00000000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">55ebdcd5f000-55ebdcd60000 r--p 00001000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">55ebdcd60000-55ebdcd61000 rw-p 00002000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">7f5f2f386000-7f5f2f546000 r-xp 00000000 08:01 1075242                    /lib/x86_64-linux-gnu/libc-2.23.so</span><br><span class="line">7f5f2f546000-7f5f2f746000 ---p 001c0000 08:01 1075242                    /lib/x86_64-linux-gnu/libc-2.23.so</span><br><span class="line">7f5f2f746000-7f5f2f74a000 r--p 001c0000 08:01 1075242                    /lib/x86_64-linux-gnu/libc-2.23.so</span><br><span class="line">7f5f2f74a000-7f5f2f74c000 rw-p 001c4000 08:01 1075242                    /lib/x86_64-linux-gnu/libc-2.23.so</span><br><span class="line">7f5f2f74c000-7f5f2f750000 rw-p 00000000 00:00 0 </span><br><span class="line">7f5f2f750000-7f5f2f776000 r-xp 00000000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7f5f2f956000-7f5f2f959000 rw-p 00000000 00:00 0 </span><br><span class="line">7f5f2f975000-7f5f2f976000 r--p 00025000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7f5f2f976000-7f5f2f977000 rw-p 00026000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7f5f2f977000-7f5f2f978000 rw-p 00000000 00:00 0 </span><br><span class="line">7ffc3bcc1000-7ffc3bce2000 rw-p 00000000 00:00 0                          [stack]</span><br><span class="line">7ffc3bcf1000-7ffc3bcf4000 r--p 00000000 00:00 0                          [vvar]</span><br><span class="line">7ffc3bcf4000-7ffc3bcf6000 r-xp 00000000 00:00 0                          [vdso]</span><br><span class="line">ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]</span><br></pre></td></tr></table></figure>
       
     </div>
@@ -426,17 +428,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -451,7 +444,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -488,22 +481,6 @@
       </section>
 
       
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#可以看得出来，确实加载了指定的libc"><span class="nav-number">1.</span> <span class="nav-text">可以看得出来，确实加载了指定的libc</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
 
       
 
@@ -517,7 +494,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
