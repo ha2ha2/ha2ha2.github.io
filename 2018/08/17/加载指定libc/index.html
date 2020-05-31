@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="1234user@ubuntu:~/workspace/pwn$ ldd b00ks 	linux-vdso.so.1 =&amp;gt;  (0x00007fff593ea000)	libc.so.6 =&amp;gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7856f38000)	/lib64/ld-linux-x86-64.so.2 (0x00007f785750">
-<meta name="keywords" content="pwn">
+<meta name="description" content="1234user@ubuntu:~&#x2F;workspace&#x2F;pwn$ ldd b00ks 	linux-vdso.so.1 &#x3D;&gt;  (0x00007fff593ea000)	libc.so.6 &#x3D;&gt; &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc.so.6 (0x00007f7856f38000)	&#x2F;li">
 <meta property="og:type" content="article">
 <meta property="og:title" content="加载指定libc">
-<meta property="og:url" content="http://yoursite.com/2018/08/17/加载指定libc/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/08/17/%E5%8A%A0%E8%BD%BD%E6%8C%87%E5%AE%9Alibc/index.html">
 <meta property="og:site_name" content="ha2">
-<meta property="og:description" content="1234user@ubuntu:~/workspace/pwn$ ldd b00ks 	linux-vdso.so.1 =&amp;gt;  (0x00007fff593ea000)	libc.so.6 =&amp;gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7856f38000)	/lib64/ld-linux-x86-64.so.2 (0x00007f785750">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-28T10:34:57.927Z">
+<meta property="og:description" content="1234user@ubuntu:~&#x2F;workspace&#x2F;pwn$ ldd b00ks 	linux-vdso.so.1 &#x3D;&gt;  (0x00007fff593ea000)	libc.so.6 &#x3D;&gt; &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc.so.6 (0x00007f7856f38000)	&#x2F;li">
+<meta property="article:published_time" content="2018-08-17T15:47:48.000Z">
+<meta property="article:modified_time" content="2019-03-28T10:34:57.927Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="pwn">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="加载指定libc">
-<meta name="twitter:description" content="1234user@ubuntu:~/workspace/pwn$ ldd b00ks 	linux-vdso.so.1 =&amp;gt;  (0x00007fff593ea000)	libc.so.6 =&amp;gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7856f38000)	/lib64/ld-linux-x86-64.so.2 (0x00007f785750">
 
 
 
@@ -136,7 +135,7 @@
 
 
 
-</head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
@@ -182,7 +181,7 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/%20" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -192,7 +191,7 @@
       
         
         <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
+          <a href="/about/%20" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
@@ -202,7 +201,7 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/tags/%20" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -222,7 +221,7 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/archives/%20" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -263,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/17/加载指定libc/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/17/%E5%8A%A0%E8%BD%BD%E6%8C%87%E5%AE%9Alibc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ha2">
@@ -330,15 +329,19 @@
       
 
       
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~/workspace/pwn$ ldd b00ks </span><br><span class="line">	linux-vdso.so.1 =&gt;  (0x00007fff593ea000)</span><br><span class="line">	libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f7856f38000)</span><br><span class="line">	/lib64/ld-linux-x86-64.so.2 (0x00007f7857505000)</span><br></pre></td></tr></table></figure>
-<p>elf文件运行加载指定libc，执行以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LD_PRELOAD=/path/to/libc.so ./binary</span><br></pre></td></tr></table></figure></p>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn$ ldd b00ks </span><br><span class="line">	linux-vdso.so.1 &#x3D;&gt;  (0x00007fff593ea000)</span><br><span class="line">	libc.so.6 &#x3D;&gt; &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc.so.6 (0x00007f7856f38000)</span><br><span class="line">	&#x2F;lib64&#x2F;ld-linux-x86-64.so.2 (0x00007f7857505000)</span><br></pre></td></tr></table></figure>
+
+<p>elf文件运行加载指定libc，执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LD_PRELOAD&#x3D;&#x2F;path&#x2F;to&#x2F;libc.so .&#x2F;binary</span><br></pre></td></tr></table></figure>
+
 <hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~/workspace/pwn$ LD_PRELOAD=/home/user/workspace/pwn/libc.so.6 ./b00ks</span><br><span class="line">Welcome to ASISCTF book library</span><br><span class="line">Enter author name:</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~$ cat /proc/4000/maps</span><br><span class="line">55984bab5000-55984bab7000 r-xp 00000000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">55984bcb6000-55984bcb7000 r--p 00001000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">55984bcb7000-55984bcb8000 rw-p 00002000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">7fef0e0ec000-7fef0e2ac000 r-xp 00000000 08:01 412441                     /home/user/workspace/pwn/libc.so.6</span><br><span class="line">7fef0e2ac000-7fef0e4ac000 ---p 001c0000 08:01 412441                     /home/user/workspace/pwn/libc.so.6</span><br><span class="line">7fef0e4ac000-7fef0e4b0000 r--p 001c0000 08:01 412441                     /home/user/workspace/pwn/libc.so.6</span><br><span class="line">7fef0e4b0000-7fef0e4b2000 rw-p 001c4000 08:01 412441                     /home/user/workspace/pwn/libc.so.6</span><br><span class="line">7fef0e4b2000-7fef0e4b6000 rw-p 00000000 00:00 0 </span><br><span class="line">7fef0e4b6000-7fef0e4dc000 r-xp 00000000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7fef0e6d8000-7fef0e6db000 rw-p 00000000 00:00 0 </span><br><span class="line">7fef0e6db000-7fef0e6dc000 r--p 00025000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7fef0e6dc000-7fef0e6dd000 rw-p 00026000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7fef0e6dd000-7fef0e6de000 rw-p 00000000 00:00 0 </span><br><span class="line">7ffd24df6000-7ffd24e17000 rw-p 00000000 00:00 0                          [stack]</span><br><span class="line">7ffd24e6c000-7ffd24e6f000 r--p 00000000 00:00 0                          [vvar]</span><br><span class="line">7ffd24e6f000-7ffd24e71000 r-xp 00000000 00:00 0                          [vdso]</span><br><span class="line">ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn$ LD_PRELOAD&#x3D;&#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;libc.so.6 .&#x2F;b00ks</span><br><span class="line">Welcome to ASISCTF book library</span><br><span class="line">Enter author name:</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~$ cat &#x2F;proc&#x2F;4000&#x2F;maps</span><br><span class="line">55984bab5000-55984bab7000 r-xp 00000000 08:01 450826                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;b00ks</span><br><span class="line">55984bcb6000-55984bcb7000 r--p 00001000 08:01 450826                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;b00ks</span><br><span class="line">55984bcb7000-55984bcb8000 rw-p 00002000 08:01 450826                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;b00ks</span><br><span class="line">7fef0e0ec000-7fef0e2ac000 r-xp 00000000 08:01 412441                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;libc.so.6</span><br><span class="line">7fef0e2ac000-7fef0e4ac000 ---p 001c0000 08:01 412441                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;libc.so.6</span><br><span class="line">7fef0e4ac000-7fef0e4b0000 r--p 001c0000 08:01 412441                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;libc.so.6</span><br><span class="line">7fef0e4b0000-7fef0e4b2000 rw-p 001c4000 08:01 412441                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;libc.so.6</span><br><span class="line">7fef0e4b2000-7fef0e4b6000 rw-p 00000000 00:00 0 </span><br><span class="line">7fef0e4b6000-7fef0e4dc000 r-xp 00000000 08:01 1075240                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;ld-2.23.so</span><br><span class="line">7fef0e6d8000-7fef0e6db000 rw-p 00000000 00:00 0 </span><br><span class="line">7fef0e6db000-7fef0e6dc000 r--p 00025000 08:01 1075240                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;ld-2.23.so</span><br><span class="line">7fef0e6dc000-7fef0e6dd000 rw-p 00026000 08:01 1075240                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;ld-2.23.so</span><br><span class="line">7fef0e6dd000-7fef0e6de000 rw-p 00000000 00:00 0 </span><br><span class="line">7ffd24df6000-7ffd24e17000 rw-p 00000000 00:00 0                          [stack]</span><br><span class="line">7ffd24e6c000-7ffd24e6f000 r--p 00000000 00:00 0                          [vvar]</span><br><span class="line">7ffd24e6f000-7ffd24e71000 r-xp 00000000 00:00 0                          [vdso]</span><br><span class="line">ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]</span><br></pre></td></tr></table></figure>
 <p>可以看得出来，确实加载了指定的libc</p>
 <hr>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~/workspace/pwn$ ./b00ks</span><br><span class="line">Welcome to ASISCTF book library</span><br><span class="line">Enter author name:</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~$ cat /proc/4017/maps</span><br><span class="line">55ebdcb5e000-55ebdcb60000 r-xp 00000000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">55ebdcd5f000-55ebdcd60000 r--p 00001000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">55ebdcd60000-55ebdcd61000 rw-p 00002000 08:01 450826                     /home/user/workspace/pwn/b00ks</span><br><span class="line">7f5f2f386000-7f5f2f546000 r-xp 00000000 08:01 1075242                    /lib/x86_64-linux-gnu/libc-2.23.so</span><br><span class="line">7f5f2f546000-7f5f2f746000 ---p 001c0000 08:01 1075242                    /lib/x86_64-linux-gnu/libc-2.23.so</span><br><span class="line">7f5f2f746000-7f5f2f74a000 r--p 001c0000 08:01 1075242                    /lib/x86_64-linux-gnu/libc-2.23.so</span><br><span class="line">7f5f2f74a000-7f5f2f74c000 rw-p 001c4000 08:01 1075242                    /lib/x86_64-linux-gnu/libc-2.23.so</span><br><span class="line">7f5f2f74c000-7f5f2f750000 rw-p 00000000 00:00 0 </span><br><span class="line">7f5f2f750000-7f5f2f776000 r-xp 00000000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7f5f2f956000-7f5f2f959000 rw-p 00000000 00:00 0 </span><br><span class="line">7f5f2f975000-7f5f2f976000 r--p 00025000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7f5f2f976000-7f5f2f977000 rw-p 00026000 08:01 1075240                    /lib/x86_64-linux-gnu/ld-2.23.so</span><br><span class="line">7f5f2f977000-7f5f2f978000 rw-p 00000000 00:00 0 </span><br><span class="line">7ffc3bcc1000-7ffc3bce2000 rw-p 00000000 00:00 0                          [stack]</span><br><span class="line">7ffc3bcf1000-7ffc3bcf4000 r--p 00000000 00:00 0                          [vvar]</span><br><span class="line">7ffc3bcf4000-7ffc3bcf6000 r-xp 00000000 00:00 0                          [vdso]</span><br><span class="line">ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn$ .&#x2F;b00ks</span><br><span class="line">Welcome to ASISCTF book library</span><br><span class="line">Enter author name:</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~$ cat &#x2F;proc&#x2F;4017&#x2F;maps</span><br><span class="line">55ebdcb5e000-55ebdcb60000 r-xp 00000000 08:01 450826                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;b00ks</span><br><span class="line">55ebdcd5f000-55ebdcd60000 r--p 00001000 08:01 450826                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;b00ks</span><br><span class="line">55ebdcd60000-55ebdcd61000 rw-p 00002000 08:01 450826                     &#x2F;home&#x2F;user&#x2F;workspace&#x2F;pwn&#x2F;b00ks</span><br><span class="line">7f5f2f386000-7f5f2f546000 r-xp 00000000 08:01 1075242                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc-2.23.so</span><br><span class="line">7f5f2f546000-7f5f2f746000 ---p 001c0000 08:01 1075242                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc-2.23.so</span><br><span class="line">7f5f2f746000-7f5f2f74a000 r--p 001c0000 08:01 1075242                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc-2.23.so</span><br><span class="line">7f5f2f74a000-7f5f2f74c000 rw-p 001c4000 08:01 1075242                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;libc-2.23.so</span><br><span class="line">7f5f2f74c000-7f5f2f750000 rw-p 00000000 00:00 0 </span><br><span class="line">7f5f2f750000-7f5f2f776000 r-xp 00000000 08:01 1075240                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;ld-2.23.so</span><br><span class="line">7f5f2f956000-7f5f2f959000 rw-p 00000000 00:00 0 </span><br><span class="line">7f5f2f975000-7f5f2f976000 r--p 00025000 08:01 1075240                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;ld-2.23.so</span><br><span class="line">7f5f2f976000-7f5f2f977000 rw-p 00026000 08:01 1075240                    &#x2F;lib&#x2F;x86_64-linux-gnu&#x2F;ld-2.23.so</span><br><span class="line">7f5f2f977000-7f5f2f978000 rw-p 00000000 00:00 0 </span><br><span class="line">7ffc3bcc1000-7ffc3bce2000 rw-p 00000000 00:00 0                          [stack]</span><br><span class="line">7ffc3bcf1000-7ffc3bcf4000 r--p 00000000 00:00 0                          [vvar]</span><br><span class="line">7ffc3bcf4000-7ffc3bcf6000 r-xp 00000000 00:00 0                          [vdso]</span><br><span class="line">ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -442,9 +445,9 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
