@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="12345678910111213141516171819202122232425262728293031#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include&lt;string.h&gt;int	main()&amp;#123;	fprintf(stderr,	&quot;Allocating	3	buffers.\n&quot;);	char">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.fastbin_dup">
+<meta property="og:url" content="http://yoursite.com/2019/04/01/2.fastbin_dup/index.html">
+<meta property="og:site_name" content="ha2">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include&lt;string.h&gt;int	main()&amp;#123;	fprintf(stderr,	&quot;Allocating	3	buffers.\n&quot;);	char">
+<meta property="article:published_time" content="2019-03-31T16:00:01.000Z">
+<meta property="article:modified_time" content="2021-03-15T03:45:06.504Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/01/2.fastbin_dup/"/>
+
+
+
+
+
+  <title>2.fastbin_dup | ha2</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/01/2.fastbin_dup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2.fastbin_dup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-01T00:00:01+08:00">
+                2019-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index">
+                    <span itemprop="name">pwn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line">#include&lt;string.h&gt;</span><br><span class="line">int	main()&#123;</span><br><span class="line">	fprintf(stderr,	&quot;Allocating	3	buffers.\n&quot;);</span><br><span class="line">	char *a	&#x3D; malloc(9);</span><br><span class="line">	char *b	&#x3D; malloc(9);</span><br><span class="line">	char *c	&#x3D; malloc(9);</span><br><span class="line">	strcpy(a,&quot;AAAAAAAA&quot;);</span><br><span class="line">	strcpy(b,&quot;BBBBBBBB&quot;);</span><br><span class="line">	strcpy(c,&quot;CCCCCCCC&quot;);</span><br><span class="line">	fprintf(stderr,	&quot;1st malloc(9) %p points to %s\n&quot;,a,a);</span><br><span class="line">	fprintf(stderr,	&quot;2nd malloc(9) %p points to %s\n&quot;,b,b);</span><br><span class="line">	fprintf(stderr,	&quot;3rd malloc(9) %p points to %s\n&quot;,c,c);</span><br><span class="line">	fprintf(stderr,	&quot;Freeing the first one %p.\n&quot;,	a);</span><br><span class="line">	free(a);</span><br><span class="line">	fprintf(stderr,	&quot;Then freeing another one %p.\n&quot;,	b);</span><br><span class="line">	free(b);</span><br><span class="line">	fprintf(stderr,	&quot;Freeing the first one %p again.\n&quot;,a);</span><br><span class="line">	free(a);</span><br><span class="line">	fprintf(stderr,	&quot;Allocating	3 buffers.\n&quot;);</span><br><span class="line">	char *d	&#x3D; malloc(9);</span><br><span class="line">	char *e	&#x3D; malloc(9);</span><br><span class="line">	char *f	&#x3D; malloc(9);</span><br><span class="line">	strcpy(d,&quot;DDDDDDDD&quot;);</span><br><span class="line">	fprintf(stderr,	&quot;4st	malloc(9)	%p	points to %s the first time\n&quot;,d,d);</span><br><span class="line">	strcpy(e,&quot;EEEEEEEE&quot;);</span><br><span class="line">	fprintf(stderr,	&quot;5nd malloc(9) %p points to %s\n&quot;,e,e);</span><br><span class="line">	strcpy(f,&quot;FFFFFFFF&quot;);</span><br><span class="line">	fprintf(stderr,	&quot;6rd malloc(9) %p points to %s the second time\n&quot;,f,f);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>源代码中可以看出， 在前面把a free了两遍。  </p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn&#x2F;fastbin_dup$ vim fastbin_dup.c </span><br><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn&#x2F;fastbin_dup$ gcc -g fastbin_dup.c -o fastbin_dup</span><br><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn&#x2F;fastbin_dup$ .&#x2F;fastbin_dup </span><br><span class="line">Allocating	3	buffers.</span><br><span class="line">1st malloc(9) 0x6f4010 points to AAAAAAAA</span><br><span class="line">2nd malloc(9) 0x6f4030 points to BBBBBBBB</span><br><span class="line">3rd malloc(9) 0x6f4050 points to CCCCCCCC</span><br><span class="line">Freeing the first one 0x6f4010.</span><br><span class="line">Then freeing another one 0x6f4030.</span><br><span class="line">Freeing the first one 0x6f4010 again.</span><br><span class="line">Allocating	3 buffers.</span><br><span class="line">4st	malloc(9)	0x6f4010	points to DDDDDDDD the first time</span><br><span class="line">5nd malloc(9) 0x6f4030 points to EEEEEEEE</span><br><span class="line">6rd malloc(9) 0x6f4010 points to FFFFFFFF the second time</span><br><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn&#x2F;fastbin_dup$</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>==这个程序展示了利用fastbins的double-free攻击，可以泄漏出一块已经被分配的内存指针。fastbins可以看成一个LIFO的栈，使用单链表实现，通过    fastbin-&gt;fd来遍历fastbins。由于    free的过程会对free list做检查，我们不能连续两次free同一个chunk，所以这里在两次free之间，增加了一次对其他chunk的free    过程，从而绕过检查顺利执行。然后再malloc三次，就在同一个地址malloc了两次，也就有了两个指向同一块内存区域的指针。==</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*	Check that the top of the bin is not the record we are going to add</span><br><span class="line">    (i.e.,	double	free).		*&#x2F;</span><br><span class="line">    if(__builtin_expect	(old &#x3D;&#x3D; p, 0))</span><br><span class="line">	&#123;</span><br><span class="line">		errstr &#x3D; &quot;double free or corruption (fasttop)&quot;;</span><br><span class="line">		goto errout;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x01-三次malloc后"><a href="#0x01-三次malloc后" class="headerlink" title="0x01:三次malloc后"></a>0x01:三次malloc后</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: 0x602060</span><br><span class="line">Last Remainder: 0</span><br><span class="line"></span><br><span class="line">0x602000 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602020 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602040 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x20fa1</span><br><span class="line">&#125;</span><br><span class="line">0x602060 PREV_INUSE &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x20fa1, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x0</span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line">0x20: 0x0</span><br><span class="line">0x30: 0x0</span><br><span class="line">0x40: 0x0</span><br><span class="line">0x50: 0x0</span><br><span class="line">0x60: 0x0</span><br><span class="line">0x70: 0x0</span><br><span class="line">0x80: 0x0</span><br><span class="line">unsortedbin</span><br><span class="line">all: 0x0</span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x02-free-a"><a href="#0x02-free-a" class="headerlink" title="0x02:free(a)"></a>0x02:free(a)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: 0x602060</span><br><span class="line">Last Remainder: 0</span><br><span class="line"></span><br><span class="line">0x602000 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602020 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4242424242424242, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602040 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4343434343434343, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x20fa1</span><br><span class="line">&#125;</span><br><span class="line">0x602060 PREV_INUSE &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x20fa1, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x0</span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line">0x20: 0x602000 ◂— 0x0</span><br><span class="line">0x30: 0x0</span><br><span class="line">0x40: 0x0</span><br><span class="line">0x50: 0x0</span><br><span class="line">0x60: 0x0</span><br><span class="line">0x70: 0x0</span><br><span class="line">0x80: 0x0</span><br><span class="line">unsortedbin</span><br><span class="line">all: 0x0</span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>被free后，fd 原本被填充的AAAAAAAA被清零，这个chunk也被加入到fastbins中。</p>
+</blockquote>
+<p>但是这个chunk a被free后，并==没有使chunk b的pre_size和size的pre_inuse改变==，不像上一篇的first_fit那个free后chunk b的字段被改变，也没放到unsorted bins中，而是被放到了fastbins中</p>
+<h3 id="0x03-free-b"><a href="#0x03-free-b" class="headerlink" title="0x03:free(b)"></a>0x03:free(b)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: 0x602060</span><br><span class="line">Last Remainder: 0</span><br><span class="line"></span><br><span class="line">0x602000 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602020 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x602000, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602040 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4343434343434343, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x20fa1</span><br><span class="line">&#125;</span><br><span class="line">0x602060 PREV_INUSE &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x20fa1, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x0</span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line">0x20: 0x602020 —▸ 0x602000 ◂— 0x0</span><br><span class="line">0x30: 0x0</span><br><span class="line">0x40: 0x0</span><br><span class="line">0x50: 0x0</span><br><span class="line">0x60: 0x0</span><br><span class="line">0x70: 0x0</span><br><span class="line">0x80: 0x0</span><br><span class="line">unsortedbin</span><br><span class="line">all: 0x0</span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+<p>==chunk b被放入fastbins中，成为新的表头，chunk b的fd字段里存着上一个chunk的地址，即chunk a 的地址：0x602000==</p>
+<h3 id="0x04-free-a"><a href="#0x04-free-a" class="headerlink" title="0x04:free(a)"></a>0x04:free(a)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: 0x602060</span><br><span class="line">Last Remainder: 0</span><br><span class="line"></span><br><span class="line">0x602000 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x602020, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602020 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x602000, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602040 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4343434343434343, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x20fa1</span><br><span class="line">&#125;</span><br><span class="line">0x602060 PREV_INUSE &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x20fa1, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x0</span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line">0x20: 0x602000 —▸ 0x602020 ◂— 0x602000</span><br><span class="line">0x30: 0x0</span><br><span class="line">0x40: 0x0</span><br><span class="line">0x50: 0x0</span><br><span class="line">0x60: 0x0</span><br><span class="line">0x70: 0x0</span><br><span class="line">0x80: 0x0</span><br><span class="line">unsortedbin</span><br><span class="line">all: 0x0</span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>又再次free了 a，此时fastbins的表头变成了chunk a的地址，即0x602000，它的fd里的值是上一个表头里的值，即chunk b的地址，即0x602020。chunk b里的fd值依旧是 chunk a 的值。形成了一个闭环 a -&gt; b -&gt; a </p>
+</blockquote>
+<h3 id="0x05-malloc"><a href="#0x05-malloc" class="headerlink" title="0x05:malloc"></a>0x05:malloc</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">char *d	&#x3D; malloc(9);</span><br><span class="line">char *e	&#x3D; malloc(9);</span><br><span class="line">char *f	&#x3D; malloc(9);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: 0x602060</span><br><span class="line">Last Remainder: 0</span><br><span class="line"></span><br><span class="line">0x602000 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x602020, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602020 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x602000, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602040 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4343434343434343, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x20fa1</span><br><span class="line">&#125;</span><br><span class="line">0x602060 PREV_INUSE &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x20fa1, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x0</span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line">0x20: 0x602020 —▸ 0x602000 ◂— 0x602020 &#x2F;* &#39;  &#96;&#39; *&#x2F;</span><br><span class="line">0x30: 0x0</span><br><span class="line">0x40: 0x0</span><br><span class="line">0x50: 0x0</span><br><span class="line">0x60: 0x0</span><br><span class="line">0x70: 0x0</span><br><span class="line">0x80: 0x0</span><br><span class="line">unsortedbin</span><br><span class="line">all: 0x0</span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="0x06"><a href="#0x06" class="headerlink" title="0x06:"></a>0x06:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strcpy(d,&quot;DDDDDDDD&quot;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: 0x602060</span><br><span class="line">Last Remainder: 0</span><br><span class="line"></span><br><span class="line">0x602000 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4444444444444444, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602020 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x602000, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602040 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4343434343434343, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x20fa1</span><br><span class="line">&#125;</span><br><span class="line">0x602060 PREV_INUSE &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x20fa1, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x0</span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bisn</span><br><span class="line">Undefined command: &quot;bisn&quot;.  Try &quot;help&quot;.</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line">0x20: 0x602020 —▸ 0x602000 ◂— &#39;DDDDDDDD&#39;</span><br><span class="line">0x30: 0x0</span><br><span class="line">0x40: 0x0</span><br><span class="line">0x50: 0x0</span><br><span class="line">0x60: 0x0</span><br><span class="line">0x70: 0x0</span><br><span class="line">0x80: 0x0</span><br><span class="line">unsortedbin</span><br><span class="line">all: 0x0</span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strcpy(e,&quot;EEEEEEEE&quot;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: 0x602060</span><br><span class="line">Last Remainder: 0</span><br><span class="line"></span><br><span class="line">0x602000 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4444444444444444, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602020 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4545454545454545, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602040 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4343434343434343, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x20fa1</span><br><span class="line">&#125;</span><br><span class="line">0x602060 PREV_INUSE &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x20fa1, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x0</span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line">0x20: 0x602020 ◂— &#39;EEEEEEEE&#39;</span><br><span class="line">0x30: 0x0</span><br><span class="line">0x40: 0x0</span><br><span class="line">0x50: 0x0</span><br><span class="line">0x60: 0x0</span><br><span class="line">0x70: 0x0</span><br><span class="line">0x80: 0x0</span><br><span class="line">unsortedbin</span><br><span class="line">all: 0x0</span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strcpy(f,&quot;FFFFFFFF&quot;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: 0x602060</span><br><span class="line">Last Remainder: 0</span><br><span class="line"></span><br><span class="line">0x602000 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4646464646464646, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602020 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4545454545454545, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x21</span><br><span class="line">&#125;</span><br><span class="line">0x602040 FASTBIN &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x21, </span><br><span class="line">  fd &#x3D; 0x4343434343434343, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x20fa1</span><br><span class="line">&#125;</span><br><span class="line">0x602060 PREV_INUSE &#123;</span><br><span class="line">  prev_size &#x3D; 0x0, </span><br><span class="line">  size &#x3D; 0x20fa1, </span><br><span class="line">  fd &#x3D; 0x0, </span><br><span class="line">  bk &#x3D; 0x0, </span><br><span class="line">  fd_nextsize &#x3D; 0x0, </span><br><span class="line">  bk_nextsize &#x3D; 0x0</span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line">0x20: 0x602020 ◂— &#39;EEEEEEEE&#39;</span><br><span class="line">0x30: 0x0</span><br><span class="line">0x40: 0x0</span><br><span class="line">0x50: 0x0</span><br><span class="line">0x60: 0x0</span><br><span class="line">0x70: 0x0</span><br><span class="line">0x80: 0x0</span><br><span class="line">unsortedbin</span><br><span class="line">all: 0x0</span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+<p>这里把chunk a原来的”DDDDDDDD”覆盖为”FFFFFFFF”,即是说d指针与f指针指向同一个chunk mem处。</p>
+<blockquote>
+<p>所以通过double-free可以泄露出一个chunk的指针。  </p>
+</blockquote>
+<hr>
+<blockquote>
+<p>总结：<br>double-free的触发是：==连续==free==同==一个chunk。<br>可以通过double-free泄漏出一个堆块的指针。指向同一个内存区域的指针。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/01/first_fit%20other%20test/" rel="next" title="first_fit other test">
+                <i class="fa fa-chevron-left"></i> first_fit other test
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/01/3.fastbin_dup_into_stack/" rel="prev" title="3.fastbin_dup_into_stack">
+                3.fastbin_dup_into_stack <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+                <a href="/archives">             
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" target="_blank" rel="noopener" title="f1aming（٩（๑>◡<๑）۶）" target="_blank">f1aming（٩（๑>◡<๑）۶）</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.cnblogs.com/hun-ya/" title="昏鸦（我大哥）" target="_blank">昏鸦（我大哥）</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-三次malloc后"><span class="nav-number">1.</span> <span class="nav-text">0x01:三次malloc后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-free-a"><span class="nav-number">2.</span> <span class="nav-text">0x02:free(a)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-free-b"><span class="nav-number">3.</span> <span class="nav-text">0x03:free(b)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-free-a"><span class="nav-number">4.</span> <span class="nav-text">0x04:free(a)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-malloc"><span class="nav-number">5.</span> <span class="nav-text">0x05:malloc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06"><span class="nav-number">6.</span> <span class="nav-text">0x06:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

