@@ -8,8 +8,6 @@
 <html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>  
-<link rel="dns-prefetch" href="//cdn.bootcss.com" />
-<link rel="dns-prefetch" href="//cdn.mathjax.org" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 <meta name="theme-color" content="#222">
@@ -81,12 +79,12 @@
 
 
 
-<meta name="description" content="原本程序运行 1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ python boundary_attack.py  如果想要链接上远程服务器后关闭终端依旧运行请运行以下代码：在最前面加上一个nohup，最后面加上一个&amp; 1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ nohup pyth">
+<meta name="description" content="原本程序运行1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ python boundary_attack.py 如果想要链接上远程服务器后关闭终端依旧运行请运行以下代码：在最前面加上一个nohup，最后面加上一个&amp;1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ nohup python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="断开服务器连接，仍然继续运行程序">
 <meta property="og:url" content="http://yoursite.com/2021/09/21/%E2%88%9A%E6%96%AD%E5%BC%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9E%E6%8E%A5%EF%BC%8C%E4%BB%8D%E7%84%B6%E7%BB%A7%E7%BB%AD%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F/index.html">
 <meta property="og:site_name" content="ha2&#39;s blog">
-<meta property="og:description" content="原本程序运行 1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ python boundary_attack.py  如果想要链接上远程服务器后关闭终端依旧运行请运行以下代码：在最前面加上一个nohup，最后面加上一个&amp; 1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ nohup pyth">
+<meta property="og:description" content="原本程序运行1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ python boundary_attack.py 如果想要链接上远程服务器后关闭终端依旧运行请运行以下代码：在最前面加上一个nohup，最后面加上一个&amp;1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ nohup python">
 <meta property="article:published_time" content="2021-09-21T12:21:10.000Z">
 <meta property="article:modified_time" content="2021-09-23T12:21:37.799Z">
 <meta property="article:author" content="ha2">
@@ -353,19 +351,9 @@
       
 
       
-        <p>原本程序运行</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ python boundary_attack.py</span><br></pre></td></tr></table></figure>
-
-<p>如果想要链接上远程服务器后关闭终端依旧运行<br>请运行以下代码：在最前面加上一个nohup，最后面加上一个&amp;</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ nohup python boundary_attack.py &amp;</span><br></pre></td></tr></table></figure>
-<p>正常的话会有以下提示：看到之后回车就好</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ nohup: ignoring input <span class="keyword">and</span> appending output to `nohup.out<span class="string">'</span></span><br></pre></td></tr></table></figure>
-<p>忽略输入输出，将输出记录到nohup.out文件中<br>此时等待一会儿 便可看到有一个nohup.out多出来了<br>输出信息会写入这个文件中（PS：要稍等一会才会有内容写入，有缓存机制， 如果本身程序就有输出，nohup.out文件就会有内容了）</p>
-<p>如果不想等缓存机制，可以在执行nohup之前执行一条命令 export PYTHONUNBUFFERED=1，如下所示   </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ export PYTHONUNBUFFERED=<span class="number">1</span></span><br><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ nohup python boundary_attack.py &amp;</span><br></pre></td></tr></table></figure>
-
-
-
+        <p>原本程序运行<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ python boundary_attack.py</span><br></pre></td></tr></table></figure></p>
+<p>如果想要链接上远程服务器后关闭终端依旧运行<br>请运行以下代码：在最前面加上一个nohup，最后面加上一个&amp;<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ nohup python boundary_attack.py &amp;</span><br></pre></td></tr></table></figure><br>正常的话会有以下提示：看到之后回车就好<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ nohup: ignoring input <span class="keyword">and</span> appending output to `nohup.out<span class="string">'</span></span><br></pre></td></tr></table></figure><br>忽略输入输出，将输出记录到nohup.out文件中<br>此时等待一会儿 便可看到有一个nohup.out多出来了<br>输出信息会写入这个文件中（PS：要稍等一会才会有内容写入，有缓存机制， 如果本身程序就有输出，nohup.out文件就会有内容了）</p>
+<p>如果不想等缓存机制，可以在执行nohup之前执行一条命令 export PYTHONUNBUFFERED=1，如下所示<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ export PYTHONUNBUFFERED=<span class="number">1</span></span><br><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ nohup python boundary_attack.py &amp;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -747,6 +735,8 @@
   
 
   
+  
+
 
   
 
