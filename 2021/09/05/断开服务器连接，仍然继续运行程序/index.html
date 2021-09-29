@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="ha2&#39;s blog">
 <meta property="og:description" content="原本程序运行1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ python boundary_attack.py 如果想要链接上远程服务器后关闭终端依旧运行请运行以下代码：在最前面加上一个nohup，最后面加上一个&amp;1(MyPytorch) user:~&#x2F;Workspace&#x2F;Project&#x2F;Opt-attack$ nohup python">
 <meta property="article:published_time" content="2021-09-05T12:21:10.000Z">
-<meta property="article:modified_time" content="2021-09-29T02:12:17.596Z">
+<meta property="article:modified_time" content="2021-09-29T02:20:16.463Z">
 <meta property="article:author" content="ha2">
 <meta property="article:tag" content="服务器使用技巧">
 <meta name="twitter:card" content="summary">
@@ -365,6 +365,7 @@
         <p>原本程序运行<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ python boundary_attack.py</span><br></pre></td></tr></table></figure></p>
 <p>如果想要链接上远程服务器后关闭终端依旧运行<br>请运行以下代码：在最前面加上一个nohup，最后面加上一个&amp;<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ nohup python boundary_attack.py &amp;</span><br></pre></td></tr></table></figure><br>正常的话会有以下提示：看到之后回车就好<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ nohup: ignoring input <span class="keyword">and</span> appending output to `nohup.out<span class="string">'</span></span><br></pre></td></tr></table></figure><br>忽略输入输出，将输出记录到nohup.out文件中<br>此时等待一会儿 便可看到有一个nohup.out多出来了<br>输出信息会写入这个文件中（PS：要稍等一会才会有内容写入，有缓存机制， 如果本身程序就有输出，nohup.out文件就会有内容了）</p>
 <p>如果不想等缓存机制，可以在执行nohup之前执行一条命令 export PYTHONUNBUFFERED=1，如下所示<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ export PYTHONUNBUFFERED=<span class="number">1</span></span><br><span class="line">(MyPytorch) user:~/Workspace/Project/Opt-attack$ nohup python boundary_attack.py &amp;</span><br></pre></td></tr></table></figure></p>
+<p>【注】： export PYTHONUNBUFFERED=1只在当前命令窗口有效，每开一个对话都要重新输一下这个命令才会有效</p>
 
       
     </div>
