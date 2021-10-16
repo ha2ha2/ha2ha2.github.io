@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="ha2&#39;s blog">
 <meta property="og:description" content="踩坑之路001号坑问题描述： pychram 中 run一个程序test_attack.py，报错信息如下：     123456&quot;D:\Program Files (x86)\Anaconda3\envs\MyPytorch\python.exe&quot; &quot;D:\Program Files\JetBrains\PyCharm 2021.2.1\plugins\python\helpers\pychar">
 <meta property="article:published_time" content="2099-09-29T13:52:02.000Z">
-<meta property="article:modified_time" content="2021-10-02T10:04:29.542Z">
+<meta property="article:modified_time" content="2021-10-14T02:05:36.755Z">
 <meta property="article:author" content="ha2">
 <meta property="article:tag" content="踩坑之路">
 <meta name="twitter:card" content="summary">
@@ -360,11 +360,15 @@
 <p>由于pycharm中以pytest运行，它会默认把test、test_开头的.py文件当做单元测试。<br>需要修改文件名，修改文件test_attack.py 为attack.py ，再run，没问题了。  </p>
 </blockquote>
 <h3 id="Refer-to"><a href="#Refer-to" class="headerlink" title="Refer to"></a>Refer to</h3><p><a href="https://www.cnblogs.com/yoyoblogs/p/11232819.html" target="_blank" rel="noopener">https://www.cnblogs.com/yoyoblogs/p/11232819.html</a>   </p>
+<hr>
 <h2 id="002号坑"><a href="#002号坑" class="headerlink" title="002号坑"></a>002号坑</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><blockquote>
 <p>python 安装 RobustBench库的时候报错    </p>
 </blockquote>
 <p>安装命令<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install git+https://github.com/RobustBench/robustbench</span><br></pre></td></tr></table></figure><br>报错如下：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Complete output from <span class="keyword">command</span> <span class="keyword">python</span> setup.<span class="keyword">py</span> egg_info:</span><br><span class="line">Traceback (most recent <span class="keyword">call</span> <span class="keyword">last</span>):</span><br><span class="line">  File <span class="string">"&lt;string&gt;"</span>, <span class="built_in">line</span> <span class="number">1</span>, in <span class="symbol">&lt;module&gt;</span></span><br><span class="line">  File <span class="string">"balbabalba\setup.py"</span>, <span class="built_in">line</span> <span class="number">11</span>, in <span class="symbol">&lt;module&gt;</span></span><br><span class="line">    long_description=<span class="keyword">open</span>(<span class="string">'README.md'</span>).<span class="keyword">read</span>(),</span><br><span class="line">UnicodeDecodeError: UnicodeDecodeError: <span class="string">'gbk'</span> codec can<span class="string">'t decode byte balabbalbal我忘了</span></span><br></pre></td></tr></table></figure><br>README.md这个文件的编码有问题。   </p>
 <h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>1、<a href="https://github.com/RobustBench/robustbench" target="_blank" rel="noopener">https://github.com/RobustBench/robustbench</a>  把源码下载下来然后解压<br>2、将里面的README.md里面的内容全去掉，注意不能删掉README.md文件<br>3、再将这些解压了的文件 加压 成一个压缩包abcd.zip<br>4、进到上面这个压缩包abcd.zip的所在位置，在命令窗口执行pip install abcd.zip    </p>
+<hr>
+<h2 id="003号坑"><a href="#003号坑" class="headerlink" title="003号坑"></a>003号坑</h2><h3 id="问题描述：gpu上训练好之后保存的gpu模型在cpu上加载"><a href="#问题描述：gpu上训练好之后保存的gpu模型在cpu上加载" class="headerlink" title="问题描述：gpu上训练好之后保存的gpu模型在cpu上加载"></a>问题描述：gpu上训练好之后保存的gpu模型在cpu上加载</h3><p>保存信息如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RuntimeError: Attempting to deserialize object on a CUDA device but torch.cuda.is_available() <span class="keyword">is</span> <span class="literal">False</span>. If you are running on a CPU-only machine, please use torch.load <span class="keyword">with</span> map_location=torch.device(<span class="string">'cpu'</span>) to map your storages to the CPU.</span><br></pre></td></tr></table></figure><br>源码：<br><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">model = <span class="constructor">CIFAR10()</span></span><br><span class="line">model = torch.nn.<span class="constructor">DataParallel(<span class="params">model</span>)</span></span><br><span class="line">load<span class="constructor">_model(<span class="params">model</span>, '<span class="params">model</span><span class="operator">/</span><span class="params">cifar10_gpu</span>.<span class="params">pt</span>')</span></span><br><span class="line"></span><br><span class="line">。。。。。。</span><br><span class="line"></span><br><span class="line">def load<span class="constructor">_model(<span class="params">model</span>, <span class="params">filename</span>)</span>:</span><br><span class="line"><span class="string">""</span><span class="string">" Load the training model "</span><span class="string">""</span></span><br><span class="line">model.load<span class="constructor">_state_dict(<span class="params">torch</span>.<span class="params">load</span>(<span class="params">filename</span>)</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h3><p>please use torch.load with map_location=torch.device(‘cpu’) to map your storages to the CPU.<br>修改代码如下：<br><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.load<span class="constructor">_state_dict(<span class="params">torch</span>.<span class="params">load</span>(<span class="params">filename</span>, <span class="params">map_location</span>=<span class="params">torch</span>.<span class="params">device</span>('<span class="params">cpu</span>')</span>))</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -395,8 +399,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2021/10/09/test/" rel="next" title="test">
-                <i class="fa fa-chevron-left"></i> test
+              <a href="/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/" rel="next" title="【算法】Bandit Attack算法手稿">
+                <i class="fa fa-chevron-left"></i> 【算法】Bandit Attack算法手稿
               </a>
             
           </div>
@@ -484,7 +488,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -557,7 +561,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#踩坑之路"><span class="nav-number">1.</span> <span class="nav-text">踩坑之路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#001号坑"><span class="nav-number">1.1.</span> <span class="nav-text">001号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述："><span class="nav-number">1.1.1.</span> <span class="nav-text">问题描述：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">1.1.2.</span> <span class="nav-text">解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Refer-to"><span class="nav-number">1.1.3.</span> <span class="nav-text">Refer to</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#002号坑"><span class="nav-number">1.2.</span> <span class="nav-text">002号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.2.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">1.2.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#踩坑之路"><span class="nav-number">1.</span> <span class="nav-text">踩坑之路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#001号坑"><span class="nav-number">1.1.</span> <span class="nav-text">001号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述："><span class="nav-number">1.1.1.</span> <span class="nav-text">问题描述：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">1.1.2.</span> <span class="nav-text">解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Refer-to"><span class="nav-number">1.1.3.</span> <span class="nav-text">Refer to</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#002号坑"><span class="nav-number">1.2.</span> <span class="nav-text">002号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.2.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">1.2.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#003号坑"><span class="nav-number">1.3.</span> <span class="nav-text">003号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述：gpu上训练好之后保存的gpu模型在cpu上加载"><span class="nav-number">1.3.1.</span> <span class="nav-text">问题描述：gpu上训练好之后保存的gpu模型在cpu上加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
