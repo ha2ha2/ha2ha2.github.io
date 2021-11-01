@@ -87,10 +87,11 @@
 <meta property="og:description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1807.07978v3源码：https:&#x2F;&#x2F;github.com&#x2F;MadryLab&#x2F;blackbox-bandits 论文中相关方法 注意：算法2中，由于化简，我们可以仅对L进行两次查询就可估计△   算法1234567891011121314151617181920while(total_queries &gt; args.m">
 <meta property="og:image" content="http://yoursite.com/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007221737817.png">
 <meta property="og:image" content="http://yoursite.com/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007221751067.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007210259502.png">
 <meta property="og:image" content="http://yoursite.com/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007221758129.png">
 <meta property="og:image" content="http://yoursite.com/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007221815955.png">
 <meta property="article:published_time" content="2021-10-07T14:13:45.000Z">
-<meta property="article:modified_time" content="2021-10-08T12:09:33.896Z">
+<meta property="article:modified_time" content="2021-11-01T11:16:15.777Z">
 <meta property="article:author" content="ha2">
 <meta property="article:tag" content="对样样本">
 <meta property="article:tag" content="黑盒攻击">
@@ -386,7 +387,7 @@
       
         <h3 id="原文链接及源码链接"><a href="#原文链接及源码链接" class="headerlink" title="原文链接及源码链接"></a>原文链接及源码链接</h3><p>原文：<a href="https://arxiv.org/abs/1807.07978v3" target="_blank" rel="noopener">https://arxiv.org/abs/1807.07978v3</a><br>源码：<a href="https://github.com/MadryLab/blackbox-bandits" target="_blank" rel="noopener">https://github.com/MadryLab/blackbox-bandits</a></p>
 <h3 id="论文中相关方法"><a href="#论文中相关方法" class="headerlink" title="论文中相关方法"></a>论文中相关方法</h3><p><img src="/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007221737817.png" alt="image-20211007221737817"></p>
-<p><img src="/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007221751067.png" alt="image-20211007221751067"><br>注意：算法2中，由于化简，我们可以仅对L进行两次查询就可估计△</p>
+<p><img src="/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007221751067.png" alt="image-20211007221751067"><br><img src="/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007210259502.png" alt="image-20211007210259502"><br>注意：算法2中，由于化简，我们可以仅对L进行两次查询就可估计△</p>
 <p><img src="/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007221758129.png" alt="image-20211007221758129"></p>
 <p><img src="/2021/10/07/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Bandit-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211007221815955.png" alt="image-20211007221815955"></p>
 <h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(total_queries &gt; args.max_queries) :   </span><br><span class="line"><span class="comment">#对lt函数的梯度求估计量，方式是算法2，求得估计量△     </span></span><br><span class="line">    exp_noise = args.exploration*ch.randn_like(prior)/(dim**<span class="number">0.5</span>)</span><br><span class="line">    <span class="comment"># Query deltas for finite difference estimator</span></span><br><span class="line">    q1 = upsampler(prior + exp_noise)                   <span class="comment">#关键就是这个prior vt隐向量，这个prior也会更新，把梯度累加上去</span></span><br><span class="line">    q2 = upsampler(prior - exp_noise)                   <span class="comment"># prior 相当于累积的更新量，用这个更新量，再去修改image，就会变得非常准</span></span><br><span class="line">    <span class="comment"># Loss points for finite difference estimator       </span></span><br><span class="line">    l1 = L(image + args.fd_eta*q1/norm(q1))     </span><br><span class="line">    l2 = L(image + args.fd_eta*q2/norm(q2)) </span><br><span class="line">    <span class="comment"># Finite differences estimate of directional derivative        </span></span><br><span class="line">    est_deriv = (l1 - l2)/(args.fd_eta*args.exploration)       </span><br><span class="line">    <span class="comment"># 2-query gradient estimate                         #估计的梯度</span></span><br><span class="line">    est_grad = est_deriv.view(<span class="number">-1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>)*exp_noise     </span><br><span class="line">    <span class="comment">######以上7行代码##对应######算法3中的line 8   </span></span><br><span class="line">    <span class="comment"># Update the prior with the estimated gradient  通过△更新潜在向量vt，这是bandit的机制</span></span><br><span class="line">    prior = prior_step(prior, est_grad, args.online_lr)    </span><br><span class="line">    <span class="comment">######以上1代码##对应######算法3中的line 9   </span></span><br><span class="line">    <span class="comment">#使用估计的这个梯度prior 来进行PGD攻击   </span></span><br><span class="line">    代码略   </span><br><span class="line">    如果攻击成功结束本张图片的迭代。</span><br></pre></td></tr></table></figure>
@@ -442,8 +443,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2099/09/29/%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF/" rel="prev" title="踩坑之路">
-                踩坑之路 <i class="fa fa-chevron-right"></i>
+              <a href="/2021/10/18/%E3%80%90%E5%9D%91%E3%80%91/" rel="prev" title="【坑】">
+                【坑】 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -521,7 +522,7 @@
               
                 <a href="/archives/%7C%7Carchive">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">31</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
