@@ -79,14 +79,14 @@
 
 
 
-<meta name="description" content="123. 买卖股票的最佳时机 III题目链接：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;best-time-to-buy-and-sell-stock-iii&#x2F; 0x1 看到题目的第一想法0x2 自己实现过程中遇到哪些困难0x3 今日学习的文章链接，或者视频链接 https:&#x2F;&#x2F;programmercarl.com&#x2F;0123.买卖股票的最佳时机III.html  0x4 看完代码随">
+<meta name="description" content="1143. 最长公共子序列题目链接：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;longest-common-subsequence&#x2F; 0x1 看到题目的第一想法0x2 自己实现过程中遇到哪些困难0x3 今日学习的文章链接，或者视频链接 https:&#x2F;&#x2F;programmercarl.com&#x2F;1143.最长公共子序列.html  0x4 看完代码随想录之后的想法 dp[i][j]  以">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【刷题DAY49】123, 188.md">
-<meta property="og:url" content="http://yoursite.com/2023/03/04/%E3%80%90%E5%88%B7%E9%A2%98DAY49%E3%80%91123,%20188/index.html">
+<meta property="og:title" content="【刷题DAY53】1143, 1035, 53.md">
+<meta property="og:url" content="http://yoursite.com/2023/03/08/%E3%80%90%E5%88%B7%E9%A2%98DAY53%E3%80%911143,%201035,%2053/index.html">
 <meta property="og:site_name" content="ha2&#39;s blog">
-<meta property="og:description" content="123. 买卖股票的最佳时机 III题目链接：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;best-time-to-buy-and-sell-stock-iii&#x2F; 0x1 看到题目的第一想法0x2 自己实现过程中遇到哪些困难0x3 今日学习的文章链接，或者视频链接 https:&#x2F;&#x2F;programmercarl.com&#x2F;0123.买卖股票的最佳时机III.html  0x4 看完代码随">
-<meta property="article:published_time" content="2023-03-04T15:03:04.000Z">
-<meta property="article:modified_time" content="2023-03-06T02:12:28.400Z">
+<meta property="og:description" content="1143. 最长公共子序列题目链接：https:&#x2F;&#x2F;leetcode.cn&#x2F;problems&#x2F;longest-common-subsequence&#x2F; 0x1 看到题目的第一想法0x2 自己实现过程中遇到哪些困难0x3 今日学习的文章链接，或者视频链接 https:&#x2F;&#x2F;programmercarl.com&#x2F;1143.最长公共子序列.html  0x4 看完代码随想录之后的想法 dp[i][j]  以">
+<meta property="article:published_time" content="2023-03-08T15:03:08.000Z">
+<meta property="article:modified_time" content="2023-03-08T03:02:10.680Z">
 <meta property="article:author" content="ha2">
 <meta property="article:tag" content="刷题">
 <meta name="twitter:card" content="summary">
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2023/03/04/【刷题DAY49】123, 188/"/>
+  <link rel="canonical" href="http://yoursite.com/2023/03/08/【刷题DAY53】1143, 1035, 53/"/>
 
 
 
 
 
-  <title>【刷题DAY49】123, 188.md | ha2's blog</title>
+  <title>【刷题DAY53】1143, 1035, 53.md | ha2's blog</title>
   
 
 
@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/03/04/%E3%80%90%E5%88%B7%E9%A2%98DAY49%E3%80%91123,%20188/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/03/08/%E3%80%90%E5%88%B7%E9%A2%98DAY53%E3%80%911143,%201035,%2053/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ha2">
@@ -279,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【刷题DAY49】123, 188.md</h1>
+          <h1 class="post-title" itemprop="name headline">【刷题DAY53】1143, 1035, 53.md</h1>
         
 
         <div class="post-meta">
@@ -291,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-03-04T23:03:04+08:00">
-                2023-03-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-03-08T23:03:08+08:00">
+                2023-03-08
               </time>
             
 
@@ -351,58 +351,70 @@
       
 
       
-        <h3 id="123-买卖股票的最佳时机-III"><a href="#123-买卖股票的最佳时机-III" class="headerlink" title="123. 买卖股票的最佳时机 III"></a>123. 买卖股票的最佳时机 III</h3><p>题目链接：<a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank" rel="noopener">https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/</a></p>
+        <h3 id="1143-最长公共子序列"><a href="#1143-最长公共子序列" class="headerlink" title="1143. 最长公共子序列"></a>1143. 最长公共子序列</h3><p>题目链接：<a href="https://leetcode.cn/problems/longest-common-subsequence/" target="_blank" rel="noopener">https://leetcode.cn/problems/longest-common-subsequence/</a></p>
 <h4 id="0x1-看到题目的第一想法"><a href="#0x1-看到题目的第一想法" class="headerlink" title="0x1 看到题目的第一想法"></a>0x1 看到题目的第一想法</h4><h4 id="0x2-自己实现过程中遇到哪些困难"><a href="#0x2-自己实现过程中遇到哪些困难" class="headerlink" title="0x2 自己实现过程中遇到哪些困难"></a>0x2 自己实现过程中遇到哪些困难</h4><h4 id="0x3-今日学习的文章链接，或者视频链接"><a href="#0x3-今日学习的文章链接，或者视频链接" class="headerlink" title="0x3 今日学习的文章链接，或者视频链接"></a>0x3 今日学习的文章链接，或者视频链接</h4><ul>
-<li><a href="https://programmercarl.com/0123.买卖股票的最佳时机III.html" target="_blank" rel="noopener">https://programmercarl.com/0123.买卖股票的最佳时机III.html</a></li>
+<li><a href="https://programmercarl.com/1143.最长公共子序列.html" target="_blank" rel="noopener">https://programmercarl.com/1143.最长公共子序列.html</a></li>
 </ul>
 <h4 id="0x4-看完代码随想录之后的想法"><a href="#0x4-看完代码随想录之后的想法" class="headerlink" title="0x4 看完代码随想录之后的想法"></a>0x4 看完代码随想录之后的想法</h4><ul>
-<li>全程可以最多买卖两次</li>
-<li>一共5种状态<blockquote>
-<pre><code>  # dp[i][0] 没有操作 从来没买
-  # dp[i][1] 表示第i天第一次持有股票所得最多现金
-  # dp[i][2] 表示第i天第一次不持有股票所得最多现金
-  # dp[i][3] 表示第i天第二次持有股票所得最多现金
-  # dp[i][4] 表示第i天第二次不持有股票所得最多现金
-</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">        <span class="comment"># 动态规划</span></span><br><span class="line"><span class="comment"># 1. </span></span><br><span class="line"><span class="comment"># dp[i][0] 没有操作 从来没</span></span><br><span class="line"><span class="comment"># dp[i][1] 表示第i天第一次持有股票所得最多现金</span></span><br><span class="line"><span class="comment"># dp[i][2] 表示第i天第一次不持有股票所得最多现金</span></span><br><span class="line"><span class="comment"># dp[i][3] 表示第i天第二次持有股票所得最多现金</span></span><br><span class="line"><span class="comment"># dp[i][4] 表示第i天第二次不持有股票所得最多现金</span></span><br><span class="line"><span class="comment"># 2. dp[i][1]第i天第一次持有股票</span></span><br><span class="line"><span class="comment"># 操作一：第i天买入股票了，那么dp[i][1] = dp[i-1][0] - prices[i]</span></span><br><span class="line"><span class="comment"># 操作二：第i天没有操作，而是沿用前一天买入的状态，即：dp[i][1] = dp[i - 1][1]</span></span><br><span class="line"><span class="comment"># dp[i][1] = max(dp[i-1][0] - prices[i], dp[i - 1][1])</span></span><br><span class="line"><span class="comment"># dp[i][2]第i天第一次不持有股票</span></span><br><span class="line"><span class="comment"># 操作一：第i-1天就第一次不持有股票，那么就保持现状，所得现金就是昨天不持有股票的所得现金 即：dp[i - 1][2]</span></span><br><span class="line"><span class="comment"># 操作二：第i天第一次卖出股票，所得现金就是按照今天股票价格卖出后所得现金即：prices[i] + dp[i - 1][1]</span></span><br><span class="line"><span class="comment"># dp[i][2] = max(dp[i-1][2], prices[i] + dp[i - 1][1])</span></span><br><span class="line"><span class="comment"># dp[i][3] 表示第i天第二次持有股票所得最多现金</span></span><br><span class="line"><span class="comment"># 操作一：第i-1天就第二次持有股票，那么就保持现状，所得现金就是昨天持有股票的所得现金 即：dp[i - 1][3]</span></span><br><span class="line"><span class="comment"># 操作二： 第i天第二次买入股票，所得现金就是买入今天的股票后所得现金即：dp[i-1][2]-prices[i]</span></span><br><span class="line"><span class="comment"># dp[i][3] = max(dp[i-1][2] - prices[i], dp[i - 1][3])</span></span><br><span class="line"><span class="comment"># dp[i][4]第i天第二次不持有股票</span></span><br><span class="line"><span class="comment"># 操作一： 第i-1天就第二次不持有股票，那么就保持现状，所得现金就是昨天不持有股票的所得现金 即：dp[i - 1][4]</span></span><br><span class="line"><span class="comment"># 操作二： 第i天第二次卖出股票，所得现金就是按照今天股票价格卖出后所得现金即：prices[i] + dp[i - 1][3]</span></span><br><span class="line"><span class="comment"># 3. </span></span><br><span class="line"><span class="comment"># dp[0][1] 表示第0天第一次持有股票的现金 = -prices[0]</span></span><br><span class="line"><span class="comment"># dp[0][2] 表示第0天不持有股票的现金 = 0    当天买当天卖</span></span><br><span class="line"><span class="comment"># dp[0][3] = -prices[0]      </span></span><br><span class="line"><span class="comment"># dp[0][4] = 0</span></span><br></pre></td></tr></table></figure>
-</blockquote>
-</li>
+<li>dp[i][j]  以nums[i-1][j-1]结尾的最长公共子序列的长度  </li>
+<li>if A[i-1] == B[i-1] dp[i][j] = dp[i-1][j-1] + 1</li>
+<li>if A[i-1] != B[i-1] max(dp[i - 1][j], dp[i][j - 1])</li>
+<li>dp[0][0] = 0</li>
 </ul>
 <h4 id="0x5-今日收获，记录一下自己的学习时长"><a href="#0x5-今日收获，记录一下自己的学习时长" class="headerlink" title="0x5 今日收获，记录一下自己的学习时长"></a>0x5 今日收获，记录一下自己的学习时长</h4><ul>
 <li>1h</li>
 </ul>
 <hr>
-<h3 id="188-买卖股票的最佳时机IV"><a href="#188-买卖股票的最佳时机IV" class="headerlink" title="188.买卖股票的最佳时机IV"></a>188.买卖股票的最佳时机IV</h3><p>题目链接：<a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/" target="_blank" rel="noopener">https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/</a></p>
-<h4 id="0x1-看到题目的第一想法-1"><a href="#0x1-看到题目的第一想法-1" class="headerlink" title="0x1 看到题目的第一想法"></a>0x1 看到题目的第一想法</h4><h4 id="0x2-自己实现过程中遇到哪些困难-1"><a href="#0x2-自己实现过程中遇到哪些困难-1" class="headerlink" title="0x2 自己实现过程中遇到哪些困难"></a>0x2 自己实现过程中遇到哪些困难</h4><h4 id="0x3-今日学习的文章链接，或者视频链接-1"><a href="#0x3-今日学习的文章链接，或者视频链接-1" class="headerlink" title="0x3 今日学习的文章链接，或者视频链接"></a>0x3 今日学习的文章链接，或者视频链接</h4><ul>
-<li><a href="https://programmercarl.com/0188.买卖股票的最佳时机IV.html" target="_blank" rel="noopener">https://programmercarl.com/0188.买卖股票的最佳时机IV.html</a></li>
+<h3 id="1035-不相交的线"><a href="#1035-不相交的线" class="headerlink" title="1035.不相交的线"></a>1035.不相交的线</h3><p>题目链接：<a href="https://leetcode.cn/problems/uncrossed-lines/" target="_blank" rel="noopener">https://leetcode.cn/problems/uncrossed-lines/</a></p>
+<h4 id="0x1-看到题目的第一想法-1"><a href="#0x1-看到题目的第一想法-1" class="headerlink" title="0x1 看到题目的第一想法"></a>0x1 看到题目的第一想法</h4><h4 id="0x2-自己实现过程中遇到哪些困难-1"><a href="#0x2-自己实现过程中遇到哪些困难-1" class="headerlink" title="0x2 自己实现过程中遇到哪些困难"></a>0x2 自己实现过程中遇到哪些困难</h4><ul>
+<li>漏 </li>
+</ul>
+<h4 id="0x3-今日学习的文章链接，或者视频链接-1"><a href="#0x3-今日学习的文章链接，或者视频链接-1" class="headerlink" title="0x3 今日学习的文章链接，或者视频链接"></a>0x3 今日学习的文章链接，或者视频链接</h4><ul>
+<li><a href="https://programmercarl.com/1035.不相交的线.html" target="_blank" rel="noopener">https://programmercarl.com/1035.不相交的线.html</a></li>
 </ul>
 <h4 id="0x4-看完代码随想录之后的想法-1"><a href="#0x4-看完代码随想录之后的想法-1" class="headerlink" title="0x4 看完代码随想录之后的想法"></a>0x4 看完代码随想录之后的想法</h4><ul>
-<li>类比123</li>
-<li>最多k次交易，则每天有2k+1种状态</li>
+<li>等价于 1143</li>
 </ul>
 <h4 id="0x5-今日收获，记录一下自己的学习时长-1"><a href="#0x5-今日收获，记录一下自己的学习时长-1" class="headerlink" title="0x5 今日收获，记录一下自己的学习时长"></a>0x5 今日收获，记录一下自己的学习时长</h4><ul>
 <li>1h</li>
 </ul>
+<hr>
+<h3 id="53-最大子数组和"><a href="#53-最大子数组和" class="headerlink" title="53. 最大子数组和"></a>53. 最大子数组和</h3><p>题目链接：<a href="https://leetcode.cn/problems/maximum-subarray/" target="_blank" rel="noopener">https://leetcode.cn/problems/maximum-subarray/</a></p>
+<h4 id="0x1-看到题目的第一想法-2"><a href="#0x1-看到题目的第一想法-2" class="headerlink" title="0x1 看到题目的第一想法"></a>0x1 看到题目的第一想法</h4><h4 id="0x2-自己实现过程中遇到哪些困难-2"><a href="#0x2-自己实现过程中遇到哪些困难-2" class="headerlink" title="0x2 自己实现过程中遇到哪些困难"></a>0x2 自己实现过程中遇到哪些困难</h4><h4 id="0x3-今日学习的文章链接，或者视频链接-2"><a href="#0x3-今日学习的文章链接，或者视频链接-2" class="headerlink" title="0x3 今日学习的文章链接，或者视频链接"></a>0x3 今日学习的文章链接，或者视频链接</h4><ul>
+<li><a href="https://programmercarl.com/0053.最大子序和（动态规划）.html" target="_blank" rel="noopener">https://programmercarl.com/0053.最大子序和（动态规划）.html</a></li>
+</ul>
+<h4 id="0x4-看完代码随想录之后的想法-2"><a href="#0x4-看完代码随想录之后的想法-2" class="headerlink" title="0x4 看完代码随想录之后的想法"></a>0x4 看完代码随想录之后的想法</h4><ul>
+<li>dp[i] 以nums[i]结尾的 最大连续子数组的和</li>
+<li>p[i] = max(dp[i-1]+1, nums[i])</li>
+<li>dp[0] = 0</li>
+</ul>
+<h4 id="0x5-今日收获，记录一下自己的学习时长-2"><a href="#0x5-今日收获，记录一下自己的学习时长-2" class="headerlink" title="0x5 今日收获，记录一下自己的学习时长"></a>0x5 今日收获，记录一下自己的学习时长</h4><ul>
+<li>1.5h</li>
+</ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li>动态规划<ul>
-<li>买卖股票 <ul>
-<li>两种状态，持有or不持有</li>
+<li>最长公共子序列<ul>
+<li>和最长重复子数组的区别</li>
+<li>最长公共子序列不要求连续，但要求相对顺序</li>
 </ul>
 </li>
-</ul>
-</li>
+<li>不相交的线</li>
+<li>最大子序和 </li>
 </ul>
 <h3 id="复习"><a href="#复习" class="headerlink" title="复习"></a>复习</h3><ul>
-<li>day25<ul>
+<li>day30<ul>
 <li>回溯<ul>
-<li>组合问题</li>
-<li>path, res</li>
-<li>startIdx</li>
+<li>重新安排行程</li>
+<li>N皇后<ul>
+<li>for 循环控制列、递归控制行</li>
+<li>合法行判断，不合法就要continue掉</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h3 id="待重点复习"><a href="#待重点复习" class="headerlink" title="待重点复习"></a>待重点复习</h3><p>123, 188</p>
+</li>
+</ul>
+<h3 id="待重点复习"><a href="#待重点复习" class="headerlink" title="待重点复习"></a>待重点复习</h3><p>1143,53, 332, 51, 37</p>
 
       
     </div>
@@ -433,8 +445,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2023/03/03/%E3%80%90%E5%88%B7%E9%A2%98DAY48%E3%80%91121,%20122/" rel="next" title="【刷题DAY48】121, 122.md">
-                <i class="fa fa-chevron-left"></i> 【刷题DAY48】121, 122.md
+              <a href="/2023/03/07/%E3%80%90%E5%88%B7%E9%A2%98DAY52%E3%80%91300,%20674,%20718/" rel="next" title="【刷题DAY52】300, 674, 718.md">
+                <i class="fa fa-chevron-left"></i> 【刷题DAY52】300, 674, 718.md
               </a>
             
           </div>
@@ -443,8 +455,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2023/03/05/%E3%80%90%E5%88%B7%E9%A2%98DAY50%E3%80%91%E5%A4%8D%E4%B9%A0/" rel="prev" title="【刷题DAY50】复习.md">
-                【刷题DAY50】复习.md <i class="fa fa-chevron-right"></i>
+              <a href="/2099/09/29/%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF/" rel="prev" title="踩坑之路">
+                踩坑之路 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -595,7 +607,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#123-买卖股票的最佳时机-III"><span class="nav-number">1.</span> <span class="nav-text">123. 买卖股票的最佳时机 III</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x1-看到题目的第一想法"><span class="nav-number">1.1.</span> <span class="nav-text">0x1 看到题目的第一想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x2-自己实现过程中遇到哪些困难"><span class="nav-number">1.2.</span> <span class="nav-text">0x2 自己实现过程中遇到哪些困难</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x3-今日学习的文章链接，或者视频链接"><span class="nav-number">1.3.</span> <span class="nav-text">0x3 今日学习的文章链接，或者视频链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x4-看完代码随想录之后的想法"><span class="nav-number">1.4.</span> <span class="nav-text">0x4 看完代码随想录之后的想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x5-今日收获，记录一下自己的学习时长"><span class="nav-number">1.5.</span> <span class="nav-text">0x5 今日收获，记录一下自己的学习时长</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#188-买卖股票的最佳时机IV"><span class="nav-number">2.</span> <span class="nav-text">188.买卖股票的最佳时机IV</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x1-看到题目的第一想法-1"><span class="nav-number">2.1.</span> <span class="nav-text">0x1 看到题目的第一想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x2-自己实现过程中遇到哪些困难-1"><span class="nav-number">2.2.</span> <span class="nav-text">0x2 自己实现过程中遇到哪些困难</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x3-今日学习的文章链接，或者视频链接-1"><span class="nav-number">2.3.</span> <span class="nav-text">0x3 今日学习的文章链接，或者视频链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x4-看完代码随想录之后的想法-1"><span class="nav-number">2.4.</span> <span class="nav-text">0x4 看完代码随想录之后的想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x5-今日收获，记录一下自己的学习时长-1"><span class="nav-number">2.5.</span> <span class="nav-text">0x5 今日收获，记录一下自己的学习时长</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复习"><span class="nav-number">4.</span> <span class="nav-text">复习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#待重点复习"><span class="nav-number">5.</span> <span class="nav-text">待重点复习</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1143-最长公共子序列"><span class="nav-number">1.</span> <span class="nav-text">1143. 最长公共子序列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x1-看到题目的第一想法"><span class="nav-number">1.1.</span> <span class="nav-text">0x1 看到题目的第一想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x2-自己实现过程中遇到哪些困难"><span class="nav-number">1.2.</span> <span class="nav-text">0x2 自己实现过程中遇到哪些困难</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x3-今日学习的文章链接，或者视频链接"><span class="nav-number">1.3.</span> <span class="nav-text">0x3 今日学习的文章链接，或者视频链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x4-看完代码随想录之后的想法"><span class="nav-number">1.4.</span> <span class="nav-text">0x4 看完代码随想录之后的想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x5-今日收获，记录一下自己的学习时长"><span class="nav-number">1.5.</span> <span class="nav-text">0x5 今日收获，记录一下自己的学习时长</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1035-不相交的线"><span class="nav-number">2.</span> <span class="nav-text">1035.不相交的线</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x1-看到题目的第一想法-1"><span class="nav-number">2.1.</span> <span class="nav-text">0x1 看到题目的第一想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x2-自己实现过程中遇到哪些困难-1"><span class="nav-number">2.2.</span> <span class="nav-text">0x2 自己实现过程中遇到哪些困难</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x3-今日学习的文章链接，或者视频链接-1"><span class="nav-number">2.3.</span> <span class="nav-text">0x3 今日学习的文章链接，或者视频链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x4-看完代码随想录之后的想法-1"><span class="nav-number">2.4.</span> <span class="nav-text">0x4 看完代码随想录之后的想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x5-今日收获，记录一下自己的学习时长-1"><span class="nav-number">2.5.</span> <span class="nav-text">0x5 今日收获，记录一下自己的学习时长</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#53-最大子数组和"><span class="nav-number">3.</span> <span class="nav-text">53. 最大子数组和</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x1-看到题目的第一想法-2"><span class="nav-number">3.1.</span> <span class="nav-text">0x1 看到题目的第一想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x2-自己实现过程中遇到哪些困难-2"><span class="nav-number">3.2.</span> <span class="nav-text">0x2 自己实现过程中遇到哪些困难</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x3-今日学习的文章链接，或者视频链接-2"><span class="nav-number">3.3.</span> <span class="nav-text">0x3 今日学习的文章链接，或者视频链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x4-看完代码随想录之后的想法-2"><span class="nav-number">3.4.</span> <span class="nav-text">0x4 看完代码随想录之后的想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x5-今日收获，记录一下自己的学习时长-2"><span class="nav-number">3.5.</span> <span class="nav-text">0x5 今日收获，记录一下自己的学习时长</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复习"><span class="nav-number">5.</span> <span class="nav-text">复习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#待重点复习"><span class="nav-number">6.</span> <span class="nav-text">待重点复习</span></a></li></ol></div>
             
 
           </div>
