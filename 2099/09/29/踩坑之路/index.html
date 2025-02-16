@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="踩坑之路," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="踩坑之路001号坑问题描述： pychram 中 run一个程序test_attack.py，报错信息如下：     123456&quot;D:\Program Files (x86)\Anaconda3\envs\MyPytorch\python.exe&quot; &quot;D:\Program Files\JetBrains\PyCharm 2021.2.1\plugins\python\helpers\pychar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="踩坑之路">
+<meta property="og:url" content="http://yoursite.com/2099/09/29/%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="踩坑之路001号坑问题描述： pychram 中 run一个程序test_attack.py，报错信息如下：     123456&quot;D:\Program Files (x86)\Anaconda3\envs\MyPytorch\python.exe&quot; &quot;D:\Program Files\JetBrains\PyCharm 2021.2.1\plugins\python\helpers\pychar">
+<meta property="article:published_time" content="2099-09-29T13:52:02.000Z">
+<meta property="article:modified_time" content="2024-12-17T03:09:26.000Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="踩坑之路">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2099/09/29/踩坑之路/"/>
+
+
+
+
+
+  <title>踩坑之路 | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2099/09/29/%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">踩坑之路</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2099-09-29T21:52:02+08:00">
+                2099-09-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF/" itemprop="url" rel="index">
+                    <span itemprop="name">踩坑之路</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="踩坑之路"><a href="#踩坑之路" class="headerlink" title="踩坑之路"></a>踩坑之路</h1><h2 id="001号坑"><a href="#001号坑" class="headerlink" title="001号坑"></a>001号坑</h2><h3 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h3><blockquote>
+<p>pychram 中 run一个程序test_attack.py，报错信息如下：   </p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"D:\Program Files (x86)\Anaconda3\envs\MyPytorch\python.exe"</span> <span class="string">"D:\Program Files\JetBrains\PyCharm 2021.2.1\plugins\python\helpers\pycharm\_jb_pytest_runner.py"</span> --path <span class="string">"test_attack.py"</span></span><br><span class="line">Testing started at <span class="number">21</span>:<span class="number">53</span> ...</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"D:\Program Files\JetBrains\PyCharm 2021.2.1\plugins\python\helpers\pycharm\_jb_pytest_runner.py"</span>, line <span class="number">5</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    <span class="keyword">import</span> pytest</span><br><span class="line">ModuleNotFoundError: No module named <span class="string">'pytest'</span></span><br></pre></td></tr></table></figure>
+<p>我一开始就在装pytest这个模块，装了后面还是要错。。。    </p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><blockquote>
+<p>由于pycharm中以pytest运行，它会默认把test、test_开头的.py文件当做单元测试。<br>需要修改文件名，修改文件test_attack.py 为attack.py ，再run，没问题了。  </p>
+</blockquote>
+<h3 id="Refer-to"><a href="#Refer-to" class="headerlink" title="Refer to"></a>Refer to</h3><p><a href="https://www.cnblogs.com/yoyoblogs/p/11232819.html" target="_blank" rel="noopener">https://www.cnblogs.com/yoyoblogs/p/11232819.html</a>   </p>
+<hr>
+<h2 id="002号坑"><a href="#002号坑" class="headerlink" title="002号坑"></a>002号坑</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><blockquote>
+<p>python 安装 RobustBench库的时候报错    </p>
+</blockquote>
+<p>安装命令<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install git+https://github.com/RobustBench/robustbench</span><br></pre></td></tr></table></figure><br>报错如下：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Complete output from <span class="keyword">command</span> <span class="keyword">python</span> setup.<span class="keyword">py</span> egg_info:</span><br><span class="line">Traceback (most recent <span class="keyword">call</span> <span class="keyword">last</span>):</span><br><span class="line">  File <span class="string">"&lt;string&gt;"</span>, <span class="built_in">line</span> <span class="number">1</span>, in <span class="symbol">&lt;module&gt;</span></span><br><span class="line">  File <span class="string">"balbabalba\setup.py"</span>, <span class="built_in">line</span> <span class="number">11</span>, in <span class="symbol">&lt;module&gt;</span></span><br><span class="line">    long_description=<span class="keyword">open</span>(<span class="string">'README.md'</span>).<span class="keyword">read</span>(),</span><br><span class="line">UnicodeDecodeError: UnicodeDecodeError: <span class="string">'gbk'</span> codec can<span class="string">'t decode byte balabbalbal我忘了</span></span><br></pre></td></tr></table></figure><br>README.md这个文件的编码有问题。   </p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>1、<a href="https://github.com/RobustBench/robustbench" target="_blank" rel="noopener">https://github.com/RobustBench/robustbench</a>  把源码下载下来然后解压<br>2、将里面的README.md里面的内容全去掉，注意不能删掉README.md文件<br>3、再将这些解压了的文件 加压 成一个压缩包abcd.zip<br>4、进到上面这个压缩包abcd.zip的所在位置，在命令窗口执行pip install abcd.zip    </p>
+<hr>
+<h2 id="003号坑"><a href="#003号坑" class="headerlink" title="003号坑"></a>003号坑</h2><h3 id="问题描述：gpu上训练好之后保存的gpu模型在cpu上加载"><a href="#问题描述：gpu上训练好之后保存的gpu模型在cpu上加载" class="headerlink" title="问题描述：gpu上训练好之后保存的gpu模型在cpu上加载"></a>问题描述：gpu上训练好之后保存的gpu模型在cpu上加载</h3><p>保存信息如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RuntimeError: Attempting to deserialize object on a CUDA device but torch.cuda.is_available() <span class="keyword">is</span> <span class="literal">False</span>. If you are running on a CPU-only machine, please use torch.load <span class="keyword">with</span> map_location=torch.device(<span class="string">'cpu'</span>) to map your storages to the CPU.</span><br></pre></td></tr></table></figure><br>源码：<br><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">model = <span class="constructor">CIFAR10()</span></span><br><span class="line">model = torch.nn.<span class="constructor">DataParallel(<span class="params">model</span>)</span></span><br><span class="line">load<span class="constructor">_model(<span class="params">model</span>, '<span class="params">model</span><span class="operator">/</span><span class="params">cifar10_gpu</span>.<span class="params">pt</span>')</span></span><br><span class="line"></span><br><span class="line">。。。。。。</span><br><span class="line"></span><br><span class="line">def load<span class="constructor">_model(<span class="params">model</span>, <span class="params">filename</span>)</span>:</span><br><span class="line"><span class="string">""</span><span class="string">" Load the training model "</span><span class="string">""</span></span><br><span class="line">model.load<span class="constructor">_state_dict(<span class="params">torch</span>.<span class="params">load</span>(<span class="params">filename</span>)</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h3><p>please use torch.load with map_location=torch.device(‘cpu’) to map your storages to the CPU.<br>修改代码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.load_state_dict(torch.load(filename, map_location=torch.device(<span class="string">'cpu'</span>)))</span><br></pre></td></tr></table></figure></p>
+<h2 id="004号坑"><a href="#004号坑" class="headerlink" title="004号坑"></a>004号坑</h2><h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>服务器上运行代码，加载模型的时候报错了，报错信息如下：  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"attck_cifar10.py"</span>, line <span class="number">297</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">    load_model(model, <span class="string">'model/cifar10_gpu.pt'</span>)</span><br><span class="line">  File <span class="string">"/home/ranyu/Workspace/Project/bandit-CIFAR10/allmodels.py"</span>, line <span class="number">756</span>, <span class="keyword">in</span> load_model</span><br><span class="line">    model.load_state_dict(torch.load(filename))</span><br><span class="line">  File <span class="string">"/home/ranyu/anaconda3/envs/MyPytorch/lib/python3.6/site-packages/torch/nn/modules/module.py"</span>, line <span class="number">830</span>, <span class="keyword">in</span> load_state_dict</span><br><span class="line">    self.__class__.__name__, <span class="string">"\n\t"</span>.join(error_msgs)))</span><br><span class="line">RuntimeError: Error(s) <span class="keyword">in</span> loading state_dict <span class="keyword">for</span> CIFAR10:</span><br><span class="line">	Missing key(s) <span class="keyword">in</span> state_dict: <span class="string">"features.0.weight"</span>, <span class="string">"features.0.bias"</span>, <span class="string">"features.1.weight"</span>, <span class="string">"features.1.bias"</span>, <span class="string">"features.1.running_mean"</span>, <span class="string">"features.1.running_var"</span>, <span class="string">"features.3.weight"</span>, <span class="string">"features.3.bias"</span>, <span class="string">"features.4.weight"</span>, <span class="string">"features.4.bias"</span>, <span class="string">"features.4.running_mean"</span>, <span class="string">"features.4.running_var"</span>, <span class="string">"features.7.weight"</span>, <span class="string">"features.7.bias"</span>, <span class="string">"features.8.weight"</span>, <span class="string">"features.8.bias"</span>, <span class="string">"features.8.running_mean"</span>, <span class="string">"features.8.running_var"</span>, <span class="string">"features.10.weight"</span>, <span class="string">"features.10.bias"</span>, <span class="string">"features.11.weight"</span>, <span class="string">"features.11.bias"</span>, <span class="string">"features.11.running_mean"</span>, <span class="string">"features.11.running_var"</span>, <span class="string">"fc1.weight"</span>, <span class="string">"fc1.bias"</span>, <span class="string">"fc2.weight"</span>, <span class="string">"fc2.bias"</span>, <span class="string">"fc3.weight"</span>, <span class="string">"fc3.bias"</span>. </span><br><span class="line">	Unexpected key(s) <span class="keyword">in</span> state_dict: <span class="string">"module.features.0.weight"</span>, <span class="string">"module.features.0.bias"</span>, <span class="string">"module.features.1.weight"</span>, <span class="string">"module.features.1.bias"</span>, <span class="string">"module.features.1.running_mean"</span>, <span class="string">"module.features.1.running_var"</span>, <span class="string">"module.features.3.weight"</span>, <span class="string">"module.features.3.bias"</span>, <span class="string">"module.features.4.weight"</span>, <span class="string">"module.features.4.bias"</span>, <span class="string">"module.features.4.running_mean"</span>, <span class="string">"module.features.4.running_var"</span>, <span class="string">"module.features.7.weight"</span>, <span class="string">"module.features.7.bias"</span>, <span class="string">"module.features.8.weight"</span>, <span class="string">"module.features.8.bias"</span>, <span class="string">"module.features.8.running_mean"</span>, <span class="string">"module.features.8.running_var"</span>, <span class="string">"module.features.10.weight"</span>, <span class="string">"module.features.10.bias"</span>, <span class="string">"module.features.11.weight"</span>, <span class="string">"module.features.11.bias"</span>, <span class="string">"module.features.11.running_mean"</span>, <span class="string">"module.features.11.running_var"</span>, <span class="string">"module.fc1.weight"</span>, <span class="string">"module.fc1.bias"</span>, <span class="string">"module.fc2.weight"</span>, <span class="string">"module.fc2.bias"</span>, <span class="string">"module.fc3.weight"</span>, <span class="string">"module.fc3.bias"</span>.</span><br></pre></td></tr></table></figure>
+<h3 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法"></a>解决方法</h3><p>原来报错的代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">model = CIFAR10()</span><br><span class="line">model = torch.nn.DataParallel(model)</span><br><span class="line">load_model(model, <span class="string">'model/cifar10_gpu.pt'</span>)</span><br><span class="line">model_to_fool=model.cuda()</span><br><span class="line">model_to_fool.eval()</span><br></pre></td></tr></table></figure></p>
+<p>将代码修改为如下所示：【注】：我使用的是1号GPU这一张卡<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">model = CIFAR10()</span><br><span class="line">model = torch.nn.DataParallel(model,device_ids=[<span class="number">1</span>])</span><br><span class="line">load_model(model, <span class="string">'model/cifar10_gpu.pt'</span>)</span><br><span class="line">model_to_fool=model.cuda()</span><br><span class="line">model_to_fool.eval()</span><br></pre></td></tr></table></figure></p>
+<h2 id="005号坑"><a href="#005号坑" class="headerlink" title="005号坑"></a>005号坑</h2><h3 id="问题描述-服务器上的数据GPU"><a href="#问题描述-服务器上的数据GPU" class="headerlink" title="问题描述   服务器上的数据GPU"></a>问题描述   服务器上的数据GPU</h3><figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"attck_cifar10.py"</span>, line <span class="number">300</span>, <span class="keyword">in</span> &lt;<span class="keyword">module</span>&gt;</span><br><span class="line">    main(args, model_to_fool, <span class="number">32</span>)</span><br><span class="line">  File <span class="string">"attck_cifar10.py"</span>, line <span class="number">231</span>, <span class="keyword">in</span> main</span><br><span class="line">    res = make<span class="constructor">_adversarial_examples(<span class="params">images</span>.<span class="params">cuda</span>()</span>, targets.cuda<span class="literal">()</span>, args, model_to_fool, dataset_size)</span><br><span class="line">  File <span class="string">"attck_cifar10.py"</span>, line <span class="number">157</span>, <span class="keyword">in</span> make_adversarial_examples</span><br><span class="line">    l1 = <span class="constructor">L((<span class="params">image</span> + <span class="params">args</span>.<span class="params">fd_eta</span><span class="operator">*</span><span class="params">q1</span><span class="operator">/</span><span class="params">norm</span>(<span class="params">q1</span>)</span>).cuda<span class="literal">()</span>) # <span class="constructor">L(<span class="params">prior</span> + <span class="params">c</span><span class="operator">*</span><span class="params">noise</span>)</span>        # q1/norm(q1)) 单位方向向量</span><br><span class="line">RuntimeError: expected device cuda:<span class="number">1</span> but got device cpu</span><br></pre></td></tr></table></figure>
+<h3 id="解决方法-3"><a href="#解决方法-3" class="headerlink" title="解决方法"></a>解决方法</h3><p>把一行注释取消掉<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ch.set_default_tensor_type('torch.cuda.FloatTensor')</span></span><br></pre></td></tr></table></figure><br>如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch.set_default_tensor_type(<span class="string">'torch.cuda.FloatTensor'</span>)</span><br></pre></td></tr></table></figure></p>
+<h2 id="006号坑"><a href="#006号坑" class="headerlink" title="006号坑"></a>006号坑</h2><h3 id="问题描述：imagenet归一化进行操作，最后将归一化后的图片进行还原（反归一化）"><a href="#问题描述：imagenet归一化进行操作，最后将归一化后的图片进行还原（反归一化）" class="headerlink" title="问题描述：imagenet归一化进行操作，最后将归一化后的图片进行还原（反归一化）"></a>问题描述：imagenet归一化进行操作，最后将归一化后的图片进行还原（反归一化）</h3><p>前面进行的归一化操作：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">normalize = transforms.Normalize(mean=[<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>], std=[<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>])                         </span><br><span class="line">val_dataset = dsets.ImageFolder(</span><br><span class="line">    <span class="string">'./ImageNet_val'</span>,</span><br><span class="line">    transforms.Compose([</span><br><span class="line">        transforms.Resize(<span class="number">256</span>),</span><br><span class="line">        transforms.CenterCrop(<span class="number">224</span>),</span><br><span class="line">        transforms.ToTensor(),</span><br><span class="line">        normalize,</span><br><span class="line">    ]))</span><br></pre></td></tr></table></figure><br>我进行的反归一化操作进行图片显示：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mean = torch.Tensor([<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>]) </span><br><span class="line">std = torch.Tensor([<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>])   </span><br><span class="line">tmp = x0[<span class="number">0</span>] * std+ mean</span><br><span class="line">        tmp = tmp.swapaxes(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">        tmp = tmp.swapaxes(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">        plt.imshow(tmp)</span><br><span class="line">        plt.show()</span><br></pre></td></tr></table></figure><br>报错了：<br><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The size of tensor a (<span class="number">224</span>) must match the size of tensor b (<span class="number">3</span>) at non-singleton dimension <span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="解决方法-4"><a href="#解决方法-4" class="headerlink" title="解决方法"></a>解决方法</h3><p>添加view(-1,1,1)，这样反归一化之后的数据 是正确的图片<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tmp = x0[<span class="number">0</span>] * std.view(<span class="number">-1</span>,<span class="number">1</span>,<span class="number">1</span>) + mean.view(<span class="number">-1</span>,<span class="number">1</span>,<span class="number">1</span>)</span><br><span class="line">tmp = tmp.swapaxes(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">tmp = tmp.swapaxes(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">plt.imshow(tmp)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<h2 id="007号坑"><a href="#007号坑" class="headerlink" title="007号坑"></a>007号坑</h2><h3 id="问题描述：Linux-上安装pytorch，一直安装不上gpu版本"><a href="#问题描述：Linux-上安装pytorch，一直安装不上gpu版本" class="headerlink" title="问题描述：Linux 上安装pytorch，一直安装不上gpu版本"></a>问题描述：Linux 上安装pytorch，一直安装不上gpu版本</h3><h3 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h3><p>源有问题，难过只能装上cpu版本的 麻了麻了 折腾了好久<br>确保这里条在前面<br>vim ~/.condarc<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda config --<span class="built_in">add</span> channels http<span class="variable">s:</span>//mirrors.tuna.tsinghua.edu.<span class="keyword">cn</span>/anaconda/pkgs/free/</span><br><span class="line">conda config --<span class="built_in">add</span> channels http<span class="variable">s:</span>//mirrors.tuna.tsinghua.edu.<span class="keyword">cn</span>/anaconda/pkgs/main/</span><br><span class="line">conda config --<span class="built_in">add</span> channels http<span class="variable">s:</span>//mirrors.tuna.tsinghua.edu.<span class="keyword">cn</span>/anaconda/cloud/pytorch/</span><br><span class="line">conda config --<span class="keyword">set</span> show_channel_urls yes</span><br><span class="line">conda install pytorch torchvision cudatoolkit=<span class="number">10.1</span></span><br></pre></td></tr></table></figure><br>换号源之后执行这个conda install pytorch torchvision cudatoolkit=10.1什么都是匹配好的 cudnn也不用我装了      </p>
+<h2 id="008号坑"><a href="#008号坑" class="headerlink" title="008号坑"></a>008号坑</h2><h3 id="问题描述：-1"><a href="#问题描述：-1" class="headerlink" title="问题描述："></a>问题描述：</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RuntimeError: cuDNN <span class="built_in">error</span>: CUDNN_STATUS_NOT_SUPPORTED. This <span class="built_in">error</span> may appear <span class="keyword">if</span> you passed <span class="keyword">in</span> a non-contiguous <span class="built_in">input</span>.</span><br></pre></td></tr></table></figure>
+<h3 id="解决方法：-1"><a href="#解决方法：-1" class="headerlink" title="解决方法："></a>解决方法：</h3><p>加上一下代码<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">torch.backends.cudnn.enabled</span> = <span class="literal">False</span></span><br></pre></td></tr></table></figure><br>参考：<a href="https://blog.csdn.net/qq_41895003/article/details/105620317" target="_blank" rel="noopener">https://blog.csdn.net/qq_41895003/article/details/105620317</a></p>
+<h2 id="009号坑"><a href="#009号坑" class="headerlink" title="009号坑"></a>009号坑</h2><h3 id="问题描述-2"><a href="#问题描述-2" class="headerlink" title="问题描述"></a>问题描述</h3><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">patch</span>_value = torch.rand<span class="params">(<span class="attr">size</span>=[bs, c, h, h])</span><span class="string">.cuda</span><span class="params">()</span></span><br><span class="line">patched_img = <span class="params">(torch.ones_like(mask)</span><span class="string">.cuda</span><span class="params">()</span> - mask) * images + mask * <span class="keyword">patch</span>_value</span><br><span class="line"><span class="keyword">patch</span>_value.requires_grad = True</span><br><span class="line"></span><br><span class="line"><span class="comment"># show_image(patched_img[0])</span></span><br><span class="line">outputs = model<span class="params">(patched_img)</span></span><br><span class="line">loss = loss_function<span class="params">(outputs, labels)</span></span><br><span class="line">loss.backward<span class="params">()</span></span><br><span class="line"><span class="keyword">patch</span>_gard = torch.sign<span class="params">(patch_value.grad)</span></span><br></pre></td></tr></table></figure>
+<p>固定所有变量， 只求patch_valued的梯度，这样反向传播之后，patch_grad是Nonetype    </p>
+<h3 id="解决办法-1"><a href="#解决办法-1" class="headerlink" title="解决办法"></a>解决办法</h3><p>patch_value是输入，是叶子，要对它求梯度，除了它的requires_grad要设置为True，所有中间节点的requires_grad也要设置为True。所以这里patch_value.requires_grad = True不能放在 patch_img后面，应该紧跟在patch_value后面，这样后面与patch_value相关的变量都会自动设置为true。而按照上面的写法，只有patch_value的requires_grad设置成True，而其他中间节点没有。改成如下：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">patch</span>_value = torch.rand<span class="params">(<span class="attr">size</span>=[bs, c, h, h])</span><span class="string">.cuda</span><span class="params">()</span></span><br><span class="line"><span class="keyword">patch</span>_value.requires_grad = True</span><br><span class="line"><span class="comment"># patch_value.requires_grad = True 紧跟在 patch_value后面</span></span><br><span class="line">patched_img = <span class="params">(torch.ones_like(mask)</span><span class="string">.cuda</span><span class="params">()</span> - mask) * images + mask * <span class="keyword">patch</span>_value</span><br><span class="line"></span><br><span class="line"><span class="comment"># show_image(patched_img[0])</span></span><br><span class="line">outputs = model<span class="params">(patched_img)</span></span><br><span class="line">loss = loss_function<span class="params">(outputs, labels)</span></span><br><span class="line">loss.backward<span class="params">()</span></span><br><span class="line"><span class="keyword">patch</span>_gard = torch.sign<span class="params">(patch_value.grad)</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="010号坑"><a href="#010号坑" class="headerlink" title="010号坑"></a>010号坑</h2><h3 id="问题描述-3"><a href="#问题描述-3" class="headerlink" title="问题描述"></a>问题描述</h3><p>第一次运行model = timm.create_model(‘resnet18’, pretrained=True, num_classes=2)时出现如下报错：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">huggingface_hub.utils._errors.LocalEntryNotFoundError: An <span class="builtin-name">error</span> happened <span class="keyword">while</span> trying <span class="keyword">to</span> locate the file on the Hub <span class="keyword">and</span> we cannot <span class="builtin-name">find</span> the requested files <span class="keyword">in</span> the local cache. Please check your<span class="built_in"> connection </span><span class="keyword">and</span> try again <span class="keyword">or</span> make sure your Internet<span class="built_in"> connection </span>is on.</span><br></pre></td></tr></table></figure></p>
+<h3 id="解决方法-5"><a href="#解决方法-5" class="headerlink" title="解决方法"></a>解决方法</h3><p>添加镜像网站运行：<br>方法1）在python代码中加入以下代码：<br><figure class="highlight moonscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="built_in">os</span> </span><br><span class="line"><span class="built_in">os</span>.environ[<span class="string">"HF_ENDPOINT"</span>]=<span class="string">"http://hf-mirror.com"</span></span><br></pre></td></tr></table></figure><br>方法2）在命令行中设置环境变量运行代码<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HF_ENDPOINT=http<span class="variable">s:</span>//hf-mirror.<span class="keyword">com</span> <span class="keyword">python</span> xx.<span class="keyword">py</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://blog.csdn.net/weixin_44257107/article/details/136532423" target="_blank" rel="noopener">https://blog.csdn.net/weixin_44257107/article/details/136532423</a></p>
+<h2 id="011号坑"><a href="#011号坑" class="headerlink" title="011号坑"></a>011号坑</h2><h3 id="问题描述-4"><a href="#问题描述-4" class="headerlink" title="问题描述"></a>问题描述</h3><p>ssh登陆上T4之后，查看文件夹，中文全部显示问号了</p>
+<h3 id="解决方法-6"><a href="#解决方法-6" class="headerlink" title="解决方法"></a>解决方法</h3><p>终端输入<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="builtin-name">export</span> <span class="attribute">LANG</span>=<span class="string">"zh_CN.UTF-8"</span>;export <span class="attribute">LANGUAGE</span>=<span class="string">"zh_CN:zh"</span>;export <span class="attribute">LC_ALL</span>=<span class="string">"zh_CN.UTF-8"</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Reference-1"><a href="#Reference-1" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://zhuanlan.zhihu.com/p/338941791" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/338941791</a><br>history看了一下，原来是被别人改成另外的语言了。。。。T4上没有sudo权限，先这么改着用。</p>
+<h2 id="012号坑"><a href="#012号坑" class="headerlink" title="012号坑"></a>012号坑</h2><h3 id="问题描述-5"><a href="#问题描述-5" class="headerlink" title="问题描述"></a>问题描述</h3><p>运行IQA_Attack的时候报错</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  File <span class="string">"/data1/ranyu/workspace/IQA_ATTACK_P100/Attack/misc.py"</span>, line <span class="number">23</span>, in &lt;<span class="class"><span class="keyword">module</span>&gt;</span></span><br><span class="line">    from torchvision.ops import _new_empty_tensor</span><br><span class="line"><span class="symbol">ImportError:</span> cannot import name <span class="string">'_new_empty_tensor'</span> from <span class="string">'torchvision.ops'</span> (<span class="regexp">/data1/ranyu</span><span class="regexp">/home/anaconda</span>3/envs/ranyu/<span class="class"><span class="keyword">lib</span>/<span class="title">python3</span>.11/<span class="title">site</span>-<span class="title">packages</span>/<span class="title">torchvision</span>/<span class="title">ops</span>/<span class="title">__init__</span>.<span class="title">py</span>)</span></span><br></pre></td></tr></table></figure>
+<h3 id="解决方法-7"><a href="#解决方法-7" class="headerlink" title="解决方法"></a>解决方法</h3><p>把项目里的misc.py文件里的下面三行注释掉<br><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">float</span>(torchvision.__version__[:<span class="number">3</span>]) &lt; <span class="number">0.7</span>:</span><br><span class="line">    <span class="keyword">from</span> torchvision.ops <span class="keyword">import</span> _new_empty_tensor</span><br><span class="line">    <span class="keyword">from</span> torchvision.ops.misc <span class="keyword">import</span> _output_size</span><br></pre></td></tr></table></figure></p>
+<h3 id="Reference-2"><a href="#Reference-2" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://zhuanlan.zhihu.com/p/586622773" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/586622773</a></p>
+<h2 id="013号坑"><a href="#013号坑" class="headerlink" title="013号坑"></a>013号坑</h2><h3 id="问题描述-6"><a href="#问题描述-6" class="headerlink" title="问题描述"></a>问题描述</h3><p>运行IQA_attack的时候报错：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.cuda.DeferredCudaCallError: CUDA <span class="keyword">call</span> <span class="keyword">failed</span> lazily <span class="keyword">at</span> initialization <span class="keyword">with</span> <span class="keyword">error</span>: device ＞= <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="解决方法-8"><a href="#解决方法-8" class="headerlink" title="解决方法"></a>解决方法</h3><blockquote>
+<p>问题原因：os.environ[“CUDA_VISIBLE_DEVICES”]=”1”写在靠后的位置了，导致模型初始化已经加载在其他卡上；<br>解决办法：在代码第一行设置os.environ[“CUDA_VISIBLE_DEVICES”]=“1”</p>
+<h3 id="Reference-3"><a href="#Reference-3" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a href="https://blog.csdn.net/qq_38476663/article/details/139769315?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-139769315-blog-133137755.235^v43^control&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=1" target="_blank" rel="noopener">https://blog.csdn.net/qq_38476663/article/details/139769315?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-139769315-blog-133137755.235^v43^control&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=1</a>  </li>
+<li><a href="https://blog.csdn.net/weixin_59191887/article/details/133744569?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-133744569-blog-132028151.235^v43^control&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=1" target="_blank" rel="noopener">https://blog.csdn.net/weixin_59191887/article/details/133744569?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-133744569-blog-132028151.235^v43^control&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=1</a></li>
+</ul>
+</blockquote>
+<h2 id="014号坑"><a href="#014号坑" class="headerlink" title="014号坑"></a>014号坑</h2><h3 id="问题描述-7"><a href="#问题描述-7" class="headerlink" title="问题描述"></a>问题描述</h3><p>macos升级后使用git报错：xcrun: error: invalid active developer path (/Library/Developer/CommandLineTools), missing xcrun at: /Library/Developer/CommandLineTools/usr/bin/xcrun</p>
+<h3 id="解决方法-9"><a href="#解决方法-9" class="headerlink" title="解决方法"></a>解决方法</h3><p>重装xcode<br>command line：<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcode-<span class="keyword">select</span> <span class="comment">--install</span></span><br></pre></td></tr></table></figure><br>如果没有解决问题，执行以下命令<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">sudo</span> xcode-<span class="keyword">select </span>-<span class="keyword">switch </span>/</span><br></pre></td></tr></table></figure></p>
+<h3 id="Reference-4"><a href="#Reference-4" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://blog.csdn.net/weixin_45072479/article/details/132862357" target="_blank" rel="noopener">https://blog.csdn.net/weixin_45072479/article/details/132862357</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E8%B8%A9%E5%9D%91%E4%B9%8B%E8%B7%AF/" rel="tag"># 踩坑之路</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2025/02/16/%E6%8A%8Amac%E4%B8%8Ahexo%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E5%88%B0debian%E4%B8%8A%E6%9D%A5/" rel="next" title="把mac上hexo博客迁移到debian上来">
+                <i class="fa fa-chevron-left"></i> 把mac上hexo博客迁移到debian上来
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2999/12/31/diary/" rel="prev" title="备忘">
+                备忘 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#踩坑之路"><span class="nav-number">1.</span> <span class="nav-text">踩坑之路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#001号坑"><span class="nav-number">1.1.</span> <span class="nav-text">001号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述："><span class="nav-number">1.1.1.</span> <span class="nav-text">问题描述：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">1.1.2.</span> <span class="nav-text">解决办法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Refer-to"><span class="nav-number">1.1.3.</span> <span class="nav-text">Refer to</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#002号坑"><span class="nav-number">1.2.</span> <span class="nav-text">002号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.2.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">1.2.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#003号坑"><span class="nav-number">1.3.</span> <span class="nav-text">003号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述：gpu上训练好之后保存的gpu模型在cpu上加载"><span class="nav-number">1.3.1.</span> <span class="nav-text">问题描述：gpu上训练好之后保存的gpu模型在cpu上加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#004号坑"><span class="nav-number">1.4.</span> <span class="nav-text">004号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-2"><span class="nav-number">1.4.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#005号坑"><span class="nav-number">1.5.</span> <span class="nav-text">005号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述-服务器上的数据GPU"><span class="nav-number">1.5.1.</span> <span class="nav-text">问题描述   服务器上的数据GPU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-3"><span class="nav-number">1.5.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#006号坑"><span class="nav-number">1.6.</span> <span class="nav-text">006号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述：imagenet归一化进行操作，最后将归一化后的图片进行还原（反归一化）"><span class="nav-number">1.6.1.</span> <span class="nav-text">问题描述：imagenet归一化进行操作，最后将归一化后的图片进行还原（反归一化）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-4"><span class="nav-number">1.6.2.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#007号坑"><span class="nav-number">1.7.</span> <span class="nav-text">007号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述：Linux-上安装pytorch，一直安装不上gpu版本"><span class="nav-number">1.7.1.</span> <span class="nav-text">问题描述：Linux 上安装pytorch，一直安装不上gpu版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法："><span class="nav-number">1.7.2.</span> <span class="nav-text">解决方法：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#008号坑"><span class="nav-number">1.8.</span> <span class="nav-text">008号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述：-1"><span class="nav-number">1.8.1.</span> <span class="nav-text">问题描述：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法：-1"><span class="nav-number">1.8.2.</span> <span class="nav-text">解决方法：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#009号坑"><span class="nav-number">1.9.</span> <span class="nav-text">009号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述-2"><span class="nav-number">1.9.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法-1"><span class="nav-number">1.9.2.</span> <span class="nav-text">解决办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#010号坑"><span class="nav-number">1.10.</span> <span class="nav-text">010号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述-3"><span class="nav-number">1.10.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-5"><span class="nav-number">1.10.2.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">1.10.3.</span> <span class="nav-text">Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#011号坑"><span class="nav-number">1.11.</span> <span class="nav-text">011号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述-4"><span class="nav-number">1.11.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-6"><span class="nav-number">1.11.2.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference-1"><span class="nav-number">1.11.3.</span> <span class="nav-text">Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#012号坑"><span class="nav-number">1.12.</span> <span class="nav-text">012号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述-5"><span class="nav-number">1.12.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-7"><span class="nav-number">1.12.2.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference-2"><span class="nav-number">1.12.3.</span> <span class="nav-text">Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#013号坑"><span class="nav-number">1.13.</span> <span class="nav-text">013号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述-6"><span class="nav-number">1.13.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-8"><span class="nav-number">1.13.2.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference-3"><span class="nav-number">1.13.3.</span> <span class="nav-text">Reference</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#014号坑"><span class="nav-number">1.14.</span> <span class="nav-text">014号坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述-7"><span class="nav-number">1.14.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法-9"><span class="nav-number">1.14.2.</span> <span class="nav-text">解决方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference-4"><span class="nav-number">1.14.3.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="写作,writing," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x 00：空格()\citeTable. \refFig. \refAlg. \ref.        0x01：全文统一写法MNIST、CIFAR10、ImageNetSign-OPT变量符号及含义…, …., and ….       0x02：算法中的专有名词建议去查算法原版所述  wiki 可查eg：line-search candidate      0x03：间距全文紧凑    0x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ICIP注意事项">
+<meta property="og:url" content="http://yoursite.com/2022/02/25/ICIP%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="0x 00：空格()\citeTable. \refFig. \refAlg. \ref.        0x01：全文统一写法MNIST、CIFAR10、ImageNetSign-OPT变量符号及含义…, …., and ….       0x02：算法中的专有名词建议去查算法原版所述  wiki 可查eg：line-search candidate      0x03：间距全文紧凑    0x">
+<meta property="article:published_time" content="2022-02-25T14:30:02.000Z">
+<meta property="article:modified_time" content="2022-02-26T05:31:28.000Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="写作">
+<meta property="article:tag" content="writing">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2022/02/25/ICIP注意事项/"/>
+
+
+
+
+
+  <title>ICIP注意事项 | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/02/25/ICIP%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ICIP注意事项</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-02-25T22:30:02+08:00">
+                2022-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%86%99%E4%BD%9C/" itemprop="url" rel="index">
+                    <span itemprop="name">写作</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%86%99%E4%BD%9C/writing/" itemprop="url" rel="index">
+                    <span itemprop="name">writing</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x-00：空格"><a href="#0x-00：空格" class="headerlink" title="0x 00：空格"></a>0x 00：空格</h3><p>()<br>\cite<br>Table. \ref<br>Fig. \ref<br>Alg. \ref<br>.       </p>
+<h3 id="0x01：全文统一写法"><a href="#0x01：全文统一写法" class="headerlink" title="0x01：全文统一写法"></a>0x01：全文统一写法</h3><p>MNIST、CIFAR10、ImageNet<br>Sign-OPT<br>变量符号及含义<br>…, …., and ….      </p>
+<h3 id="0x02：算法中的专有名词"><a href="#0x02：算法中的专有名词" class="headerlink" title="0x02：算法中的专有名词"></a>0x02：算法中的专有名词</h3><p>建议去查算法原版所述  wiki 可查<br>eg：line-search candidate     </p>
+<h3 id="0x03：间距"><a href="#0x03：间距" class="headerlink" title="0x03：间距"></a>0x03：间距</h3><p>全文紧凑   </p>
+<h3 id="0x04：图、表"><a href="#0x04：图、表" class="headerlink" title="0x04：图、表"></a>0x04：图、表</h3><p>图的caption在下面<br>表的caption在上面    </p>
+<h3 id="0x05：符号"><a href="#0x05：符号" class="headerlink" title="0x05：符号"></a>0x05：符号</h3><p>矢量加粗，脚标不加粗<br>标量不加粗    </p>
+<h3 id="0x06：缩写"><a href="#0x06：缩写" class="headerlink" title="0x06：缩写"></a>0x06：缩写</h3><p>i.e.<br>a.k.a.<br>w.r.t         </p>
+<h3 id="0x07：参考文献"><a href="#0x07：参考文献" class="headerlink" title="0x07：参考文献"></a>0x07：参考文献</h3><p>1、作者，标题（第一个单词的字符首字母大写），In Proceedings of 会议（每一个单词的首字母大写，除了介词），pages多少页到多少页，年份<br>eg:<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Yanpei Liu, Xinyun Chen, Chang Liu, <span class="keyword">and</span> Dawn Song. Delving <span class="keyword">into</span> transferable adversarial examples <span class="keyword">and</span> <span class="keyword">black</span>-box attacks. In Proceedings <span class="keyword">of</span> <span class="keyword">the</span> International Conference <span class="keyword">on</span> <span class="title">Learning</span> <span class="title">Representations</span>, <span class="title">pages</span> <span class="title">1</span>–<span class="title">14</span>, <span class="title">2017</span>.</span><br></pre></td></tr></table></figure><br>2、作者，标题（第一个单词首字母大写），期刊（杂志）（每一个单词的首字母大写，除了介词），vol，pages，year<br>3、同一会议 期刊的名字要全文统一。     </p>
+<h3 id="0x08：摘要（Abstract）"><a href="#0x08：摘要（Abstract）" class="headerlink" title="0x08：摘要（Abstract）"></a>0x08：摘要（Abstract）</h3><p>however<br>we find 我们的部分差不多占一半      </p>
+<h3 id="0x09：引言"><a href="#0x09：引言" class="headerlink" title="0x09：引言"></a>0x09：引言</h3><p>1、一般三段到四段<br>第一段背景<br>第二段过去的技术方法   缺点<br>第三段 motivated by balalbaba/ Based on these finding 我们提出了吧啦吧<br>2、刚好占满第一页     </p>
+<h3 id="0x10：实验"><a href="#0x10：实验" class="headerlink" title="0x10：实验"></a>0x10：实验</h3><p>1、实验中各个参数的设置 要交代清楚<br>2、算法：一般参数放在最前面 然后是input output<br>3、#号 是the number of 的意思  </p>
+<h3 id="0x11：a、the的用法。"><a href="#0x11：a、the的用法。" class="headerlink" title="0x11：a、the的用法。"></a>0x11：a、the的用法。</h3><p>有限定的前面加the</p>
+<h3 id="0x12：logical-word"><a href="#0x12：logical-word" class="headerlink" title="0x12：logical word"></a>0x12：logical word</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>due to</td>
+</tr>
+<tr>
+<td>meanwhile</td>
+</tr>
+<tr>
+<td>thereby</td>
+</tr>
+<tr>
+<td>by contrast</td>
+</tr>
+<tr>
+<td>thus</td>
+</tr>
+<tr>
+<td>developed</td>
+</tr>
+<tr>
+<td>respectively</td>
+</tr>
+<tr>
+<td>Since</td>
+</tr>
+<tr>
+<td>utterly</td>
+</tr>
+<tr>
+<td>extra</td>
+</tr>
+<tr>
+<td>causing</td>
+</tr>
+<tr>
+<td>actually</td>
+</tr>
+<tr>
+<td>carry out</td>
+</tr>
+<tr>
+<td>Unfortunately</td>
+</tr>
+<tr>
+<td>unavailable</td>
+</tr>
+<tr>
+<td>a large number of</td>
+</tr>
+<tr>
+<td>Therefore</td>
+</tr>
+<tr>
+<td>As a result</td>
+</tr>
+<tr>
+<td>Obviously</td>
+</tr>
+<tr>
+<td>Hence</td>
+</tr>
+<tr>
+<td>That is to say</td>
+</tr>
+<tr>
+<td>even if</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0x13：nice-word"><a href="#0x13：nice-word" class="headerlink" title="0x13：nice word"></a>0x13：nice word</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>搜索</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>constrain</td>
+</tr>
+<tr>
+<td>challenging</td>
+</tr>
+<tr>
+<td>adversary</td>
+</tr>
+<tr>
+<td>makes great advances</td>
+</tr>
+<tr>
+<td>is employed to</td>
+</tr>
+<tr>
+<td>obtain/find</td>
+</tr>
+<tr>
+<td>costs</td>
+</tr>
+<tr>
+<td>a huge amount of</td>
+</tr>
+<tr>
+<td>resulting in</td>
+</tr>
+<tr>
+<td>degradation</td>
+</tr>
+<tr>
+<td>termed</td>
+</tr>
+<tr>
+<td>enhance</td>
+</tr>
+<tr>
+<td>requires</td>
+</tr>
+<tr>
+<td>achieve</td>
+</tr>
+<tr>
+<td>significantly</td>
+</tr>
+<tr>
+<td>overall</td>
+</tr>
+<tr>
+<td>achieving tremendous attention</td>
+</tr>
+<tr>
+<td>focuses on</td>
+</tr>
+<tr>
+<td>realistic scenario</td>
+</tr>
+<tr>
+<td>dramatically</td>
+</tr>
+<tr>
+<td>worked out</td>
+</tr>
+<tr>
+<td>Inversely</td>
+</tr>
+<tr>
+<td>superiority</td>
+</tr>
+<tr>
+<td>demonstrate</td>
+</tr>
+<tr>
+<td>illustration</td>
+</tr>
+<tr>
+<td>below</td>
+</tr>
+<tr>
+<td>as follows</td>
+</tr>
+<tr>
+<td>visualizes</td>
+</tr>
+<tr>
+<td>among which</td>
+</tr>
+<tr>
+<td>be activated to</td>
+</tr>
+<tr>
+<td>figure out</td>
+</tr>
+<tr>
+<td>Note that</td>
+</tr>
+<tr>
+<td>denotes</td>
+</tr>
+<tr>
+<td>dramatically surpasses\</td>
+</tr>
+<tr>
+<td>verify</td>
+</tr>
+<tr>
+<td>in terms of</td>
+</tr>
+<tr>
+<td>confirmed</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0x14：想到啥再补充-｀・ω・´"><a href="#0x14：想到啥再补充-｀・ω・´" class="headerlink" title="0x14：想到啥再补充(｀・ω・´)"></a>0x14：想到啥再补充(｀・ω・´)</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%86%99%E4%BD%9C/" rel="tag"># 写作</a>
+          
+            <a href="/tags/writing/" rel="tag"># writing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/10/30/%E3%80%90%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%E3%80%91Simple-Black-box-Adversarial-Attacks/" rel="next" title="【论文笔记】Simple Black-box Adversarial Attacks">
+                <i class="fa fa-chevron-left"></i> 【论文笔记】Simple Black-box Adversarial Attacks
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/" rel="prev" title="【文献笔记】QUERY EFFICIENT DECISION BASED SPARSE ATTACKS AGAINST BLACK-BOX DEEP LEARNING MODELS">
+                【文献笔记】QUERY EFFICIENT DECISION BASED SPARSE ATTACKS AGAINST BLACK-BOX DEEP LEARNING MODELS <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x-00：空格"><span class="nav-number">1.</span> <span class="nav-text">0x 00：空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01：全文统一写法"><span class="nav-number">2.</span> <span class="nav-text">0x01：全文统一写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02：算法中的专有名词"><span class="nav-number">3.</span> <span class="nav-text">0x02：算法中的专有名词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03：间距"><span class="nav-number">4.</span> <span class="nav-text">0x03：间距</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04：图、表"><span class="nav-number">5.</span> <span class="nav-text">0x04：图、表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05：符号"><span class="nav-number">6.</span> <span class="nav-text">0x05：符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06：缩写"><span class="nav-number">7.</span> <span class="nav-text">0x06：缩写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x07：参考文献"><span class="nav-number">8.</span> <span class="nav-text">0x07：参考文献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x08：摘要（Abstract）"><span class="nav-number">9.</span> <span class="nav-text">0x08：摘要（Abstract）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x09：引言"><span class="nav-number">10.</span> <span class="nav-text">0x09：引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x10：实验"><span class="nav-number">11.</span> <span class="nav-text">0x10：实验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x11：a、the的用法。"><span class="nav-number">12.</span> <span class="nav-text">0x11：a、the的用法。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x12：logical-word"><span class="nav-number">13.</span> <span class="nav-text">0x12：logical word</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x13：nice-word"><span class="nav-number">14.</span> <span class="nav-text">0x13：nice word</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x14：想到啥再补充-｀・ω・´"><span class="nav-number">15.</span> <span class="nav-text">0x14：想到啥再补充(｀・ω・´)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

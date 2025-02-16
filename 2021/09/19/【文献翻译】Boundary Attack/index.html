@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="对样样本,黑盒攻击,Adversarial examples,black-attack,硬标签,hard-label,Decision-Based,文献翻译," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x00 原文链接以及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1712.04248源码：https:&#x2F;&#x2F;github.com&#x2F;bethgelab&#x2F;foolbox  0x01：应用场景Decision-Based：不知道模型细节，只知道模型的最终分类结果。    0x02 提出的攻击方法：Boundary AttackBoundary Attack：从一个大的对抗性扰动开始，然后试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【文献翻译】Boundary Attack">
+<meta property="og:url" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="0x00 原文链接以及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1712.04248源码：https:&#x2F;&#x2F;github.com&#x2F;bethgelab&#x2F;foolbox  0x01：应用场景Decision-Based：不知道模型细节，只知道模型的最终分类结果。    0x02 提出的攻击方法：Boundary AttackBoundary Attack：从一个大的对抗性扰动开始，然后试">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210920200258736.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210920162844673.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210920200258736.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921112118069.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921112621087.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921112756641.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921113018620.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921113041767.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921140719287.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921141958305.png">
+<meta property="article:published_time" content="2021-09-19T07:12:10.000Z">
+<meta property="article:modified_time" content="2025-02-16T04:32:12.837Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="对样样本">
+<meta property="article:tag" content="黑盒攻击">
+<meta property="article:tag" content="Adversarial examples">
+<meta property="article:tag" content="black-attack">
+<meta property="article:tag" content="硬标签">
+<meta property="article:tag" content="hard-label">
+<meta property="article:tag" content="Decision-Based">
+<meta property="article:tag" content="文献翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210920200258736.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/09/19/【文献翻译】Boundary Attack/"/>
+
+
+
+
+
+  <title>【文献翻译】Boundary Attack | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【文献翻译】Boundary Attack</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-19T15:12:10+08:00">
+                2021-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/" itemprop="url" rel="index">
+                    <span itemprop="name">对抗样本</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/ICLR-2018/" itemprop="url" rel="index">
+                    <span itemprop="name">ICLR 2018</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/ICLR-2018/%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index">
+                    <span itemprop="name">文献翻译</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00-原文链接以及源码链接"><a href="#0x00-原文链接以及源码链接" class="headerlink" title="0x00 原文链接以及源码链接"></a>0x00 原文链接以及源码链接</h3><p>原文：<a href="https://arxiv.org/abs/1712.04248" target="_blank" rel="noopener">https://arxiv.org/abs/1712.04248</a><br>源码：<a href="https://github.com/bethgelab/foolbox" target="_blank" rel="noopener">https://github.com/bethgelab/foolbox</a> </p>
+<h3 id="0x01：应用场景"><a href="#0x01：应用场景" class="headerlink" title="0x01：应用场景"></a>0x01：应用场景</h3><p>Decision-Based：不知道模型细节，只知道模型的最终分类结果。   </p>
+<h3 id="0x02-提出的攻击方法：Boundary-Attack"><a href="#0x02-提出的攻击方法：Boundary-Attack" class="headerlink" title="0x02 提出的攻击方法：Boundary Attack"></a>0x02 提出的攻击方法：Boundary Attack</h3><p>Boundary Attack：从一个大的对抗性扰动开始，然后试图在保持对抗性的同时减少扰动。<br>边界攻击算法背后的基本直觉如图2所示，该算法从一个已经是对抗性的点开始初始化，然后沿着对抗性区域和非对抗性区域之间的边界执行随机游走，使得：<br>(1)对抗样本停留在对抗性区域内；<br>(2)减少对抗样本到目标图像的距离。<br>换句话说，根据给定的对抗准则$c(\cdot)$，我们用一个合适的建议分布$P$执行拒绝抽样（rejection sampling，不懂。待查。），来找到逐渐变小的对抗扰动。<br><img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210920200258736.png" alt="image-20210920200258736">    </p>
+<p>算法的基本逻辑在算法1中描述，每个单独的构建块将在下一小节中详细说明。<br>Algorithm 1:Minimal version of the Boundary Attack，如Algorithm 1所示：<br><img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210920162844673.png" alt="Algorithm 1"><br>算法的输入为：原始图像$o$，对抗规则$c(\cdot)$，目标模型预测$d(\cdot)$    </p>
+<p>结果： 获得和原始样本距离最小的对抗样本$\tilde{\boldsymbol{o}}$</p>
+<h4 id="0x02-1-初始化"><a href="#0x02-1-初始化" class="headerlink" title="0x02.1    初始化"></a>0x02.1    初始化</h4><p>边界攻击需要用已经是对抗性的样本进行初始化。在非定向攻击的情况下，我们只需从给定输入的有效域的最大熵分布中抽样。在下面的计算机视觉应用中，输入被限制在每个像素[0,255]的范围内，我们从一个均匀分布的$U$(0,255)中抽取初始图像$\tilde{\mathbf{o}}^{0}$中的每个像素。我们拒绝非敌对性的样本。在定向攻击设置中，我们从模型分类为目标类的任何样本开始。</p>
+<h4 id="0x02-2-建议分布"><a href="#0x02-2-建议分布" class="headerlink" title="0x02.2 建议分布"></a>0x02.2 建议分布</h4><p>算法的效率很大程度上取决于建议的分布$P$，即在算法每一步所探索的随机方向。最优的建议的分布通常取决于要攻击的领域和/或模型。这个建议的分布背后的基本思想如下：在第k步中，我们希望从满足以下约束的最大熵分布中得出扰动$\eta^{k}$：<br>1）扰动样本位于输入域内<br>$\tilde{\mathbf{o}_{i}}^{k-1}+ \eta^{k}_{i}\in[0,255]$                             （1）</p>
+<p>2）扰动的相对大小为$\delta$<br>$\left | \eta^{k}\right |_{2}=\delta \cdot\ d({\mathbf{o}},\tilde{\mathbf{o}_{i}}^{k-1})$                        （2）</p>
+<p>3）该扰动将扰动图像相对于原始输入的距离减少了相对量$\epsilon$<br>$d({\mathbf{o}},\tilde{\mathbf{o}_{i}}^{k-1}) - d({\mathbf{o}},\tilde{\mathbf{o}_{i}}^{k-1} + \eta^{k}) = \epsilon \cdot d({\mathbf{o}},\tilde{\mathbf{o}_{i}}^{k-1})$   </p>
+<p>在实践中，很难从该分布中采样，因此我们求助于一个更简单的启发式方法：<br>首先， 我们从一个iid高斯分布$\eta^{k}_{i}$~$N(0,1)$中采样，然后重新缩放和剪裁，使得（1）和（2）成立。<br>第二步，我们把$\eta^{k}$投影到围绕原始图像$o$的球面上，使得 $ d({\mathbf{o}},\tilde{\mathbf{o}_{i}}^{k-1} + \eta^{k}) = d({\mathbf{o}},\tilde{\mathbf{o}_{i}}^{k-1})$和（1）成立。 我们将其表示为正交扰动，稍后将其用于超参数调谐。<br>最后一步中，我们向原始图像做一个小的移动，使得(1)和(3)保持不变。<br>对于高维输入和小的$\delta$、$\epsilon$，约束（2）也将大致成立。</p>
+<h4 id="0x02-3-对抗标准"><a href="#0x02-3-对抗标准" class="headerlink" title="0x02.3 对抗标准"></a>0x02.3 对抗标准</h4><p>非定向攻击（Untargeted Attack）：指鹿不为马<br>定向攻击（Target Attack)：指鹿为马<br>top-k分类错误：目标模型输出的top-k类不包括真实类别；<br>置信度阈值：目标模型对特定类输出的置信度达到阈值。  </p>
+<h4 id="0x02-4-超参数调整"><a href="#0x02-4-超参数调整" class="headerlink" title="0x02.4 超参数调整"></a>0x02.4 超参数调整</h4><p>   边界攻击只有两个相关参数：总扰动$\delta$的长度和朝向原始输入的步骤$\epsilon$的长度(见图2)。<br>   <img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210920200258736.png" alt="Figure 2"><br>   我们根据边界的局部几何形状动态调整这两个参数。这次调整的灵感来自于信任域方法（Trust Region methods）。 本质上，我们首先测试正交扰动是否仍然是对抗性的。如果这是true，那么我们向目标移动一小步，然后再测试一次。正交步长检验步长是否足够小，以便我们可以将对抗性区域和非对抗性区域之间的决策边界视为近似线性的。如果是这样的话，我们预计大约50%的正交扰动仍然是对抗性的。如果这个比率低得多，我们就减小步长$\delta$，如果它接近50%或更高，我们就增大它。如果正交扰动仍然是对抗性的，我们向原始输入增加一小步。此步骤的最大大小取决于局部邻域中决策边界的角度（另请参见图2)。如果成功率太小，我们会减少$\epsilon$如果成功率太大，我们会增加$\epsilon$。通常，我们离原始图像越近，决策边界就越平坦，而$\epsilon$越小才能继续取得进展。只要$\epsilon$收敛到零，攻击就会收敛。   </p>
+<h3 id="0x03-与其他攻击的比较"><a href="#0x03-与其他攻击的比较" class="headerlink" title="0x03 与其他攻击的比较"></a>0x03 与其他攻击的比较</h3><p>我们量化了边界攻击在三个不同标准数据集上的性能：MNIST、CIFAR-10和ImageNet-1000。为了尽可能简单和透明地与以前的结果进行比较，我们在这里使用与Carlini&amp;Wagner相同的MNIST和CIFAR网络。简而言之，MNIST和CIFAR模型都有9层，包括4个卷积层、2个最大汇聚层和2个完全连通层。在ImageNet上，我们使用Keras5提供的预先训练的网络VGG-19、ResNet-50和Inception-v3。<br>   我们在两种设置中评估边界攻击: (1)非定向攻击设置，其中对抗性的扰动将原样本的标签翻转到任何其他标签; (2)定向攻击设置，其中对抗性的扰动将标签翻转到特定的目标类。<br>   在非目标环境下，我们比较了三种基于边界的攻击算法:<br>   Fast-Gradient Sign Method（FGSM）：FGSM是最简单、应用最广泛的非定向对抗攻击方法之一。简而言之，FGSM计算梯度$g=\nabla_{o} \mathcal{L}(\boldsymbol{o}, c)$，该梯度使真实类标签$c$的损失$\mathcal{L}$的损失最大，然后寻找使$\boldsymbol{o} + \epsilon \cdot  \mathcal{g}$仍然保持对抗性的最小$\epsilon$。<br>   DeepFool：DeepFool是一种简单但非常有效的攻击。在每次迭代中，它通过用线性分类器近似模型分类器，为每个类$\ell \neq \ell_{0}$计算到达类边界所需的最小距离$d(\ell,\ell_{0})$。然后，它在距离最小的类的方向上进行相应的步骤。<br>   Carlini &amp; Wagner：Carlini&amp;Wagner的攻击本质上是一种改进的迭代梯度攻击，它使用Adam优化器、多起点、考虑盒约束的tanh非线性和基于最大值的对抗约束函数。 </p>
+<p>为了评估每次攻击的成功程度，我们使用以下指标:<br>设$\boldsymbol{\eta}_{A, M}\left(\boldsymbol{o}_{i}\right) \in \mathbb{R}^{N}$为攻击$A$对第$i$个样本$o_{i}$在模型M上发现的对抗性扰动。$A$的总分$S_{A}$是所有样本上$L_{2}$距离的中位数平方，<br><img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921112118069.png" alt="image-20210921112118069"><br>对于MNIST和CIFAR，我们评估从验证集中随机抽取的1000个样本，对于ImageNet，我们使用250个图像。   </p>
+<h4 id="0x03-1-非定向攻击"><a href="#0x03-1-非定向攻击" class="headerlink" title="0x03.1 非定向攻击"></a>0x03.1 非定向攻击</h4><p>在非定向攻击设置中，对抗性是其预测标签与原始图像的标签不同的任何图像。我们在图3中显示了通过边界攻击为每个数据集合成的对抗性样本。每个攻击和每个数据集的得分如下：<br><img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921112621087.png" alt="Figure 3"><br>尽管边界攻击很简单，但就最小的对抗性扰动而言，它与基于梯度的攻击具有竞争性，并且对于初始点的选择非常稳定(图5)。<br><img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921112756641.png" alt="Figure 5"></p>
+<p>这一发现相当值得注意，因为基于梯度的攻击可以完全观察到模型，而边界攻击则严格限制在最终类预测上。为了弥补这种信息的缺乏，边界攻击需要更多的迭代才能收敛。作为与实现质量无关的攻击运行时间的粗略衡量标准，我们跟踪了每个攻击请求通过网络的向前传递(预测)和向后传递(梯度)的数量，以找到Resnet-50的对手：平均超过20个样本，在与以前相同的条件下，DeepFool需要大约7个向前传递和37个向后传递，Carlini&amp;Wagner攻击需要16000个向前传递和相同数量的向后传递，边界攻击使用1200000个向前传递但0个反向传递。虽然这(毫不奇怪)使得边界攻击的运行成本更高，但重要的是要注意，如果人们只对不可察觉的扰动感兴趣，边界攻击需要的迭代次数要少得多，请参见图4和图6。<br><img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921113018620.png" alt="Figure 4"> </p>
+<p><img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921113041767.png" alt="Figure 6">   </p>
+<h4 id="0x03-2-定向攻击"><a href="#0x03-2-定向攻击" class="headerlink" title="0x03.2 定向攻击"></a>0x03.2 定向攻击</h4><p>我们也可以在有目标的情况下使用边界攻击。在这种情况下，我们从模型正确识别的目标类样本中初始化攻击。从起点到原始样本的样本轨迹见图7。<br><img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921140719287.png" alt="image-20210921140719287"><br>对模型进行大约$10^{4}$次调用之后，受干扰的图像已经被人类清楚地识别为猫，并且没有达尔马提亚狗的痕迹，但这张照片仍然被模型分类为斑点狗。<br>为了将边界攻击与Carlini&amp;Wagner进行比较，我们以如下方式为每个样本定义了目标目标标签：在MNIST和CIFAR数据集中，标签为$\ell$的样本得到的目标标签是($\ell+1$ )mod 10。在ImageNet上，我们随机绘制目标标签，但在各种攻击中保持一致的。结果如下：<br><img src="/2021/09/19/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Boundary%20Attack/image-20210921141958305.png" alt="image-20210921141958305"></p>
+<h3 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h3><p>算法分析：<a href="https://ha2ha2.github.io/2021/09/27/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/" target="_blank" rel="noopener">./【算法】Boundary Attack算法手稿</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AF%B9%E6%A0%B7%E6%A0%B7%E6%9C%AC/" rel="tag"># 对样样本</a>
+          
+            <a href="/tags/%E9%BB%91%E7%9B%92%E6%94%BB%E5%87%BB/" rel="tag"># 黑盒攻击</a>
+          
+            <a href="/tags/Adversarial-examples/" rel="tag"># Adversarial examples</a>
+          
+            <a href="/tags/black-attack/" rel="tag"># black-attack</a>
+          
+            <a href="/tags/%E7%A1%AC%E6%A0%87%E7%AD%BE/" rel="tag"># 硬标签</a>
+          
+            <a href="/tags/hard-label/" rel="tag"># hard-label</a>
+          
+            <a href="/tags/Decision-Based/" rel="tag"># Decision-Based</a>
+          
+            <a href="/tags/%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91/" rel="tag"># 文献翻译</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/09/05/%E6%96%AD%E5%BC%80%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%9E%E6%8E%A5%EF%BC%8C%E4%BB%8D%E7%84%B6%E7%BB%A7%E7%BB%AD%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F/" rel="next" title="断开服务器连接，仍然继续运行程序">
+                <i class="fa fa-chevron-left"></i> 断开服务器连接，仍然继续运行程序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/09/20/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Boundary_Attack%E7%AE%97%E6%B3%95/" rel="prev" title="【算法】Boundary Attack算法手稿">
+                【算法】Boundary Attack算法手稿 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-原文链接以及源码链接"><span class="nav-number">1.</span> <span class="nav-text">0x00 原文链接以及源码链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01：应用场景"><span class="nav-number">2.</span> <span class="nav-text">0x01：应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-提出的攻击方法：Boundary-Attack"><span class="nav-number">3.</span> <span class="nav-text">0x02 提出的攻击方法：Boundary Attack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-1-初始化"><span class="nav-number">3.1.</span> <span class="nav-text">0x02.1    初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-2-建议分布"><span class="nav-number">3.2.</span> <span class="nav-text">0x02.2 建议分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-3-对抗标准"><span class="nav-number">3.3.</span> <span class="nav-text">0x02.3 对抗标准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-4-超参数调整"><span class="nav-number">3.4.</span> <span class="nav-text">0x02.4 超参数调整</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-与其他攻击的比较"><span class="nav-number">4.</span> <span class="nav-text">0x03 与其他攻击的比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-1-非定向攻击"><span class="nav-number">4.1.</span> <span class="nav-text">0x03.1 非定向攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-2-定向攻击"><span class="nav-number">4.2.</span> <span class="nav-text">0x03.2 定向攻击</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#友情链接"><span class="nav-number">5.</span> <span class="nav-text">友情链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

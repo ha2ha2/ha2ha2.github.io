@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="对样样本,黑盒攻击,Adversarial examples,black-attack,硬标签,hard-label,Decision-Based,算法," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1909.10773源码：https:&#x2F;&#x2F;github.com&#x2F;cmhcbb&#x2F;attackbox    类型这里分析Untargeted Attack，l2攻击     算法输入攻击的模型：model原始的样本及其标签：x0，y0迭代次数：1000查询次数：20000alpha：0.02beta：0.001 初始化随机生成num_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】Sign-Opt Attack算法手稿">
+<meta property="og:url" content="http://yoursite.com/2021/10/02/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Sign-Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1909.10773源码：https:&#x2F;&#x2F;github.com&#x2F;cmhcbb&#x2F;attackbox    类型这里分析Untargeted Attack，l2攻击     算法输入攻击的模型：model原始的样本及其标签：x0，y0迭代次数：1000查询次数：20000alpha：0.02beta：0.001 初始化随机生成num_">
+<meta property="og:image" content="http://yoursite.com/2021/10/02/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Sign-Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211003132818992.png">
+<meta property="og:image" content="https://ha2ha2.github.io/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/sign.gif">
+<meta property="article:published_time" content="2021-10-02T10:18:31.000Z">
+<meta property="article:modified_time" content="2021-10-03T05:30:06.000Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="对样样本">
+<meta property="article:tag" content="黑盒攻击">
+<meta property="article:tag" content="Adversarial examples">
+<meta property="article:tag" content="black-attack">
+<meta property="article:tag" content="硬标签">
+<meta property="article:tag" content="hard-label">
+<meta property="article:tag" content="Decision-Based">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/10/02/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Sign-Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211003132818992.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/10/02/【算法】Sign-Opt-Attack算法手稿/"/>
+
+
+
+
+
+  <title>【算法】Sign-Opt Attack算法手稿 | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/10/02/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Sign-Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【算法】Sign-Opt Attack算法手稿</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-10-02T18:18:31+08:00">
+                2021-10-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/" itemprop="url" rel="index">
+                    <span itemprop="name">对抗样本</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/ICLR-2020/" itemprop="url" rel="index">
+                    <span itemprop="name">ICLR 2020</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/ICLR-2020/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="原文链接及源码链接"><a href="#原文链接及源码链接" class="headerlink" title="原文链接及源码链接"></a>原文链接及源码链接</h3><p>原文：<a href="https://arxiv.org/abs/1909.10773" target="_blank" rel="noopener">https://arxiv.org/abs/1909.10773</a><br>源码：<a href="https://github.com/cmhcbb/attackbox" target="_blank" rel="noopener">https://github.com/cmhcbb/attackbox</a>   </p>
+<h3 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h3><p>这里分析Untargeted Attack，l2攻击    </p>
+<h3 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h3><h4 id="输入"><a href="#输入" class="headerlink" title="输入"></a>输入</h4><p>攻击的模型：model<br>原始的样本及其标签：x0，y0<br>迭代次数：1000<br>查询次数：20000<br>alpha：0.02<br>beta：0.001</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>随机生成num_directions=100个高斯噪声$\boldsymbol{u}$，并在这100个方向中找到最好的初始攻击方向。<br>最好的初始攻击方向，在这个方向上，g(θ)的值是最小的。<br>g(θ)的含义：当搜索方向为θ时，对应的到决策边界最近的对抗样本与原图像的距离为g(θ)（失真度）。<br>g(θ)的求法：细粒度搜索+二分查找     </p>
+<h4 id="梯度下降"><a href="#梯度下降" class="headerlink" title="梯度下降"></a>梯度下降</h4><ul>
+<li><p>1000次迭代以内</p>
+<ul>
+<li><p>在x0+theta处进行梯度估计，使用sign_grad_v1（详见下一小节）来进行梯度估计，然后使用这个不完美的梯度来更新搜索方向theta。</p>
+</li>
+<li><p>线性搜索来寻找梯度下降的步长</p>
+</li>
+<li><p>初始化：min_theta=之前初始化最好的theta；min_g2之前初始化最好的g_theta；min_vg=0向量只用于动量mpmentum）</p>
+</li>
+<li><p>part 1：循环【每一次 通过一步SGD（随机梯度下降法）来更新theta】  【跨大步直到直到找到new_g2&gt;=min_g2】</p>
+<ul>
+<li><p>通过动量判断更新的theta及其对应的g(θ)值暂存于new_theta和new_g2中。</p>
+</li>
+<li><p>逐渐增大步长 alpha = alpha * 2   </p>
+</li>
+<li><p>如果new_g2&lt;min_g2，更新min_theta和min_g2      </p>
+<ul>
+<li>如果momentum&gt;0，更新new_vg   </li>
+</ul>
+</li>
+<li><p>否则 结束part 1 </p>
+</li>
+</ul>
+</li>
+<li></li>
+<li><p>part 2  循环【如果part 1失败了，即以来就结束了part 1，说明alpha初始化过大，要尝试小一点的alpha。】  【跨小步直到找到new_g2 &lt; gg】</p>
+<ul>
+<li><p>通过动量判断更新的theta及其对应的g(θ)值暂存于new_theta和new_g2中。     </p>
+</li>
+<li><p>逐渐缩小步长 alpha = alpha * 0.25   </p>
+</li>
+<li><p>如果new_g2&lt;gg，更新min_theta和min_g2      </p>
+<ul>
+<li>如果momentum&gt;0，更新new_vg ，并且 结束part 2</li>
+</ul>
+</li>
+</ul>
+</li>
+<li></li>
+<li><p>part 3 如果part 2 part 3全失败了，都没能更新min_theta和min_g2，即意味着没有移动，执行part 3      </p>
+<ul>
+<li>alpha重置为1  并输出提示”Warning: not moving”  </li>
+<li>beta = beta * 1</li>
+<li>如果beta &lt; 1e-8 结束整个1000次迭代 </li>
+</ul>
+</li>
+<li></li>
+<li><p>part 4【更新xg，gg，vg】    </p>
+</li>
+<li><p>如果part 1 part 2全失败了，min_theta，min_g2将会是当前theta值，当前g2值（即没有移动）。</p>
+</li>
+<li></li>
+<li><p>part 5 【如果查询次数query_count &gt; 查询限制 query_limit，结束整个1000次迭代。】   </p>
+</li>
+</ul>
+</li>
+<li><p>迭代结束 返回对抗样本</p>
+</li>
+</ul>
+<h4 id="sign-grad-v1"><a href="#sign-grad-v1" class="headerlink" title="sign_grad_v1"></a>sign_grad_v1</h4><p>通过以下公式估计梯度的符号：<br>$ sign(g) = 1/Q [ \sum_{q=1}^Q sign( g(theta+h*u_i) - g(theta) )u_i]$          </p>
+<p><img src="/2021/10/02/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Sign-Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/image-20211003132818992.png" alt="image-20211003132818992">   </p>
+<p><img src="https://ha2ha2.github.io/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/sign.gif" alt="sign_gif">      </p>
+<p>判断：在以原来长度（g(θ)值）为半径的球面，x0从另一个方向（new_tℎeta）生成对抗样本，该样本是否依然落在决策边界外（即保持对抗性)！<br>如果仍然保持对抗性（即≠y0），则新方向（new_tℎeta）到决策边界距离较小，从而给出较小的g值（即g_new(小) - g(大) &lt; 0），表明$u$是最小化优化问题下降的方向！把这些随机的$u$加起来求平均来近似估计g的梯度。（是一种不精确的梯度估计，但是减少了查询量）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sign_grad_v1</span><span class="params">(self, x0, y0, theta, initial_lbd, h=<span class="number">0.001</span>, D=<span class="number">4</span>, target=None)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Evaluate the sign of gradient by formulat</span></span><br><span class="line"><span class="string">    sign(g) = 1/Q [ \sum_&#123;q=1&#125;^Q sign( g(theta+h*u_i) - g(theta) )u_i$ ]</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    K = self.k <span class="comment"># 200个随机方向 (用来估计梯度)</span></span><br><span class="line">    sign_grad = np.zeros(theta.shape)			<span class="comment">#初始化</span></span><br><span class="line">    queries = <span class="number">0</span></span><br><span class="line">    <span class="comment">### 使用正交变换</span></span><br><span class="line">    <span class="comment">#dim = np.prod(sign_grad.shape)</span></span><br><span class="line">    <span class="comment">#H = np.random.randn(dim, K)</span></span><br><span class="line">    <span class="comment">#Q, R = qr(H, mode='economic')</span></span><br><span class="line">    <span class="keyword">for</span> iii <span class="keyword">in</span> range(K): <span class="comment"># for each u</span></span><br><span class="line">        <span class="comment"># # Code for reduced dimension gradient</span></span><br><span class="line">        <span class="comment"># u = np.random.randn(N_d,N_d)</span></span><br><span class="line">        <span class="comment"># u = u.repeat(D, axis=0).repeat(D, axis=1)</span></span><br><span class="line">        <span class="comment"># u /= LA.norm(u)</span></span><br><span class="line">        <span class="comment"># u = u.reshape([1,1,N,N])</span></span><br><span class="line">        </span><br><span class="line">        u = np.random.randn(*theta.shape); u /= LA.norm(u)   <span class="comment">#随机一个U方向，并单位化</span></span><br><span class="line">        new_theta = theta + h*u; new_theta /= LA.norm(new_theta)   <span class="comment">#新的theta：new_theta=theta + h*u，并将new_theta单位化</span></span><br><span class="line">        sign = <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Targeted case.	定向攻击  的设置</span></span><br><span class="line">        <span class="keyword">if</span> (target <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> </span><br><span class="line">            self.model.predict_label(x0+torch.tensor(initial_lbd*new_theta, dtype=torch.float)) == target):</span><br><span class="line">            sign = <span class="number">-1</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Untargeted case	非定向攻击 的设置</span></span><br><span class="line">        <span class="comment"># preds.append(self.model.predict_label(x0+torch.tensor(initial_lbd*new_theta, dtype=torch.float)).item())</span></span><br><span class="line">        <span class="keyword">if</span> (target <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">and</span></span><br><span class="line">            self.model.predict_label(x0+torch.tensor(initial_lbd*new_theta, dtype=torch.float)) != y0): <span class="comment"># success				</span></span><br><span class="line">            sign = <span class="number">-1</span>		<span class="comment"># 依旧保持对抗性，说明下降的方向正确</span></span><br><span class="line"></span><br><span class="line">        queries += <span class="number">1</span></span><br><span class="line">        sign_grad += u*sign</span><br><span class="line">    </span><br><span class="line">    sign_grad /= K</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sign_grad, queries</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>使用单次查询来估计梯度的方向，而不使用有限差分来直接估计梯度。  </p>
+<h3 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h3><p>文献笔记：<a href="https://ha2ha2.github.io/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/" target="_blank" rel="noopener">【文献笔记】SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AF%B9%E6%A0%B7%E6%A0%B7%E6%9C%AC/" rel="tag"># 对样样本</a>
+          
+            <a href="/tags/%E9%BB%91%E7%9B%92%E6%94%BB%E5%87%BB/" rel="tag"># 黑盒攻击</a>
+          
+            <a href="/tags/Adversarial-examples/" rel="tag"># Adversarial examples</a>
+          
+            <a href="/tags/black-attack/" rel="tag"># black-attack</a>
+          
+            <a href="/tags/%E7%A1%AC%E6%A0%87%E7%AD%BE/" rel="tag"># 硬标签</a>
+          
+            <a href="/tags/hard-label/" rel="tag"># hard-label</a>
+          
+            <a href="/tags/Decision-Based/" rel="tag"># Decision-Based</a>
+          
+            <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/" rel="next" title="【文献笔记】SIGN-OPT: A QUERY-EFFICIENT HARD-LABEL">
+                <i class="fa fa-chevron-left"></i> 【文献笔记】SIGN-OPT: A QUERY-EFFICIENT HARD-LABEL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/" rel="prev" title="【文献翻译】Prior Convictions——Black-Box Adversarial Attacks with Bandits and Priors">
+                【文献翻译】Prior Convictions——Black-Box Adversarial Attacks with Bandits and Priors <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原文链接及源码链接"><span class="nav-number">1.</span> <span class="nav-text">原文链接及源码链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型"><span class="nav-number">2.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法"><span class="nav-number">3.</span> <span class="nav-text">算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#输入"><span class="nav-number">3.1.</span> <span class="nav-text">输入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化"><span class="nav-number">3.2.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#梯度下降"><span class="nav-number">3.3.</span> <span class="nav-text">梯度下降</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sign-grad-v1"><span class="nav-number">3.4.</span> <span class="nav-text">sign_grad_v1</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#友情链接"><span class="nav-number">5.</span> <span class="nav-text">友情链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

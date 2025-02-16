@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="黑盒攻击,black-attack,对样攻击,硬标签,Adversarial attack,hard-label,Decision-Based," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x00 原文链接以及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2202.00091v1源码：暂无  0x01 目的minimize a number of perturbed pixels 0x01 方法使用进化算法解决 decision-based sparse attack问题效果图如下：进化算法需要种群里的个体进行编码，这里设计的编码是 $v &#x3D; \{0, 1\}^{N}$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【文献笔记】QUERY EFFICIENT DECISION BASED SPARSE ATTACKS AGAINST BLACK-BOX DEEP LEARNING MODELS">
+<meta property="og:url" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="0x00 原文链接以及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2202.00091v1源码：暂无  0x01 目的minimize a number of perturbed pixels 0x01 方法使用进化算法解决 decision-based sparse attack问题效果图如下：进化算法需要种群里的个体进行编码，这里设计的编码是 $v &#x3D; \{0, 1\}^{N}$">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Fig2.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Alg1.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/eq4.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Alg2.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Fig3.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Eq5.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Eq3.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Eq2.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/xadv.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/attack.png">
+<meta property="og:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/T4.png">
+<meta property="article:published_time" content="2022-03-21T12:51:10.000Z">
+<meta property="article:modified_time" content="2025-02-16T04:32:42.017Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="黑盒攻击">
+<meta property="article:tag" content="black-attack">
+<meta property="article:tag" content="对样攻击">
+<meta property="article:tag" content="硬标签">
+<meta property="article:tag" content="Adversarial attack">
+<meta property="article:tag" content="hard-label">
+<meta property="article:tag" content="Decision-Based">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Fig2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2022/03/21/【文献笔记】QUERY EFFICIENT DECISION BASED SPARSE ATTACKS AGAINST BLACK-BOX DEEP LEARNING MODELS/"/>
+
+
+
+
+
+  <title>【文献笔记】QUERY EFFICIENT DECISION BASED SPARSE ATTACKS AGAINST BLACK-BOX DEEP LEARNING MODELS | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【文献笔记】QUERY EFFICIENT DECISION BASED SPARSE ATTACKS AGAINST BLACK-BOX DEEP LEARNING MODELS</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-03-21T20:51:10+08:00">
+                2022-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%94%BB%E5%87%BB/" itemprop="url" rel="index">
+                    <span itemprop="name">对抗攻击</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%94%BB%E5%87%BB/ICLR-2022/" itemprop="url" rel="index">
+                    <span itemprop="name">ICLR 2022</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%94%BB%E5%87%BB/ICLR-2022/%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">文献笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00-原文链接以及源码链接"><a href="#0x00-原文链接以及源码链接" class="headerlink" title="0x00 原文链接以及源码链接"></a>0x00 原文链接以及源码链接</h3><p>原文：<a href="https://arxiv.org/abs/2202.00091v1" target="_blank" rel="noopener">https://arxiv.org/abs/2202.00091v1</a><br>源码：暂无 </p>
+<h3 id="0x01-目的"><a href="#0x01-目的" class="headerlink" title="0x01 目的"></a>0x01 目的</h3><p>minimize a number of perturbed pixels</p>
+<h3 id="0x01-方法"><a href="#0x01-方法" class="headerlink" title="0x01 方法"></a>0x01 方法</h3><p>使用进化算法解决 decision-based sparse attack问题<br>效果图如下：<br>进化算法需要种群里的个体进行编码，这里设计的编码是 $v = \{0, 1\}^{N}$，其中$N = WH$，即所有的像素个数。这是一个二进制向量，也称为候选解。</p>
+<h4 id="总流程"><a href="#总流程" class="headerlink" title="总流程"></a>总流程</h4><p><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Fig2.png" alt="Fig2"> </p>
+<p><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Alg1.png" alt="Fig2"> </p>
+<h4 id="S1-种群初始化"><a href="#S1-种群初始化" class="headerlink" title="S1 种群初始化"></a>S1 种群初始化</h4><p>初始化一个含有p个个体的种群。<br>使用初始化好的$v^{(o)}$向量来初始化这p个个体。<br>$v^{(o)}$向量的初始化：<br><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/eq4.png" alt="eq4"><br>即，若原图$x$和目标类的图像$x^{‘}$的对应像素的所有通道值都一样，那么对应像素的位置作为$v^{(o)}$向量的相应索引值置为0，否则为1。<br>利用$v^{(o)}$向量初始化p个个体：<br>每一个候选解的生成是通过随机改变$v^{(o)}$向量的d个 1-bit，其中$d = \lfloor \alpha WH \rfloor $，$\alpha$为初始化比例。如果该候选解的适应度不是$\infty$，该候选解将会被加入到种群中。计算适应度的函数见公式3。否则，将会随机改变另外d个1-bit去产生新的候选解。<br>上述过程将会一直重复，直到成功的找到p个候选解加入到种群$\mathbb{V}$中，种群中每一个候选解的对应适应度将会存入适应度矩阵。</p>
+<p>具体算法如下所示：<br><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Alg2.png" alt="eq4"></p>
+<h4 id="S2-二进制差分重组"><a href="#S2-二进制差分重组" class="headerlink" title="S2 二进制差分重组"></a>S2 二进制差分重组</h4><p>k点或均匀交叉，一对父母交配产生下一代的后代。但是，在种群初始化阶段之后，所有的第一代双亲都略有不同。因为它们都是由一个初始化的向量$v^{(o)}$生成的，因此这些交叉变量导致了低水平的解决方案和低查询效率。为了解决这个问题，本文增加了种群丰富性。受差分进化算法的启发，本文生成下一代的方法是：变异和重组。但是直接使用差分进化是不切实际的，因为差分进化中的变异操作是将多个选定亲本的加权差值与另一个亲本相加，得到一个后代。这些个体是实坐标空间中的向量，因此子代可以受益于加权实值差，但在我们提出的搜索空间中无法获得，其中所有候选解都是二进制向量。因此，本文提出了二元差分重组方案——一种基于遗传算法中均匀交叉和变异概念的混合方法。实验证明，用最好的候选解和两个随机的候选解进行重组比其他的重组方案性能好。<br>二进制差分重组方案如下：<br><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Fig3.png" alt="eq4"><br>1）从种群中随机的挑选两个候选解：$v^{(j)}$、$v^{(q)}$<br>2）使用均匀交叉从任意一个选择的候选解中以相等的概率选择每一位，以产生一个新的候选解。<br>3）利用该新候选解==重组==种群中最好的解$v^{(k_{b})}$，通过改变$v^{(k_{b})}$的所有1bit（其在新候选解中的对应位为0-bit)得到后代$v^{(r)}$。<br>二进制差分重组可被公式化为：<br><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Eq5.png" alt="eq4"><br>作为从个体差异中获益的结果，本文的方法能够促进进化进程，如第4节所示。<br>element-wise product：两个矩阵对应位置元素进行乘积</p>
+<h4 id="S3-变异"><a href="#S3-变异" class="headerlink" title="S3 变异"></a>S3 变异</h4><p>变异操作是为了促进生物多样性。<br>实际上，本文对后代$v^{(r)}$的所s</p>
+<h4 id="S4-适应度计算-fitness-value"><a href="#S4-适应度计算-fitness-value" class="headerlink" title="S4 适应度计算 (fitness value)"></a>S4 适应度计算 (fitness value)</h4><p>使用适应度(fitness value)来评估一个候选解是好是坏。适应度通过设计的适应函数计算得到的。<br>定向攻击的适应度函数：<br><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Eq3.png" alt="eq4"><br>其中对抗样本$ \widetilde{x}$的表示如下，$ \widetilde{y}$是目标类：<br><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/Eq2.png" alt="eq4"><br>视觉效果如下：<br><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/xadv.png" alt="eq4"><br>对于非定向攻击，适应度函数和公式3一致，但是约束条件变为$f(\widetilde{x}) \neq y$</p>
+<h4 id="S5-选择"><a href="#S5-选择" class="headerlink" title="S5 选择"></a>S5 选择</h4><p>通过适应度函数得到的值(fitness value)越小说明该候选解越好。<br>如果种群最坏的个体的适应值(fitness value)比后代的还要高，那么如果种群V最坏的个体将会被舍弃，并且新的后代会被选中来取代他加入种群。  </p>
+<h4 id="S6"><a href="#S6" class="headerlink" title="S6"></a>S6</h4><p>计算最好的个体、最坏的个体，重复S2-S5。</p>
+<h3 id="攻击可视化"><a href="#攻击可视化" class="headerlink" title="攻击可视化"></a>攻击可视化</h3><p><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/attack.png" alt="eq4">    </p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="/2022/03/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91QUERY%20EFFICIENT%20DECISION%20BASED%20SPARSE%20ATTACKS%20AGAINST%20BLACK-BOX%20DEEP%20LEARNING%20MODELS/T4.png" alt="eq4">    </p>
+<h3 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h3><p>现已有许多决策的密集攻击 HJSA、SignOpt等等，这些攻击可被改写基于决策的稀疏攻击，利用$l_{0}$球，类似$PGD_{0}$。<br>以后补充。。。。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E9%BB%91%E7%9B%92%E6%94%BB%E5%87%BB/" rel="tag"># 黑盒攻击</a>
+          
+            <a href="/tags/black-attack/" rel="tag"># black-attack</a>
+          
+            <a href="/tags/%E5%AF%B9%E6%A0%B7%E6%94%BB%E5%87%BB/" rel="tag"># 对样攻击</a>
+          
+            <a href="/tags/%E7%A1%AC%E6%A0%87%E7%AD%BE/" rel="tag"># 硬标签</a>
+          
+            <a href="/tags/Adversarial-attack/" rel="tag"># Adversarial attack</a>
+          
+            <a href="/tags/hard-label/" rel="tag"># hard-label</a>
+          
+            <a href="/tags/Decision-Based/" rel="tag"># Decision-Based</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2022/02/25/ICIP%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" rel="next" title="ICIP注意事项">
+                <i class="fa fa-chevron-left"></i> ICIP注意事项
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2022/03/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91POISONING%20AND%20BACKDOORING%20CONTRASTIVE%20LEARNING/" rel="prev" title="【文献笔记】POISONING AND BACKDOORING CONTRASTIVE LEARNING">
+                【文献笔记】POISONING AND BACKDOORING CONTRASTIVE LEARNING <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-原文链接以及源码链接"><span class="nav-number">1.</span> <span class="nav-text">0x00 原文链接以及源码链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-目的"><span class="nav-number">2.</span> <span class="nav-text">0x01 目的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-方法"><span class="nav-number">3.</span> <span class="nav-text">0x01 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总流程"><span class="nav-number">3.1.</span> <span class="nav-text">总流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#S1-种群初始化"><span class="nav-number">3.2.</span> <span class="nav-text">S1 种群初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#S2-二进制差分重组"><span class="nav-number">3.3.</span> <span class="nav-text">S2 二进制差分重组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#S3-变异"><span class="nav-number">3.4.</span> <span class="nav-text">S3 变异</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#S4-适应度计算-fitness-value"><span class="nav-number">3.5.</span> <span class="nav-text">S4 适应度计算 (fitness value)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#S5-选择"><span class="nav-number">3.6.</span> <span class="nav-text">S5 选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#S6"><span class="nav-number">3.7.</span> <span class="nav-text">S6</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#攻击可视化"><span class="nav-number">4.</span> <span class="nav-text">攻击可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果"><span class="nav-number">5.</span> <span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充说明"><span class="nav-number">6.</span> <span class="nav-text">补充说明</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

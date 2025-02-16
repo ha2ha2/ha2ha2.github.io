@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="对样样本,黑盒攻击,Adversarial examples,black-attack,硬标签,hard-label,文献翻译," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1807.04457源码：https:&#x2F;&#x2F;github.com&#x2F;LeMinhThong&#x2F;blackbox-attack 摘要   我们研究了在硬标签黑盒（hard-label black-box）环境下攻击机器学习模型的问题，在这种情况下，攻击者除了可以查询探测相应的硬标签决策外，不会显示任何模型信息。这是一个非常具有挑战性的问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【文献翻译】Query Efficient Hard label Black box_Attack An Optimization-based Approach">
+<meta property="og:url" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1807.04457源码：https:&#x2F;&#x2F;github.com&#x2F;LeMinhThong&#x2F;blackbox-attack 摘要   我们研究了在硬标签黑盒（hard-label black-box）环境下攻击机器学习模型的问题，在这种情况下，攻击者除了可以查询探测相应的硬标签决策外，不会显示任何模型信息。这是一个非常具有挑战性的问题">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918110951220.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918113311641.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918113322702.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918153435834.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918153546107.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918154348642.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918154822716.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918154909437.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161153988.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161215279.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161256643.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918162902954.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161801041.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161402457.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918163300033.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918163910347.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919112227711.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919112358319.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919114932474.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919123431587.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919125713023.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919140017463.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919140554036.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919141745661.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919142420933.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/1241397-dabaf4edaecbbc28.png">
+<meta property="article:published_time" content="2021-09-21T07:12:10.000Z">
+<meta property="article:modified_time" content="2025-02-16T04:31:59.041Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="对样样本">
+<meta property="article:tag" content="黑盒攻击">
+<meta property="article:tag" content="Adversarial examples">
+<meta property="article:tag" content="black-attack">
+<meta property="article:tag" content="硬标签">
+<meta property="article:tag" content="hard-label">
+<meta property="article:tag" content="文献翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918110951220.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/09/21/【文献翻译】Query Efficient Hard label Black box_Attack An Optimization-based Approach/"/>
+
+
+
+
+
+  <title>【文献翻译】Query Efficient Hard label Black box_Attack An Optimization-based Approach | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【文献翻译】Query Efficient Hard label Black box_Attack An Optimization-based Approach</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-21T15:12:10+08:00">
+                2021-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/" itemprop="url" rel="index">
+                    <span itemprop="name">对抗样本</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index">
+                    <span itemprop="name">文献翻译</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91/ICLR-2019/" itemprop="url" rel="index">
+                    <span itemprop="name">ICLR 2019</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="原文链接及源码链接"><a href="#原文链接及源码链接" class="headerlink" title="原文链接及源码链接"></a>原文链接及源码链接</h3><p>原文：<a href="https://arxiv.org/abs/1807.04457" target="_blank" rel="noopener">https://arxiv.org/abs/1807.04457</a><br>源码：<a href="https://github.com/LeMinhThong/blackbox-attack" target="_blank" rel="noopener">https://github.com/LeMinhThong/blackbox-attack</a></p>
+<h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>   我们研究了在硬标签黑盒（hard-label black-box）环境下攻击机器学习模型的问题，在这种情况下，攻击者除了可以查询探测相应的硬标签决策外，不会显示任何模型信息。这是一个非常具有挑战性的问题，因为将最先进的白盒攻击(例如，C&amp;W或PGD)直接扩展到硬标签黑盒设置将需要最小化非连续阶跃函数，该阶跃函数是组合的，并且不能通过基于梯度的优化器来解决。目前唯一的方法是基于边界上的随机游走[1]，这需要大量的查询，并且缺乏收敛性保证。我们提出了一种新的方法，将硬标签黑盒攻击描述为一个实值优化问题，该问题通常是连续的，可以用任何零阶优化算法来求解。例如，使用随机化的无梯度方法[2]，我们能够限制我们的算法获得驻点所需的迭代次数。我们在MNIST、CIFAR和ImageNet数据集上证明了我们的方法比以前的随机游走方法更好地攻击卷积神经网络。更有趣的是，我们证明了该算法还可以用来攻击其他离散和非连续的机器学习模型，如梯度增强决策树(GBDT)。    </p>
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>   最近有人观察到，机器学习算法，特别是深层神经网络，容易受到对抗样本的攻击。例如，在图像分类问题中，攻击算法[9,3,10]可以为几乎所有图像找到对抗的例子，只要有人类无法察觉的微小扰动。找到一个对抗样本的问题可以被看作是解决一个最优化问题—在原始样本周围的一个小邻域内，找到一个点来优化衡量攻击“成功”的代价函数。使用基于梯度的优化器求解此目标函数会导致最先进的攻击。<br>   大多数当前的攻击考虑的是“白盒”设置，即机器学习模型完全暴露给攻击者。在该设置中，可以通过反向传播来计算上述攻击目标函数的梯度，因此可以非常容易地进行攻击。当攻击者不知道模型参数时，这种白盒设置显然是不现实的。取而代之的是，最近的几篇文章考虑了“基于分数的黑盒”设置，其中机器学习模型对攻击者来说是未知的，但可以进行查询以获得模型的相应概率输出。然而，在许多情况下，真实世界模型不会向用户提供概率输出。取而代之的是，只能观察到最终决定(例如，前1个预测类别)。因此，展示机器学习模型在这种设置下是否易受到攻击是很有趣的。<br>   此外，现有的基于梯度的攻击不能应用于一些涉及离散决策的非连续机器学习模型。例如，基于决策树的模型(随机森林和梯度增强决策树(GBDT))的稳健性不能使用基于梯度的方法来评估，因为这些函数的梯度不存在。<br>   在本文中，我们开发了一个基于优化的框架，用于在更现实、更通用的“硬标签黑盒”环境下攻击机器学习模型。我们假设模型没有被暴露，攻击者只能进行查询来获得相应的硬标签决策，而不是概率输出(也称为软标签)。在这种情况下的攻击非常具有挑战性，之前几乎所有的攻击都失败了，原因有两个。首先，梯度不能通过反向传播直接计算，基于有限差分的方法也会失败，因为硬标签输出对小的输入扰动不敏感；其次，由于只观察到硬标签判决，攻击目标函数变得不连续，输出是离散的，这本质上是组合的（？没明白？原文： which is combinatorial in nature and hard to optimize ），很难优化(更多细节见第2.4节)。<br>   在本文中，我们通过将硬标签黑盒攻击转化为一个新的实值优化问题，使硬标签黑盒攻击成为可能并提高查询效率，实值优化问题通常是连续的且更容易解决。虽然这种重构的目标函数不能写成解析形式，但我们展示了如何使用模型查询来评估其函数值，并应用任何零阶优化算法来解决它。此外，我们证明了只要边界光滑，通过仔细控制函数计算的数值精度，随机无梯度(RGF)方法可以收敛到固定点。我们注意到，这是第一次在硬标签黑盒设置中保证收敛速度的攻击。在实验中，我们展示了该算法能够成功地在MNIST、CIFAR和ImageNet上对硬标签黑盒CNN模型进行攻击，而查询次数要少得多。<br>   此外，由于我们的算法不依赖于分类器的梯度，我们可以将我们的方法应用于除神经网络之外的其他不可微分类器。我们展示了一个有趣的应用，在攻击梯度增强决策树（GBDT）时，即使在白盒环境下，梯度增强决策树（GBDT）也不能被所有现有的基于梯度的方法攻击。但是，对于GBDT（梯度增强决策树），我们的方法可以在3万个查询中成功地找到具有不可察觉扰动的对抗性样本 。  </p>
+<h3 id="2-背景及相关工作"><a href="#2-背景及相关工作" class="headerlink" title="2 背景及相关工作"></a>2 背景及相关工作</h3><p>   我们将首先介绍我们的问题设置，并给出一个简短的文献回顾，来强调攻击硬标签黑箱模型的难度。 </p>
+<h4 id="2-1-问题设置"><a href="#2-1-问题设置" class="headerlink" title="2.1 问题设置"></a>2.1 问题设置</h4><p>   为简单起见，本文考虑攻击K-Way多类分类模型。给定分类模型   $f: \mathbb{R}^{d} \rightarrow\{1, \ldots, K\}$ 和原始图像$\boldsymbol{x}_{0}$，我们目标是生成一个对抗样本$\boldsymbol{x}$，但是$\boldsymbol{x}$与原始图像$\boldsymbol{x}_{0}$很接近，而且$f(\boldsymbol{x}) \neq f\left(\boldsymbol{x}_{0}\right)$，也就是说是的对抗样本的分类结果与原始图像的分类结果不一致，即对抗样本被模型错误分类了。<br>   $\boldsymbol{x}$ is close to $\boldsymbol{x}_{0}$ and $f(\boldsymbol{x}) \neq f\left(\boldsymbol{x}_{0}\right)$，($x$ is misclassified by model $f$)        (1)  </p>
+<h4 id="2-2-白盒攻击"><a href="#2-2-白盒攻击" class="headerlink" title="2.2 白盒攻击"></a>2.2 白盒攻击</h4><p>   文献中的大多数攻击算法都考虑白盒设置，即分类器$f$暴露给攻击者。对于神经网络，在此假设下，由于攻击者已知网络结构和权值，因此可以对目标模型进行反向传播。<br>   对于神经网络中的分类模型，经常假设$f(\boldsymbol{x})=\operatorname{argmax}_{i}\left(Z(\boldsymbol{x})_{i}\right)$，其中$Z(\boldsymbol{x}) \in \mathbb{R}^{K}$ 是最后(Logit)一层的输出，$Z(\boldsymbol{x})_{i}$ 是第i 类的预测得分。然后（1）中的问题可以自然而然地表示为以下优化问题：<br>   $\underset{x}{\operatorname{argmin}}\left\{\operatorname{Dis}\left(\boldsymbol{x}, \boldsymbol{x}_{0}\right)+c \mathscr{L}(Z(\boldsymbol{x}))\right\}:=h(\boldsymbol{x})$，        (2)<br>   其中$\operatorname{Dis}(\cdot, \cdot)$ 是某种距离度量（例如：欧几里得空间中的$\ell_{2}$、$\ell_{1}$和$\ell_{\infty}$范式），$\mathscr{L}(\cdot)$是对应于攻击目标的损失函数，$c$是一个平衡参数。对于非定向攻击，其目标是使目标分类器错误分类，损失函数可以定义为：<br>   $\mathscr{L}(Z(\boldsymbol{x}))=\max \left\{[Z(\boldsymbol{x})]_{y_{0}}-\max _{i \neq y_{0}}[Z(\boldsymbol{x})]_{i},-\kappa\right\}$，        (3)<br>   其中$\boldsymbol{y}_{0}$是被分类器预测的原始标签。对于定向攻击，攻击的目的是转变为特定目标类，也可以相应地定义损失函数。<br>   因此，攻击机器学习模型可以假设为求解这个优化问题，根据距离度量的选择，也称为C&amp;W攻击或EAD攻击。要求解(2)，可以应用任何基于梯度的优化算法，例如SGD或ADAM，因为 $\mathscr{L}(Z(\boldsymbol{x}))$的梯度可以通过反向传播来计算。<br>   计算梯度的能力还可以在白盒设置中实现多种不同的攻击。例如，方程(2)也可以转化为约束优化问题，然后用投影梯度下降法(PGD)求解。FGSM是具有$\ell_{\infty}$范数距离的一步PGD的特例。其他算法，如Deepfool，也可以解决类似的优化问题来构造对抗性示例。    </p>
+<h4 id="2-4-以前关于黑盒攻击的工作"><a href="#2-4-以前关于黑盒攻击的工作" class="headerlink" title="2.4 以前关于黑盒攻击的工作"></a>2.4 以前关于黑盒攻击的工作</h4><p>   在现实世界的中，通常不会暴露底层的机器学习模型，因此不能应用白盒攻击。这促进了在黑盒环境下攻击机器学习模型的研究，在黑盒环境下，攻击者没有关于函数$f$的任何信息，唯一有效的操作是查询模型并得到相应的输出$f(\boldsymbol{x})$。黑盒攻击的第一种方法是使用转移攻击，而不是攻击原始模型$f$，攻击者试图构建替代模型$\hat{f}$来模仿$f$，然后使用白盒攻击方法攻击$\hat{f}$。这种方法得到了很好的研究和分析。然而，最近的论文表明，攻击替代模型通常会导致更大的失真和低成功率。因此，取而代之的是，[10]考虑了基于分数的黑盒设置，其中攻击者可以使用$x$来查询Softmax层输出以及最终分类结果。在这种情况下，只要目标函数$h(\boldsymbol{x})$对于任何$x$存在，他们就可以重构损失函数(3)并对其进行评估。因此，可以直接应用零阶优化方法来最小化$h(\boldsymbol{x})$。[16]通过引入两个新的构件，进一步提高了[10]的查询复杂度：(i)一种平衡查询计数和失真的自适应随机梯度估计算法；(ii)一种训练有素的自动编码器，可实现攻击加速。[13]利用进化算法解决了一个基于分数的攻击问题，表明该方法同样适用于硬标签黑盒设置。</p>
+<h4 id="2-4-硬标签黑盒攻击难度"><a href="#2-4-硬标签黑盒攻击难度" class="headerlink" title="2.4 硬标签黑盒攻击难度"></a>2.4 硬标签黑盒攻击难度</h4><p>   在本文中，硬标签黑盒设置指的是现实世界中的ML系统只提供输入查询的有限预测结果的情况。具体地说，攻击者只知道最终判决(TOP-1预测标签)而不是概率输出。<br>   在这种情况下进攻是非常具有挑战性的。在图1a中，我们显示了一个简单的三层神经网络的决策边界。请注意，$\mathscr{L}(Z(\boldsymbol{x}))$项是连续的，如图1b所示，因为Logit层输出是实值函数。但是，在硬标签黑盒设置中，只有$f(\cdot)$而不是$Z(\cdot)$可用。由于$f(\cdot)$只能是one-hot向量，如果将$f$带入损失函数，则$\mathscr{L}(f(\boldsymbol{x}))$(如图1c所示)将是不连续的并且具有离散的输出。<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918110951220.png" alt="image-20210918110951220"><br>   优化这个函数$\mathscr{L}(f(\boldsymbol{x}))$将需要组合优化或搜索算法，这在高维情况下几乎是不可能做到的。因此，文献中几乎没有一种算法能够成功地进行硬标签黑盒攻击。目前唯一的方法[1]是基于边界上的随机游走。<br>   虽然这种基于决策的攻击可以找到与白盒攻击相当的失真对抗性样本，但是它的搜索时间是指数级的，导致大量查询，并且缺乏收敛保证。实验结果表明，与基于决策的攻击相比，基于优化的算法可以显著减少查询次数，并且保证了迭代次数(查询)的收敛性。   </p>
+<h3 id="3-算法"><a href="#3-算法" class="headerlink" title="3 算法"></a>3 算法</h3><p>   现在我们将介绍一种新的方法来重新制定硬标签黑盒攻击作为另一个优化问题，展示如何使用硬标签查询来计算函数值，然后应用零阶优化算法来求解。</p>
+<h4 id="3-1-基于边界的重新公式化"><a href="#3-1-基于边界的重新公式化" class="headerlink" title="3.1 基于边界的重新公式化"></a>3.1 基于边界的重新公式化</h4><p>   对于一个给定的样本$\boldsymbol{x}_{0}$、真实的标签$\boldsymbol{y}_{0}$、硬标签黑盒函数$f: \mathbb{R}^{d} \rightarrow\{1, \ldots, K\}$，我们根据攻击类型定义了目标函数$g: \mathbb{R}^{d} \rightarrow\R$<br>   Untargeted attack：<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918113311641.png" alt="image-20210918113311641"><br>   Targeted attack：   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918113322702.png" alt="image-20210918113322702"><br>   在该公式中，$\theta$表示搜索方向，$g(\theta)$是沿$\theta$方向从 $\boldsymbol{x}_{0}$到最近的对抗性样本的距离。(4)和(5)的区别在于对非目标攻击和目标攻击中“成功”的不同定义，前者的目的是把预测变成任何错误的标签，而后者的目的是把预测变成指定目标的标签。对于无目标攻击，$g(\theta)$也对应于沿$\theta$方向到决策边界的距离。在图像问题中，$f$的输入域是有界的，因此我们将在(4)和(5)的定义中添加相应的上下界。<br>   我们不搜索对抗性样本，而是搜索方向$\theta$来最小化失真(θ)，这导致了以下优化问题：<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918153435834.png" alt="image-20210918153435834"><br>   最后，通过<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918153546107.png" alt="image-20210918153546107">，其中$\theta*$是(6)的最优解。请注意，与C&amp;W或PGD目标函数不同，C&amp;W或PGD目标函数在硬标签设置中是不连续的阶跃函数（见第2节)，$g(\theta)$将输入方向映射到实值输出（到决策边界的距离)，这通常是连续的，$\theta$的微小变化通常会导致$g(\theta)$的微小变化，如图2所示。<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918154348642.png" alt="image-20210918154348642"><br>   此外，我们还给出了定义在二维输入空间中的$f(x)$及其对应的$g(θ)$的三个例子。在图3a中，我们有如下定义的连续分类函数：<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918154822716.png" alt="image-20210918154822716"><br>   在这种情况下，如图3c所示，$g(θ)$是连续的。此外，在图3b和图1a中，我们显示了GBDT和神经网络分类器生成的决策边界，这两个边界不是连续的。然而，如图3d和图1d所示，即使分类器函数不是连续的，g(θ)仍然是连续的。这使得应用零阶法求解变得容易(6)。<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918154909437.png" alt="image-20210918154909437"><br>   计算$g(θ)$达到一定的精度。我们不能计算g的梯度，但我们可以对原始函数$f$使用硬标签查询来计算g的函数值。为简单起见，我们在这里重点讨论非定向攻击，但同样的过程也可以应用于定向攻击。<br>   首先，我们讨论了如何在没有附加信息的情况下直接计算$g(θ)$。这在我们的算法的初始化步骤中使用。对于给定的规范化$θ$，我们先进行细粒度搜索(fine-grained search)，然后进行二分查找(binary search)。在细粒度搜索中，我们逐个查找点<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161153988.png" alt="image-20210918161153988">，直到找到<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161215279.png" alt="image-20210918161215279">。这意味着边界在<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161256643.png" alt="image-20210918161256643">之间。然后我们进入第二阶段，执行二分查找来在该区域内找到解(与算法1中的第11-17行相同)。<br>   接下来，我们讨论当我们知道解非常接近于值v时，如何计算$g(θ)$。这在我们的优化算法中的所有函数求值中使用，因为当前解通常与前一个解接近，并且当我们使用(7)估计梯度时，查询的方向将只是前一个方向的一个小扰动。在这种情况下，我们首先增加或减少局部区域，以找到包含边界(例如，<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918162902954.png" alt="image-20210918162902954">)的区间，然后进行二分搜索以求出g的最终值。我们的计算g值的过程在算法1中给出。</p>
+<p><img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161801041.png" alt="image-20210918161801041"></p>
+<p><img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918161402457.png" alt="image-20210918161402457"></p>
+<h4 id="3-2-零阶优化"><a href="#3-2-零阶优化" class="headerlink" title="3.2 零阶优化"></a>3.2 零阶优化</h4><p>   对于只能求函数值而不能求梯度的最佳化问题，可以自然地应用零阶优化算法。事实上，在重新构造之后，任何零阶优化算法都有可能解决这个问题，比如零阶梯度下降法或坐标下降法(详见文献[17])。<br>   在这里，我们建议使用文献[2，18]中提出的随机无梯度(RGF)方法来求解方程(1)。在实践中，我们发现它的性能优于零阶坐标下降。在每次迭代中，梯度由以下公式估计<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918163300033.png" alt="image-20210918163300033"><br>   其中，$u$是随机高斯变量，$\beta&gt;0$是平滑参数(我们在所有实验中都设置了β=0.005)。然后用步长$η$由$\boldsymbol{\theta} \leftarrow \boldsymbol{\theta}-\eta \hat{\boldsymbol{g}}$更新该解。在算法2中对整个过程进行了总结：<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210918163910347.png" alt="image-20210918163910347"><br>   当我们应用该算法时，有几个实现细节。首先，对于高维问题，我们发现(7)中的估计是非常噪声的。因此，我们不使用一个向量，而是从高斯分布中抽样q个向量，并对它们的估计量进行平均，以得到$\hat{g}$。我们在所有的实验中都设置q=20。收敛性证明自然可以推广到这种情况。其次，我们不使用固定的步长(理论上建议)，而是使用回溯直线搜索法(backtracking<br>line-search approach)（见补充)来求出每一步的步长。这会导致额外的查询计数，但会使算法更加稳定，并且不需要手动调整步长。   </p>
+<h4 id="3-3-理论分析"><a href="#3-3-理论分析" class="headerlink" title="3.3 理论分析"></a>3.3 理论分析</h4><p>   如果$g(\theta)$可以精确计算，[2]中已经证明了算法2中的RGF需要至多<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919112227711.png" alt="image-20210919112227711">次迭代才能收敛到<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919112358319.png" alt="image-20210919112358319">，然而，在我们的算法中，函数值$g(\theta)$不能精确计算，在算法1中，我们可以通过二进制阈值来控制精度。因此，我们将[2]中的证明扩展到包括近似函数值计算的情况，如下面的定理所述。<br>   定理 1 在算法2中，假设g是具有常数$L_{1}(g)$的Lipschitz-连续梯度，如果函数值得计算误差由$\epsilon$~$O(\beta\delta^{^{2}})$和$\beta$~$O(\frac{\delta}{dL_{1}(g)})$控制，那么为了获得<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919114932474.png" alt="image-20210919114932474">，总的迭代次数至多为$O(\frac{d}{\delta^{2}})$。<br>   详细的证明可以在附录中找到。请注意，二分查找过程可以在$O(log\delta)$步内获得所期望的函数值精度，利用与定理1相同的思想并遵循[2]中的证明，当$g(\theta)$不平滑但 Lipschitz连续的时候，我们也可以达到$O(\frac{d^{2}}{\delta^{3}})$的复杂度。   </p>
+<h3 id="4-实验结果"><a href="#4-实验结果" class="headerlink" title="4 实验结果"></a>4 实验结果</h3><p>   我们在卷积神经网络(CNN)模型上测试了我们的硬标签黑盒攻击算法的性能，并与基于决策的攻击算法[1]进行了比较。此外，我们还证明了我们的方法可以应用于攻击梯度提升决策树(GBDT)，并给出了一些有趣的发现。<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919123431587.png" alt="image-20210919123431587">   </p>
+<h4 id="4-1攻击CNN图像分类模型"><a href="#4-1攻击CNN图像分类模型" class="headerlink" title="4.1攻击CNN图像分类模型"></a>4.1攻击CNN图像分类模型</h4><p>   我们使用三个标准数据集：MNIST[19]、CIFAR-10[20]和ImageNet-1000[21]。为了与以前的工作进行公平的比较，我们采用了[9]和[1]中使用的相同网络。详细地说，MNIST和CIFAR都使用相同的网络结构，具有四个卷积层、两个最大池层和两个全连通层。使用[9]提供的参数，我们可以在MNIST上达到99.5%的准确率，在CIFAR-10上达到82.5%的准确率，这与文献[9]中报道的结果相似。对于Imagenet-1000，我们使用了Torchvision提供的预训练网络RESNET-50[22]，该网络可以达到76.15%的TOP-1准确率。所有模型都是使用Pytorch进行培训的，我们的源代码是公开提供的。<br>   我们比较了以下几种算法：<br>   1）基于OPT的黑盒攻击(OPT-Attack)：我们提出的算法。<br>   2）基于决策的黑盒攻击<a href="Decision-Attack">1</a>：这是之前关于攻击硬标签黑盒模型的唯一工作。我们使用作者的实现并使用Foolbox中提供的默认参数。<br>   3）C&amp;W白盒攻击[9]：白盒环境下当前最先进的攻击算法之一。我们对每幅图像的参数进行二分查找，以达到最佳的性能。在白盒环境下攻击是一个容易得多的问题，所以我们包含C&amp;W攻击仅供参考，并指出我们可能达到的最佳性能。<br>   对于所有的情况，我们对验证集中随机抽样的N=100幅图像进行了对抗攻击。注意，这三种攻击都有100%的成功率，我们报告了平均$L_{2}$失真，定义为<img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919125713023.png" alt="image-20210919125713023">，其中$x^{(i)}$是由攻击算法构造的对抗样本，$x_{0}^{(i)}$是原始样本，对于黑盒攻击算法，我们还报告了平均查询数以供比较。    </p>
+<h5 id="4-1-1-非定向攻击（Untargeted-attack）"><a href="#4-1-1-非定向攻击（Untargeted-attack）" class="headerlink" title="4.1.1 非定向攻击（Untargeted attack）"></a>4.1.1 非定向攻击（Untargeted attack）</h5><p>   对于非目标攻击，目标是将正确分类的图像转换为任意其他标签。结果如表1所示，请注意，对于OPT攻击和Decision攻击，通过改变停止条件，我们可以得到不同数量的查询的性能。<br>   首先，我们比较了表1中的两种黑盒攻击方法。我们的算法始终比决策攻击用更少的查询数实现更小的失真。例如，对于 mnist 数据，我们可以减少3-4倍的查询次数，并且在所有3个数据集中，决策攻击收敛到更差的解。与 c &amp; w 攻击相比，黑盒攻击对 mnist 和 cifar 的失真程度略有下降。这是合理的，因为白盒攻击比黑盒攻击有更多的信息，而且严格来说更容易。我们注意到，文献[1]中的实验结果表明，C&amp;W攻击和决策攻击（Decision Attack）具有相似的性能，因为它们只运行带有单个正则化参数的C&amp;W，而不进行二分查找来获得最优参数。对于 imageNet，由于我们限制了查询的数量，黑盒攻击的失真比C&amp;W攻击严重得多。如图4所示，可以通过增加查询数量来缩小差距。<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919140017463.png" alt="image-20210919140017463"></p>
+<h5 id="4-1-2-定向攻击（Targeted-attack）"><a href="#4-1-2-定向攻击（Targeted-attack）" class="headerlink" title="4.1.2 定向攻击（Targeted attack）"></a>4.1.2 定向攻击（Targeted attack）</h5><p>   目标攻击的结果如表2所示。根据[1]中的实验，对于每个带有标签的随机采样图像，我们设置目标标签t=(i+1)mod10。在MNIST数据上，我们发现我们的算法比决策攻击算法快4倍以上(就查询次数而言)，并且收敛到更好的解决方案。在CIFAR数据上，我们的算法与前60,000个查询的决策攻击算法具有相似的效率，但收敛到一个略差的解决方案。此外，我们在图5中显示了从相同起点到原始样本的质量比较示例。<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919140554036.png" alt="image-20210919140554036"><br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919141745661.png" alt="image-20210919141745661"></p>
+<h4 id="4-1-3-攻击梯度增强决策树-GBDT"><a href="#4-1-3-攻击梯度增强决策树-GBDT" class="headerlink" title="4.1.3 攻击梯度增强决策树(GBDT)"></a>4.1.3 攻击梯度增强决策树(GBDT)</h4><p>   为了评估我们的方法对离散决策函数模型的攻击能力，我们对梯度引导决策树(GBDT)进行了非定向攻击。在这个实验中，我们使用了两个标准数据集：Higgs[23]用于二分类，MNIST[19]用于多类分类。我们使用流行的LightGBM框架对GBDT模型进行训练。使用建议的参数，HIGGS的AUC值为0.8457，MNIST的准确率为98.09%。对GBDT的无针对性攻击结果如表3所示。<br>   <img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/image-20210919142420933.png" alt="image-20210919142420933"><br>   如表3所示，通过使用大约30K的查询，我们可以在两个数据集上得到一个小的失真，这首先揭示了GBDT模型的漏洞。基于树的方法以其良好的可解释性而闻名。正因为如此，它们在行业中得到了广泛的应用。然而，我们发现，即使GBDT模型具有良好的可解释性和与卷积神经网络相似的预测精度，在我们的OPT攻击下仍然是脆弱的。这一结果提出了一个关于基于树的模型的稳健性的问题，这将是未来一个有趣的方向。   </p>
+<h3 id="5-结论"><a href="#5-结论" class="headerlink" title="5  结论"></a>5  结论</h3><p>本文提出了一种通用的、基于优化的硬标签黑盒攻击算法，该算法适用于非神经网络的离散和非连续模型，如梯度增强决策树。该方法不仅具有查询效率，而且在攻击性能上有理论上的收敛保证。此外，与最先进的算法相比，我们的攻击使用的查询减少了3-4倍，从而实现了更小或相似的失真。   </p>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><p>[1]Wieland Brendel, Jonas Rauber, and Matthias Bethge. Decision-based adversarial attacks: Reliable attacks against<br>black-box machine learning models.arXiv preprint arXiv:1712.04248, 2017.<br>[2]Y urii Nesterov and Vladimir Spokoiny. Random gradient-free minimization of convex functions.F oundations of<br>Computational Mathematics, 17(2):527–566, 2017.<br>[3]Ian J Goodfellow, Jonathon Shlens, and Christian Szegedy. Explaining and harnessing adversarial examples.arXiv<br>preprint arXiv:1412.6572, 2014.<br>[4]Christian Szegedy, Wojciech Zaremba, Ilya Sutskever, Joan Bruna, Dumitru Erhan, Ian Goodfellow, and Rob<br>Fergus. Intriguing properties of neural networks.arXiv preprint arXiv:1312.6199, 2013.<br>[5]Seyed-Mohsen Moosavi-Dezfooli, Alhussein Fawzi, Omar Fawzi, and Pascal Frossard. Universal adversarial<br>perturbations.<br>[6]Seyed Mohsen Moosavi Dezfooli, Alhussein Fawzi, and Pascal Frossard. Deepfool: a simple and accurate<br>method to fool deep neural networks. InProceedings of 2016 IEEE Conference on Computer Vision and Pattern<br>Recognition (CVPR), number EPFL-CONF-218057, 2016.<br>[7]Hongge Chen, Huan Zhang, Pin-Y u Chen, Jinfeng Yi, and Cho-Jui Hsieh. Attacking visual language grounding<br>with adversarial examples: A case study on neural image captioning. InACL, 2018.<br>[8]Minhao Cheng, Jinfeng Yi, Huan Zhang, Pin-Y u Chen, and Cho-Jui Hsieh. Seq2sick: Evaluating the robustness of<br>sequence-to-sequence models with adversarial examples.CoRR, 2018.<br>[9]Nicholas Carlini and David Wagner. Towards evaluating the robustness of neural networks. InSecurity and Privacy<br>(SP), 2017 IEEE Symposium on, pages 39–57. IEEE, 2017.<br>[10]Pin-Y u Chen, Huan Zhang, Yash Sharma, Jinfeng Yi, and Cho-Jui Hsieh. Zoo: Zeroth order optimization based<br>black-box attacks to deep neural networks without training substitute models. InProceedings of the 10th ACM<br>Workshop on Artificial Intelligence and Security, pages 15–26. ACM, 2017.<br>[11]Aleksander Madry, Aleksandar Makelov, Ludwig Schmidt, Dimitris Tsipras, and Adrian Vladu. Towards deep<br>learning models resistant to adversarial attacks. InICLR, 2018.<br>[12]Pin-Y u Chen, Y ash Sharma, Huan Zhang, Jinfeng Yi, and Cho-Jui Hsieh. Ead: elastic-net attacks to deep neural<br>networks via adversarial examples. InAAAI, 2018.<br>[13]Andrew Ilyas, Logan Engstrom, Anish Athalye, and Jessy Lin. Query-efficient black-box adversarial examples.<br>arXiv preprint arXiv:1712.07113, 2017.<br>[14]Nicolas Papernot, Patrick McDaniel, Ian Goodfellow, Somesh Jha, Z Berkay Celik, and Ananthram Swami.<br>Practical black-box attacks against machine learning. InProceedings of the 2017 ACM on Asia Conference on<br>Computer and Communications Security, pages 506–519. ACM, 2017.<br>[15]Arjun Nitin Bhagoji, Warren He, Bo Li, and Dawn Song. Exploring the space of black-box attacks on deep neural<br>networks.arXiv preprint arXiv:1712.09491, 2017.<br>[16]Chun-Chen Tu, Pai-Shun Ting, Pin-Y u Chen, Sijia Liu, Huan Zhang, Jinfeng Yi, Cho-Jui Hsieh, and Shin-Ming<br>Cheng. Autozoom: Autoencoder-based zeroth order optimization method for attacking black-box neural networks.<br>CoRR, abs/1805.11770, 2018.<br>[17]Andrew R Conn, Katya Scheinberg, and Luis N Vicente.Introduction to derivative-free optimization, volume 8.<br>Siam, 2009.<br>[18]Saeed Ghadimi and Guanghui Lan. Stochastic first-and zeroth-order methods for nonconvex stochastic program-<br>ming.SIAM Journal on Optimization, 23(4):2341–2368, 2013.<br>[19]Yann LeCun, L´eon Bottou, Y oshua Bengio, and Patrick Haffner. Gradient-based learning applied to document<br>recognition.Proceedings of the IEEE, 86(11):2278–2324, 1998.<br>[20]Alex Krizhevsky. Learning multiple layers of features from tiny images. 2009.<br>[21]Jia Deng, Wei Dong, Richard Socher, Li-Jia Li, Kai Li, and Li Fei-Fei. Imagenet: A large-scale hierarchical image<br>database. InComputer Vision and Pattern Recognition, 2009. CVPR 2009. IEEE Conference on, pages 248–255.<br>IEEE, 2009.<br>[22]Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for image recognition. In<br>Proceedings of the IEEE conference on computer vision and pattern recognition, pages 770–778, 2016.<br>[23]Pierre Baldi, Peter Sadowski, and Daniel Whiteson. Searching for exotic particles in high-energy physics with<br>deep learning.Nature communications, 5:4308, 2014.<br>[24]Y urii Nesterov. Random gradient-free minimization of convex functions. Technical report, 2011.</p>
+<h3 id="回溯直线搜索"><a href="#回溯直线搜索" class="headerlink" title="回溯直线搜索"></a>回溯直线搜索</h3><p>回溯直线搜索是求解无约束凸优化问题中，调整搜索步长非常简单有效的方法，也是实际应用中常用的方法。    </p>
+<p><img src="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/1241397-dabaf4edaecbbc28.png" alt="1241397-dabaf4edaecbbc28.png (662×268)"></p>
+<h3 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h3><p>文件笔记：<a href="https://ha2ha2.github.io/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/" target="_blank" rel="noopener">./【文献笔记】Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach</a><br>算法分析：<a href="https://ha2ha2.github.io/2021/09/27/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/" target="_blank" rel="noopener">./【算法】Opt-Attack算法手稿</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AF%B9%E6%A0%B7%E6%A0%B7%E6%9C%AC/" rel="tag"># 对样样本</a>
+          
+            <a href="/tags/%E9%BB%91%E7%9B%92%E6%94%BB%E5%87%BB/" rel="tag"># 黑盒攻击</a>
+          
+            <a href="/tags/Adversarial-examples/" rel="tag"># Adversarial examples</a>
+          
+            <a href="/tags/black-attack/" rel="tag"># black-attack</a>
+          
+            <a href="/tags/%E7%A1%AC%E6%A0%87%E7%AD%BE/" rel="tag"># 硬标签</a>
+          
+            <a href="/tags/hard-label/" rel="tag"># hard-label</a>
+          
+            <a href="/tags/%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91/" rel="tag"># 文献翻译</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/09/20/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Boundary_Attack%E7%AE%97%E6%B3%95/" rel="next" title="【算法】Boundary Attack算法手稿">
+                <i class="fa fa-chevron-left"></i> 【算法】Boundary Attack算法手稿
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/" rel="prev" title="【文献笔记】Query Efficient Hard label Black box_Attack An Optimization-based Approach">
+                【文献笔记】Query Efficient Hard label Black box_Attack An Optimization-based Approach <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原文链接及源码链接"><span class="nav-number">1.</span> <span class="nav-text">原文链接及源码链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要"><span class="nav-number">2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#引言"><span class="nav-number">3.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-背景及相关工作"><span class="nav-number">4.</span> <span class="nav-text">2 背景及相关工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-问题设置"><span class="nav-number">4.1.</span> <span class="nav-text">2.1 问题设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-白盒攻击"><span class="nav-number">4.2.</span> <span class="nav-text">2.2 白盒攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-以前关于黑盒攻击的工作"><span class="nav-number">4.3.</span> <span class="nav-text">2.4 以前关于黑盒攻击的工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-硬标签黑盒攻击难度"><span class="nav-number">4.4.</span> <span class="nav-text">2.4 硬标签黑盒攻击难度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-算法"><span class="nav-number">5.</span> <span class="nav-text">3 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-基于边界的重新公式化"><span class="nav-number">5.1.</span> <span class="nav-text">3.1 基于边界的重新公式化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-零阶优化"><span class="nav-number">5.2.</span> <span class="nav-text">3.2 零阶优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-理论分析"><span class="nav-number">5.3.</span> <span class="nav-text">3.3 理论分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-实验结果"><span class="nav-number">6.</span> <span class="nav-text">4 实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1攻击CNN图像分类模型"><span class="nav-number">6.1.</span> <span class="nav-text">4.1攻击CNN图像分类模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#4-1-1-非定向攻击（Untargeted-attack）"><span class="nav-number">6.1.1.</span> <span class="nav-text">4.1.1 非定向攻击（Untargeted attack）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-1-2-定向攻击（Targeted-attack）"><span class="nav-number">6.1.2.</span> <span class="nav-text">4.1.2 定向攻击（Targeted attack）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-3-攻击梯度增强决策树-GBDT"><span class="nav-number">6.2.</span> <span class="nav-text">4.1.3 攻击梯度增强决策树(GBDT)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-结论"><span class="nav-number">7.</span> <span class="nav-text">5  结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文献"><span class="nav-number">8.</span> <span class="nav-text">参考文献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回溯直线搜索"><span class="nav-number">9.</span> <span class="nav-text">回溯直线搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#友情链接"><span class="nav-number">10.</span> <span class="nav-text">友情链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

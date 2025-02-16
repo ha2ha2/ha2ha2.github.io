@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="多模态,DeepFake," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Task010x01注册Kaggle账号0x02 跑通baseline 播放比赛所提供的训练集中的视频，可以发现 DeepFake的视频从肉眼上看某些帧人脸会有明显的突变 从声音来听，DeepFake的视频大部分都会重复出现   Baseline思路：单从音频的角度来进行分析视频是否为DeepFake Baseline实现方法：提取训练集中音视频的音频信号，对音频信号进行特征提取，将特征送入res">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deepfake攻防挑战赛">
+<meta property="og:url" content="http://yoursite.com/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="Task010x01注册Kaggle账号0x02 跑通baseline 播放比赛所提供的训练集中的视频，可以发现 DeepFake的视频从肉眼上看某些帧人脸会有明显的突变 从声音来听，DeepFake的视频大部分都会重复出现   Baseline思路：单从音频的角度来进行分析视频是否为DeepFake Baseline实现方法：提取训练集中音视频的音频信号，对音频信号进行特征提取，将特征送入res">
+<meta property="og:image" content="http://yoursite.com/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/fig1.png">
+<meta property="og:image" content="http://yoursite.com/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/fig2.png">
+<meta property="og:image" content="http://yoursite.com/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/fig3.png">
+<meta property="og:image" content="http://yoursite.com/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/fig4.png">
+<meta property="article:published_time" content="2024-07-13T17:01:01.000Z">
+<meta property="article:modified_time" content="2025-02-16T04:20:29.098Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="多模态">
+<meta property="article:tag" content="DeepFake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/fig1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2024/07/14/Deepfake攻防挑战赛/"/>
+
+
+
+
+
+  <title>Deepfake攻防挑战赛 | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Deepfake攻防挑战赛</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-07-14T01:01:01+08:00">
+                2024-07-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/2024%E5%B9%B4/" itemprop="url" rel="index">
+                    <span itemprop="name">2024年</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Task01"><a href="#Task01" class="headerlink" title="Task01"></a>Task01</h3><h4 id="0x01注册Kaggle账号"><a href="#0x01注册Kaggle账号" class="headerlink" title="0x01注册Kaggle账号"></a>0x01注册Kaggle账号</h4><h4 id="0x02-跑通baseline"><a href="#0x02-跑通baseline" class="headerlink" title="0x02 跑通baseline"></a>0x02 跑通baseline</h4><ul>
+<li>播放比赛所提供的训练集中的视频，可以发现<ul>
+<li>DeepFake的视频从肉眼上看某些帧人脸会有明显的突变</li>
+<li>从声音来听，DeepFake的视频大部分都会重复出现</li>
+</ul>
+</li>
+<li>Baseline思路：单从音频的角度来进行分析视频是否为DeepFake</li>
+<li>Baseline实现方法：提取训练集中音视频的音频信号，对音频信号进行特征提取，将特征送入resnet18模型进行训练</li>
+</ul>
+<h4 id="0x03-相关知识点"><a href="#0x03-相关知识点" class="headerlink" title="0x03 相关知识点"></a>0x03 相关知识点</h4><ul>
+<li><p>音频信号的特征提取</p>
+<ul>
+<li><p>语谱图：语音频率随时间变换的情况</p>
+</li>
+<li><p>MEL-spectrogram（梅尔频谱）</p>
+<ul>
+<li><p>研究表明，人类不会感知线性范围的频率。 我们在检测低频差异方面要胜于高频。 例如，我们可以轻松分辨出500 Hz和1000 Hz之间的差异，但是即使之间的距离相同，我们也很难分辨出10,000 Hz和10,500 Hz之间的差异。</p>
+</li>
+<li><p>Mel刻度上相等距离的两对频度，人耳的感知差异也是相同的。因此mel谱图是频率转换为mel标度的谱图。</p>
+</li>
+<li><pre><code>S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=n_mels)
+S_dB = librosa.power_to_db(S, ref=np.max)
+</code></pre></li>
+<li><p>S_dB[i, j] 表示在第i个时间点，在第j个Mel频率段的能量</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="0x04-需要补充的知识点"><a href="#0x04-需要补充的知识点" class="headerlink" title="0x04 需要补充的知识点"></a>0x04 需要补充的知识点</h4><ul>
+<li>每个信号都可以分解为一组正弦波和余弦波，它们加起来等于原始信号。</li>
+<li>FFT是全局频域分析</li>
+<li>Window FFT 是时频分析 固定时窗截取变换</li>
+<li>Wavelet transition 是可变长度时窗截取变换</li>
+</ul>
+<p><img src="/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/fig1.png" alt="image-20240714143009850"></p>
+<p>光从频谱上看是不知道原信号长什么样子的</p>
+<p><img src="/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/fig2.png" alt="image-20240714143112483"></p>
+<p><img src="/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/fig3.png" alt="image-20240714143228501"></p>
+<p><img src="/2024/07/14/Deepfake%E6%94%BB%E9%98%B2%E6%8C%91%E6%88%98%E8%B5%9B/fig4.png" alt="image-20240714143251603"></p>
+<ul>
+<li><strong>梅尔（Mel）量表</strong><br>研究表明，人类不会感知线性范围的频率。我们在检测低频差异方面要胜于高频。例如，我们可以轻松分辨出500 Hz和1000 Hz之间的差异，但是即使之间的距离相同，我们也很难分辨出10,000 Hz和10,500 Hz之间的差异。</li>
+</ul>
+<p>但是人耳感知到的声音高低与声音的原始频率并不呈线性关系，人耳对低频声音更加敏感，低频区域的差异变化比较容易被感受，而对于高频声音的变化感知并不明显。比如10hz和110hz的声音，人耳能够明显感觉到不同，而1000hz和1100hz的声音，人耳感觉会是一样的。频域上相等距离的两对频度，对于人耳来说他们的距离不一定相等。这样的感知是非线性的。</p>
+<p><strong>梅尔频谱（Mel spectrogram）</strong>是更加符合人耳的听觉特性的一种频域表示法，声音通过一组梅尔滤波器组映射到梅尔音阶上，滤波器在低频范围内分布密集，在高频范围内分布稀疏，Mel谱是<strong>非线性的</strong>。这样使得在Mel刻度上相等距离的两对频度，人耳的感知差异也是相同的，即人耳感知和梅尔尺度呈线性关系。在低频段（1000hz），梅尔刻度与正常频度几乎呈线性关系，在高频段，两者呈对数关系。</p>
+<h4 id="0x05-本地尝试跑baseline"><a href="#0x05-本地尝试跑baseline" class="headerlink" title="0x05 本地尝试跑baseline"></a>0x05 本地尝试跑baseline</h4><ul>
+<li>数据集太大了，卡在保存MEL特征为jpg图像这一步很久，没往下走了，等它慢慢存完。</li>
+</ul>
+<h4 id="0x06-感受"><a href="#0x06-感受" class="headerlink" title="0x06 感受"></a>0x06 感受</h4><ul>
+<li>还没感受到多模态，现在还只是单一的利用了音频特征，看看后面多模态具体是怎么个多模态法的。</li>
+</ul>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><ul>
+<li>Datawhale社区</li>
+<li><a href="https://cloud.tencent.com/developer/article/1689856" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1689856</a></li>
+<li><a href="https://www.bilibili.com/video/BV1VY411176K/?spm_id_from=333.999.0.0&amp;vd_source=8915714bbad1ad8be52c5ce9f1bd2f42" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1VY411176K/?spm_id_from=333.999.0.0&amp;vd_source=8915714bbad1ad8be52c5ce9f1bd2f42</a></li>
+<li><a href="https://www.bilibili.com/video/BV1tu4y1M7th/?spm_id_from=333.337.search-card.all.click&amp;vd_source=8915714bbad1ad8be52c5ce9f1bd2f42" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1tu4y1M7th/?spm_id_from=333.337.search-card.all.click&amp;vd_source=8915714bbad1ad8be52c5ce9f1bd2f42</a>    </li>
+</ul>
+<h3 id="Task02"><a href="#Task02" class="headerlink" title="Task02"></a>Task02</h3><h4 id="音频特征提取技术"><a href="#音频特征提取技术" class="headerlink" title="音频特征提取技术"></a>音频特征提取技术</h4><p>MFCC<br>LPCC<br>FBANK     </p>
+<p>神经网络结构    </p>
+<p>也没做了。。。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%A4%9A%E6%A8%A1%E6%80%81/" rel="tag"># 多模态</a>
+          
+            <a href="/tags/DeepFake/" rel="tag"># DeepFake</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2024/07/12/%E3%80%90%E9%9A%8F%E7%AC%94%E3%80%9124%E5%B9%B47%E6%9C%88/" rel="next" title="【随笔】24年7月">
+                <i class="fa fa-chevron-left"></i> 【随笔】24年7月
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2024/10/12/%E7%A0%94%E7%A9%B6%E7%94%9F%E9%98%B6%E6%AE%B5%E7%9A%84%E7%89%B9%E7%82%B9%E4%B8%8E%E8%A6%81%E6%B1%82/" rel="prev" title="研究生阶段的特点与要求">
+                研究生阶段的特点与要求 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Task01"><span class="nav-number">1.</span> <span class="nav-text">Task01</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01注册Kaggle账号"><span class="nav-number">1.1.</span> <span class="nav-text">0x01注册Kaggle账号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-跑通baseline"><span class="nav-number">1.2.</span> <span class="nav-text">0x02 跑通baseline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-相关知识点"><span class="nav-number">1.3.</span> <span class="nav-text">0x03 相关知识点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-需要补充的知识点"><span class="nav-number">1.4.</span> <span class="nav-text">0x04 需要补充的知识点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05-本地尝试跑baseline"><span class="nav-number">1.5.</span> <span class="nav-text">0x05 本地尝试跑baseline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06-感受"><span class="nav-number">1.6.</span> <span class="nav-text">0x06 感受</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">1.7.</span> <span class="nav-text">Reference</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Task02"><span class="nav-number">2.</span> <span class="nav-text">Task02</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#音频特征提取技术"><span class="nav-number">2.1.</span> <span class="nav-text">音频特征提取技术</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="对样样本,黑盒攻击,基于分数,Adversarial examples,black-attack,score-based,文献翻译," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1807.07978v3源码：https:&#x2F;&#x2F;github.com&#x2F;MadryLab&#x2F;blackbox-bandits 摘要我们研究了在黑盒环境下生成对抗样本的问题，在黑盒环境中，只有loss-oracle访问模型是可行的。我们介绍了一个框架，它在概念上统一了许多现有的关于黑盒攻击的工作，并且我们证明了当前最先进的方法在自然意义上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【文献翻译】Prior Convictions——Black-Box Adversarial Attacks with Bandits and Priors">
+<meta property="og:url" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1807.07978v3源码：https:&#x2F;&#x2F;github.com&#x2F;MadryLab&#x2F;blackbox-bandits 摘要我们研究了在黑盒环境下生成对抗样本的问题，在黑盒环境中，只有loss-oracle访问模型是可行的。我们介绍了一个框架，它在概念上统一了许多现有的关于黑盒攻击的工作，并且我们证明了当前最先进的方法在自然意义上">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211003193514357.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211003201436906.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211003201955752.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004165747138.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004170358116.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004170516874.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004170714465.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004201733463.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004204147463.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004210208871.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004211251804.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004211425830.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005144515168.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005155815150.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005192157711.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005193900044.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005193631005.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005195303212.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005195740097.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005200706608.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005200926475.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005201454618.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005202144496.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005202222890.png">
+<meta property="og:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005202429841.png">
+<meta property="article:published_time" content="2021-10-05T09:01:53.000Z">
+<meta property="article:modified_time" content="2025-02-16T04:32:03.845Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="对样样本">
+<meta property="article:tag" content="黑盒攻击">
+<meta property="article:tag" content="基于分数">
+<meta property="article:tag" content="Adversarial examples">
+<meta property="article:tag" content="black-attack">
+<meta property="article:tag" content="score-based">
+<meta property="article:tag" content="文献翻译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211003193514357.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/10/05/【文献翻译】Prior-Convictions——Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/"/>
+
+
+
+
+
+  <title>【文献翻译】Prior Convictions——Black-Box Adversarial Attacks with Bandits and Priors | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【文献翻译】Prior Convictions——Black-Box Adversarial Attacks with Bandits and Priors</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-10-05T17:01:53+08:00">
+                2021-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/" itemprop="url" rel="index">
+                    <span itemprop="name">对抗样本</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/ICLR-2019/" itemprop="url" rel="index">
+                    <span itemprop="name">ICLR 2019</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="原文链接及源码链接"><a href="#原文链接及源码链接" class="headerlink" title="原文链接及源码链接"></a>原文链接及源码链接</h3><p>原文：<a href="https://arxiv.org/abs/1807.07978v3" target="_blank" rel="noopener">https://arxiv.org/abs/1807.07978v3</a><br>源码：<a href="https://github.com/MadryLab/blackbox-bandits" target="_blank" rel="noopener">https://github.com/MadryLab/blackbox-bandits</a></p>
+<h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>我们研究了在黑盒环境下生成对抗样本的问题，在黑盒环境中，只有loss-oracle访问模型是可行的。我们介绍了一个框架，它在概念上统一了许多现有的关于黑盒攻击的工作，并且我们证明了当前最先进的方法在自然意义上是最优的。尽管存在这种最优化，我们还是展示了如何通过在问题中引入一个新的元素来改进黑盒攻击：梯度先验。我们给出了一个基于bandit优化的算法，它允许我们无缝地集成任何这样的先验，并且我们显式地识别并合并了两个例子。由此产生的方法使用的查询减少了2到4倍，失败的频率比当前的技术状态减少了2到5倍。  </p>
+<h3 id="1-引言"><a href="#1-引言" class="headerlink" title="1 引言"></a>1 引言</h3><p>最近的研究表明，神经网络对对抗样本或为愚弄网络预测而设计的略有扰动的输入表现出极大的脆弱性。此漏洞存在于各种设置中，从直接将输入馈送到分类器[SZS+14，CMV+16]的情况到高度可变的真实环境[KGB16，AEIK18]。研究人员已经开发了许多方法来构造此类攻击[GSS15，MFF，CW17，MMS+18]，其中大多数方法对应于一阶(即基于梯度的)方法。这些攻击被证明是非常有效的：在许多情况下，只有几个梯度步骤就足以构成对抗性扰动。<br>然而，许多此类攻击的一个重大缺陷是，它们从根本上依赖于白盒威胁模型。也就是说，它们关键是需要直接访问被攻击网络的分类损失的梯度。在许多实际情况下，期望这种完全访问是不现实的。在此类设置中，攻击者只能向目标网络发出分类查询，这对应于限制更严格的黑盒威胁模型。<br>最近的研究[CZS+17，BHLS17，IEA+18]为这种威胁模型提供了许多攻击。Chen et.al[CZS+17]展示了如何使用零阶优化的基本原语——有限差分方法来估计分类查询中的梯度，然后使用它(除了一些优化之外)来发动基于梯度的攻击。该方法确实成功地构建了对抗性扰动。然而，这是以在所需查询数量方面引入大量开销为代价的。例如，攻击ImageNet[RDS+15]分类器需要数十万个查询。后续工作[IEA+18]显著改善了这种依赖性，但仍不能完全缓解这个问题(更详细的分析请参见4.1节)。   </p>
+<h4 id="1-1-本文的贡献"><a href="#1-1-本文的贡献" class="headerlink" title="1.1 本文的贡献"></a>1.1 本文的贡献</h4><p>我们在生成对抗样本的背景下，从经验和理论的角度重新审视了零阶优化。我们提出了一种新的生成黑盒对抗样本的方法，利用bandit优化来利用关于梯度的先验信息，这是突破现有方法的最优性所必需的。我们在生成黑盒对抗样本的任务中评估了我们的方法，其中通过整合两个示例先验获得的方法显著优于最先进的方法。<br>具体地说，在这个工作中：<br>1、 我们将梯度估计问题形式化为查询有效黑盒攻击的核心问题。然后，我们将展示生成的框架如何统一先前的攻击方法。我们证明了信号处理中的经典原语最小二乘法不仅是一般梯度估计问题的最优解，而且本质上等价于现有的最佳黑盒攻击方法。<br>2、我们证明，尽管这些方法看起来是最优的，但我们仍然可以通过利用问题的一个方面来改进它们，这是以前没有考虑过的：梯度分布的先验信息。我们确定了这类先验的两个示例类，并表明它们确实导致了更好的梯度预测。<br>3、最后，我们开发了一个bandit优化框架，用于生成黑盒对抗样本，从而实现先验信息的无缝集成。为了证明其有效性，我们展示了利用上述两个先验知识产生的黑盒攻击，其查询效率是现有技术的2-5倍，并且不容易失败。</p>
+<p><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211003193514357.png" alt="image-20211003193514357"></p>
+<h3 id="2-黑盒攻击与梯度估计问题"><a href="#2-黑盒攻击与梯度估计问题" class="headerlink" title="2 黑盒攻击与梯度估计问题"></a>2 黑盒攻击与梯度估计问题</h3><p>对抗样本是机器学习系统的自然输入，在扰动程度的约束下(在某些度量下)，机器学习系统已经被仔细地扰动，以诱导系统的不当行为。对于图像分类器，这种错误行为可以是将其分类为不同于原始类别的特定类别(目标攻击)，也可以是错误分类(非目标攻击)。为简单起见，为了使总体框架的演示更有针对性，本文将我们的注意力限制在非定向攻击的的案例上。然而，我们的算法和整个框架都可以很容易地适应定向攻击设置。此外，我们还考虑了最标准的威胁模型，在该模型中，对抗性扰动必须具有$l_{p}$-范数，对于某些固定的p，小于某些$\epsilon_{p}$。  </p>
+<h4 id="2-1-一阶对抗攻击"><a href="#2-1-一阶对抗攻击" class="headerlink" title="2.1 一阶对抗攻击"></a>2.1 一阶对抗攻击</h4><p>设我们拥有分类器$C(x)$和对应的分类损失函数$L(x,y)$，其中$x$是一些输入，$y$是$x$对应的label。为了从某些输入-标签$(x,y)$生成使分类器分类错误的输入，我们想找到一个对抗样本$x’$，该对抗样本$x’$使得$L(x’,y)$最小，但是仍然与原图保持$\epsilon_{p}$以内的距离。因此，我们可以将对抗性攻击问题表示为以下约束优化任务：<br>   <img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211003201436906.png" alt="image-20211003201436906"><br>一阶方法尽管是非凸性的，但在解决问题时往往是非常成功的[GSS15，CW17，MMS+18]。一阶方法是投影梯度下降法(PGD)，它被用来作为一些最强大的针对$l_{p}$有界对抗的白盒攻击的骨干。该迭代方法在给定输入$x$及其正确标签$y$的情况下，通过应用以下$k$个步骤来更新计算扰动的输入$x_{k}$。(其中 $x_{0}=x$)<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211003201955752.png" alt="image-20211003201955752"><br>其中，$\Pi_{S}$是在集合$S$上的投影，$B_{p}(x’,\epsilon ‘)$是以$x’$为球心、$\epsilon ‘$为半径的$l_{p}$球，$\eta$是步长大小，$\partial U$是集合U的边界。同样，按照连续优化的标准，我们将$s_{l}$设为在$x_{l-1}$处梯度$\nabla_{x}L(x_{l-1},y)$在单位球$l_{p}$上的投影。这样，我们可以确保$s_{l}$对应于单位$l_{p}$范式向量，该向量和$\nabla_{x}L(x_{l-1},y)$的内积最大。（注意，在$l_{2}$范式情况下，$s_{l}$只是归一化梯度，但在$l_{\infty}$范式情况下，$s_{l}$对应于符号向量，梯度的$sgn(\nabla_{x}L(x_{l-1},y))$)。<br>因此，直观地说，PGD更新会使输入朝着(局部)增加损失最大的方向扰动。注意，由于（1)中的投影，如所希望的那样，$x_{k}$总是$x$的有效扰动。</p>
+<h3 id="2-2-黑盒对抗攻击"><a href="#2-2-黑盒对抗攻击" class="headerlink" title="2.2 黑盒对抗攻击"></a>2.2 黑盒对抗攻击</h3><p>上述投影梯度下降(PGD)方法被设计用于所谓的白盒攻击的设置中。也就是说，在对手完全访问被攻击模型的损失函数 的梯度$\nabla_{x}L(x,y)$的设置中。然而，在许多实际场景中，这种访问是不现实的。在更真实的黑盒设置中，对手只能访问针对给定输入(x，y)返回的Oracle，只能访问损失值$L(x,y)$。<br>因此，人们可能会认为PGD在这样的黑盒设置中没有用处。然而，事实证明，这种直觉是不正确的。具体地说，人们仍然可以仅使用这样的值查询来估计梯度。(事实上，这种估计器是所谓的零阶优化框架的支柱[SPA05]。)。在这种情况下，最规范的原语是有限差分法。该方法将某个函数$f$在向量$v$方向上的点$x$的方向导数$D_{v}f(x)=\left \langle\nabla_{x}f(x),v\right \rangle$估计为<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004165747138.png" alt="image-20211004165747138"></p>
+<p>这里，步长$δ&gt;0$控制梯度估计的精度。由于精度和噪声问题，较小的$δ$可以提供更准确的估计，但也会降低可靠性。因此，在实践中，$δ$是一个可调参数。现在，我们可以只使用有限差分来构造梯度的估计值。为此，我们可以通过估计梯度与所有标准基向量$e_{1},……,e_{d}$的内积来找到梯度的d个分量：<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004170358116.png" alt="image-20211004170358116"><br>然后我们可以很容易地使用这个估计器实现PGD攻击：<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004170516874.png" alt="image-20211004170516874"><br>事实上，[CZS+17]是第一个使用这种基本形式的有限差分方法在黑盒环境下支持基于PGD的对抗性攻击的。这一基本攻击被证明是成功的，但由于其查询复杂度与维度成正比，因此其结果查询复杂度高得令人望而却步。例如，ImageNet数据集上的Inception v3[SVI+]分类器的维度d=268,203，因此此方法需要268,204个查询。(然而，值得注意的是，[CZS+17]开发了额外的方法，至少部分降低了这种查询复杂性。)             </p>
+<h4 id="2-3-具有-不完全梯度估计-的黑盒攻击"><a href="#2-3-具有-不完全梯度估计-的黑盒攻击" class="headerlink" title="2.3 具有 不完全梯度估计 的黑盒攻击"></a>2.3 具有 不完全梯度估计 的黑盒攻击</h4><p>根据上面的讨论，人们可能想知道算法(4)是否可以使查询效率更高。在这里，一个自然的想法是避免完全估计梯度，而只依赖其不完美的估计器。这就产生了以下问题：执行成功的PGD攻击所需的梯度估计的精确度有多高？<br>我们首先在尽可能简单的情况下研究这个问题：在这种情况下，我们只采用一个的PGD步骤(即，K=1的情况)。以前的工作[GSS15]表明，这样的攻击可能已经相当强大了。因此，我们研究了这种攻击的有效性如何随梯度估计精度的变化而变化。我们的实验，如图1所示，表明在不正确估计梯度的大部分坐标的情况下生成的对抗样本是可行的。例如，在$l_{\infty}$攻击的情况下，将梯度中随机选择的20%的坐标设置为与真实梯度匹配（并使剩余的坐标具有随机符号）就足以利用单步PGD在超过60%的图像上欺骗分类器。因此，我们的实验表明，即使是在由基本上不完美的梯度估计驱动的情况下，对手也很可能通过执行迭代PGD攻击而导致误分类。</p>
+<p><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004170714465.png" alt="image-20211004170714465">    </p>
+<h4 id="2-4-梯度估计问题"><a href="#2-4-梯度估计问题" class="headerlink" title="2.4 梯度估计问题"></a>2.4 梯度估计问题</h4><p>上述讨论清楚地表明，成功的攻击不需要完美的梯度估计，只要该估计被适当地构造。然而，如何有效地找到这种不完美但有帮助的估计器仍然不清楚。连续优化方法表明，我们的估计器需要的关键特性是它与实际梯度的内积要足够大。因此，我们将这一挑战归结为以下梯度估计问题：<br>定义1 (梯度估计问题)：对于输入/标签$(x,y)$和损失函数，设 $g^{\star}=\nabla_{x}L(x,y)$ 为$L$在$(x，y)$处的梯度。然后，梯度估计问题的目标是从有限数量（可能是自适应的）函数值查询$L(x’,y’)$中找到最大化内积(5)的单位向量$\widehat g$。（这里的期望值取代了估计算法的随机性。）<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004201733463.png" alt="image-20211004201733463"> </p>
+<p>关于上述梯度估计问题的一个有用的观点源于将(5)中的$g^{\star}$的恢复作为一个欠定向量估计任务。也就是说，我们可以将有限差分法的每次执行视为计算一个内积查询，在这个查询中，我们获得$g^{\star}$的内积值和一些选定的方向向量$A_{i}$。现在，如果我们执行这样的查询，并且$k&lt;d$（这是我们感兴趣的机制），则在该过程中获得的信息可以表示为以下（欠定）线性回归问题$Ag^{\star}=y$，其中矩阵$A$的行对应于查询$A_{1},….,A_{k}$，并且向量y的项给我们相应的内积值。<br>与压缩感知的关系 我们开发的梯度估计问题的观点与压缩感知环境有惊人的相似之处[ FR13]。因此，人们可能会想，该领域的工具包是否可以在这里应用。然而，压缩传感关键地需要估计信号中的某些稀疏结构(这里，在梯度$g^{\star}$中)，并且据我们所知，损耗梯度不呈现这样的结构。(我们在附录B中对此进行了进一步讨论。)<br>最小二乘法 鉴于此，我们将注意力转向另一种经典的信号处理方法：norm-minimizing  $l_{2}$ least squares estimation（范数最小化的$l_{2}$最小二乘估计？）。该方法通过将（5）中提出的估计问题转换为形式为$Ag^{\star}=b$的待定线性回归问题来解决该问题，其中我们可以选择矩阵A（A的行对应于带$g^{\star}$的内积查询）然后，通过求解以下方程得到回归问题的解$\widehat g$：<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004204147463.png" alt="image-20211004204147463"><br>$A$（通过[JL84]和相关结果)的合理选择是保持距离的随机高斯投影矩阵，即$A_{ij}$正态分布。<br>由此产生的算法最终产生的解决方案与自然进化策略(NES)给出的解决方案大致相同，[IEA+18]以前将NES应用于黑盒攻击。特别地，在附录A中，我们证明了以下定理：<br>定理1 （NES和最小二乘等价性）进一步地，我们可以利用这种等价性证明[IEA+18]中提出的算法不仅是自然的，而且是最优的，因为最小二乘估计在$k=d$的情况下是信息论上最优的梯度估计，在$k&lt;&lt;d$的情况下是误差最小化的估计。<br>定理2 （最小二乘最优性(证明见附录A)）对于已知$A$和$y$、未知$g$，且为各向异性高斯误差的线性回归问题 $y=A\boldsymbol g$，最小二乘估计是在有限样本情况下有效的方法，即潜在向量$g$的最小方差无偏(MVU)估计。<br>定理3 （最小二乘优化）在欠定情况下，即当k &lt;&lt; d时，最小范数最小二乘估计(定理1中的$\hat x _{LSQ}$)是无经验损失的最小方差(因此也是最小误差，因为偏差是固定的)估计。</p>
+<h3 id="3-有先验（priors）的黑盒对抗攻击"><a href="#3-有先验（priors）的黑盒对抗攻击" class="headerlink" title="3  有先验（priors）的黑盒对抗攻击"></a>3  有先验（priors）的黑盒对抗攻击</h3><p>最小二乘的最优性强烈地表明我们已经达到了黑盒对抗攻击的查询效率的极限。但事实真的是这样吗？令人惊                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     讶的是，我们发现改进仍然是可能的。关键的观察是，我们建立的最小二乘最优性(根据定理1，[IEA+18]中的NES方法)只适用于梯度估计问题的最基本设置，在这种设置中，我们假设目标梯度是真正任意且完全未知的向量。<br>然而，在我们关心的背景下，这一假设并不成立—实际上有大量关于梯度的先验信息可用。<br>首先，我们计算梯度所依据的输入不是任意的，并且表现出局部可预测的结构，因此该结构反映在梯度中。<br>其次，当执行迭代梯度攻击(例如PGD)时，在连续迭代中使用的梯度可能是高度相关的。上述观察促使我们将先验信息作为梯度估计问题的一个整体元素来关注。具体来说，我们通过制定定义1的目标来加强定义1。<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004210208871.png" alt="image-20211004210208871"><br>这种观点上的变化引出了两个重要的问题：是否存在对我们有用的先验信息?是否存在一种利用这些信息的算法方法？我们发现这两个问题的答案都是肯定的。   </p>
+<h4 id="3-1-梯度先验"><a href="#3-1-梯度先验" class="headerlink" title="3.1 梯度先验"></a>3.1 梯度先验</h4><p>考虑对应于某一输入$(x,y)$的损失函数的梯度$\nabla_{x}L(x,y)$。是否存在可以从数据集$\left \{ x_{i} \right \}$中提取某种先验？特别是可以用作梯度预测的输入$(x,y)$。我们证明了事实确实是这样的，并给出了这类先验的两个例子。<br>时间相关先验  我们考虑的第一类先验是依赖于时间的先验，它的一个标准例子就是我们所说的“多步先验”。我们发现，沿着估计梯度所走的轨迹，连续的梯度实际上是高度相关的。我们通过沿着在每个点上运行NES估计器生成的优化路径采取步骤，并绘制由（8）给出的连续梯度之间的归一化内积(余弦相似性)来经验性地展示这一点。<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004211251804.png" alt="image-20211004211251804"><br>图2表明，连续的梯度之间确实存在很大的相关性—通常，连续步骤的梯度(使用[IEA+18]中的步长)的余弦相似度约为0.9。连续的梯度在步长较大时继续相关：附录B显示，即使步长为4.0时，趋势仍在继续(总摄动界ε的典型值)。这表明将这种相关性合并到我们的迭代优化中确实有潜在的好处。为了利用这一增益，我们打算使用时间t−1处的梯度作为时间t处梯度的先验，其中先验估计和梯度估计本身都随着迭代而演变。<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211004211425830.png" alt="image-20211004211425830"><br>数据相关先验 我们发现，上面讨论的时间相关的先验并不是这里可以利用的唯一类型的先验。也就是说，我们还可以使用输入本身的结构来降低查询复杂性(事实上，这种依赖于数据的先验的存在是机器学习成功的首要原因)。<br>在图像分类的情况下，数据相关先验信息的一个简单且被大量利用的例子源于这样一个事实，即图像倾向于显示空间上的局部相似性（即，邻近的像素往往很相似）。我们发现，这种相似性也延伸到了梯度：具体地说，当$\nabla_{x}L(x,y)$的两个坐标$(i,j)$和$(k,l)$接近时，我们期望$\nabla_{x}L(x,y)_{i,j}$和$\nabla_{x}L(x,y)_{k,l}$也接近。为了证实和量化这一现象，we compare $\nabla_{x}L(x,y)$ with an average-pooled, or “tiled”, version (with “tile length” $k$) of the same signal. 可以在附录B中看到这种平均模糊渐变的示例。更具体地说，我们对梯度应用核大小为$(k,k,1)$和步长为$(k,k,1)$的平均池化操作，然后将空间维数提升k，然后度量平均模糊梯度与梯度本身之间的余弦相似度。如图3所示，我们的结果表明，图像的梯度局部足够相似，以至于平均模糊梯度与实际梯度保持相对较高的余弦相似性，即使在平铺很大的情况下也是如此。我们的结果表明，我们可以将问题的维数降低$k^{2}$倍(对于相当大的k)，并且仍然可以估计指向与原始梯度相同方向的向量。正如我们稍后所展示的，这一因素会显著提高黑盒对抗性攻击性能。<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005144515168.png" alt="image-20211005144515168">      </p>
+<h4 id="3-2-有先验的梯度估计框架"><a href="#3-2-有先验的梯度估计框架" class="headerlink" title="3.2 有先验的梯度估计框架"></a>3.2 有先验的梯度估计框架</h4><p>鉴于这些梯度先验信息的可用性，我们现在需要一个框架，使我们能够轻松地将这些先验合并到我们构建的黑盒对抗攻击中。我们提出的方法建立在bandit优化（<em>bandit optimization</em>）的框架之上，bandit 优化 是在线凸优化（online convex optimization）的基本工具[HAZ]。在bandit优化框架中，代理（agent）玩一个由一系列回合（rounds）组成的游戏（game）。在第$t$回合中，代理必须选择一个有效的动作（action），然后由于执行该动作导致了一个损失，这个损失由损失函数$l_{t}(\cdot)$给出，且代理对这个损失函数未知。在执行完动作后，他/她只知道所选动作造成的损失值；损失函数是特定于回合$t$的，并且可以在回合之间任意改变。代理人的目标（goal）是将所有回合的平均损失降至最低，代理人的成功通常通过将总损失与事后最好的专家（best expert in hindsight）的损失进行比较来量化（最佳单一行动策略（the best single-action policy））。根据这种公式的性质，这个游戏的各个回合不能被视为独立的—为了很好地执行，代理需要跟踪一些潜在（latent）的记录，这些记录汇总了在一系列回合中学习到的信息。该潜在记录通常采取矢量的形式，该矢量$v_{t}$被约束到指定的(凸)集合$K$。正如我们将看到的，bandit优化框架的这一方面将为我们提供将先验信息合并到我们的梯度预测中的便利方式。</p>
+<p>bandit情况下的梯度估计综述 我们可以相当直接地将梯度估计问题归结为一个bandit优化问题。具体地说，我们假设$t$回合的动作（action）是估计梯度$g_{t}$(基于我们的潜在向量$v_{t}$)，损失值$l_{t}$和该预测（梯度）和实际梯度之间的(负)内积相关。注意，我们永远不能直接访问该损失函数$l_{t}$，但是我们能够通过有限差分法(2)估计其在特定预测向量$g_{t}$上的值(这是土匪优化框架要求我们能够做的全部工作)。<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005155815150.png" alt="image-20211005155815150"><br>正如损失函数$l_{t}$的这种选择允许我们量化梯度估计问题的性能一样，潜在向量$v_{t}$将允许我们通过算法将先验信息合并到我们的预测中。着眼于我们考虑的两个示例先验，时间相关的先验反映在：在不同点的梯度估计之间传递潜在向量。数据相关的先验反应在：强制潜在向量具有特定的结构。对于我们在上一节中量化的特定先验(图像的数据相相关的先验)，我们将简单地通过平均池化（average-pooling）(“tiling”)降低了潜在向量的维度，从而不需要额外的查询来辨别空间上接近的梯度分量。</p>
+<h4 id="3-3-在bandit框架中实现梯度估计"><a href="#3-3-在bandit框架中实现梯度估计" class="headerlink" title="3.3 在bandit框架中实现梯度估计"></a>3.3 在bandit框架中实现梯度估计</h4><p>现在，我们将更详细地描述我们的生成对抗样本的bandit框架。请注意，该算法是通用的，可以用来构造黑盒对抗样本，其中扰动被限制在任何凸集上($l_{2}$-norm约束是特例)。我们讨论了算法的一般形式，然后给出了明确应用于$l_{2}$和$l_{\infty}$的版本。<br>如前所述，该潜在向量 $v_{t} \in \mathcal{K}$用作对应回合$t$的梯度的先验。事实上，我们使我们的预测$g_{t}$恰好是$v_{t}$投影到适当的空间上，因此我们将$\mathcal{K}$设为有效对抗扰动空间的一个扩展。（例如，$l_{2}$样本的$\mathbb{R}^{n}$，$l_{\infty}$样本的$[-1,1]^{n}$）。我们的损失函数$l_{t}$被定义为：<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005192157711.png" alt="image-20211005192157711"><br>对于给定的梯度估计$g$，我们通过有限差分得到内积。这里，$L(x,y)$是具有真实类别$y$的图像$x$上的分类损失。<br>因此，我们算法的关键将是更新潜在向量$v_{t}$的方法。我们将在这里改编经典的“reduction from bandit information”[HAZ]。具体地说，我们的更新过程由梯度$\nabla_{v}l_{t}(v)$的估计器$\Delta_{t}$和一阶更新步骤$\mathcal{A}\left(\mathcal{K} \times \mathbb{R}^{\operatorname{dim}(\mathcal{K})} \rightarrow \mathcal{K}\right)$参数化，一阶更新步骤$\mathcal{A}\left(\mathcal{K} \times \mathbb{R}^{\operatorname{dim}(\mathcal{K})} \rightarrow \mathcal{K}\right)$将潜在向量$v_{t}$和$l_{t}$关于$v_{t}$的估计梯度(记为$\Delta_{t}$)映射到新的潜在向量$v_{t+1}$。由此得到的通用算法为算法1。<br>这一段好绕。。。。麻木了就是    输入$v_{t}$和$\Delta_{t}$，经过一阶更新步骤$\mathcal{A}$，输出$v_{t+1}$  是吗？<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005193900044.png" alt="image-20211005193900044"></p>
+<p><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005193631005.png" alt="image-20211005193631005">  </p>
+<p>在我们的设置中，我们将损失$l$的梯度$-\nabla_{v}\langle\nabla L(x, y), v\rangle$的估计量$\Delta$设为标准球面梯度估计量(见 [Haz])。我们对期望值进行两次查询估计，并采用对偶抽样，结果估计值被计算为<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005195303212.png" alt="image-20211005195303212"></p>
+<p>其中，$\boldsymbol{u}$是从$\mathcal{N}(0,\frac{1}{d}I)$采样的高斯向量。从给定当前潜在向量$v$、输入$x$和初始标签$y$来计算梯度估计算法是算法2。<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005195740097.png" alt="image-20211005195740097"><br>这里的一个关键点是，上述的梯度估计量$\Delta_{t}$（用来参数化bandit reduction）与第2.4节中定义的“梯度估计问题”没有直接关系。它是bandit优化中更新潜向量$v_{t}$的一种通用机制。是动作$g_{t}$(等于$v_{t}$)为2.4节中的梯度估计问题提供了建议的解决方案。<br>一旦已知凸集$\mathcal{K}$，更新规则$\mathcal{A}$的选择就趋于自然。对于$\mathcal{K}=\mathcal{R}^{n}$，我们可以简单地使用梯度上升：<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005200706608.png" alt="image-20211005200706608"><br>并且当约束为$l_{\infty}$边界时(即$\mathcal{K}=[−1，1]^{n}$)时，指数梯度(EG)更新：<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005200926475.png" alt="image-20211005200926475"></p>
+<p>最后，为了将我们的梯度估计算法转化为构造黑盒对抗样本的有效方法，我们将迭代梯度估计算法与图像本身的迭代更新交织在一起，使用$g_{t}$的边界投影来代替梯度(试比较公式1)。这产生了一种通用的、高效的、优先利用的算法，用于构建黑盒对抗样本。在$l_{2}$-约束情况下得到的算法如算法3所示：<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005201454618.png" alt="image-20211005201454618"></p>
+<h3 id="实验和评估"><a href="#实验和评估" class="headerlink" title="实验和评估"></a>实验和评估</h3><p>我们评估了我们在第3节中描述的bandit方法和[IEA+18]的自然进化策略(NES)方法在生成非定向对抗样本方面的有效性。我们从成功率和查询复杂性两个方面考虑ImageNet[RDS+15]数据集上的$l_{2}$和$l_{\infty}$攻击模型。我们给出了对Inception-v3、RESNET-50和VGG16分类器的攻击结果。我们进一步研究了每种方法在优化轨迹上的损失和梯度估计质量。在评估我们的方法时，我们既测试了带时间先验的bandit方法(BanditsT)，又测试了带数据和时间先验的bandit方法。我们使用10,000张随机选择的图像(缩放到$[0,1]$)来评估所有方法。对于NES、BanditsT和BanditsTD，我们通过网格搜索找到了超参数(见附录C以及实验参数)。</p>
+<h4 id="4-1-结果"><a href="#4-1-结果" class="headerlink" title="4.1 结果"></a>4.1 结果</h4><p>对于ImageNet，我们在表1($l_{2}$和$l_{\infty}$扰动约束)中记录了两种威胁模型中不同方法的有效性，其中我们显示了为Inception-v3分类器生成对抗样本所需的攻击成功率和(成功攻击的)平均查询数(附录E中的其他分类器的结果)。对于所有攻击，我们将攻击者限制在最多10,000个Oracle查询。如表1所示，在$l_{2}$和$l_{\infty}$设置下，我们的数据依赖和时间优先的bandit框架(BanditsTD)分别比以前的现有技术状态(NES[IEA+18])的故障发生率低6倍和3倍。尽管成功率更高，但我们的方法实际上使用的查询数大约是NES的一半。特别地，当限于NES成功生成对抗样本的输入时，对于$l_{2}$和$l_{\infty}$设置，我们的攻击分别是查询效率的2.5倍和5倍。<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005202144496.png" alt="image-20211005202144496"><br>我们还进一步量化了我们的方法在黑盒攻击和梯度估计方面的性能。具体地说，在达到一定的成功率(图4a)之后，我们首先测量每次成功的平均查询数，这表明查询计数对期望的成功率的依赖性。<br><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005202222890.png" alt="image-20211005202222890"><br>数据显示，对于任何固定的成功率，我们的方法都比NES更高效，并且(由于指数趋势)表明，对于更高的成功率，这种差异可能会被放大。然后我们绘制分类器随时间的损失(在所有图像上平均)，以及在$l_{2}$和$l_{\infty}$两种情况下在梯度估计问题上的性能(关键是，这直接对应于我们在(7)中最大化的期望)。我们在图4中显示了$l_{\infty}$的这三个曲线图，并在附录D中显示了$l_{2}$的结果(非常相似)，同时还显示了 CDFs，它们显示了每个方法作为查询限制函数的成功性。我们发现在两种威胁模型的每一个度量上，我们的方法在性能上严格优于其他方法。</p>
+<p><img src="/2021/10/05/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/image-20211005202429841.png" alt="image-20211005202429841"></p>
+<h3 id="5-最近的工作"><a href="#5-最近的工作" class="headerlink" title="5 最近的工作"></a>5 最近的工作</h3><h3 id="6-总结"><a href="#6-总结" class="headerlink" title="6 总结"></a>6 总结</h3><p>我们对黑箱对抗攻击提出了一个新的、统一的观点。这种观点将此类攻击的构造视为梯度估计问题。我们证明了一个标准的最小二乘估计既能捕捉到现有的最先进的黑盒对抗攻击方法，而且在某种自然意义上，实际上是问题的最佳解决方案。然后，我们通过考虑问题的一个以前未被探索的方面来打破这种优化所造成的障碍：存在大量关于梯度的额外先验信息，可以利用这些信息成功发起对抗攻击。我们确定了这类先验的两个例子：“时间相关”先验：对应于在相似输入下评估的梯度的相似性；的“数据相关”先验：源于输入空间中存在的潜在结构。最后，我们开发了一种针对黑盒对抗攻击的bandit优化方法，该方法允许无缝集成此类先验信息。由此产生 的框架显著优于最先进的方法，在成功率和查询效率方面实现了2到6倍的改进。因此，我们的结果为寻找构建更有效的黑盒对抗攻击的先验信息开辟了一条新的途径。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AF%B9%E6%A0%B7%E6%A0%B7%E6%9C%AC/" rel="tag"># 对样样本</a>
+          
+            <a href="/tags/%E9%BB%91%E7%9B%92%E6%94%BB%E5%87%BB/" rel="tag"># 黑盒攻击</a>
+          
+            <a href="/tags/%E5%9F%BA%E4%BA%8E%E5%88%86%E6%95%B0/" rel="tag"># 基于分数</a>
+          
+            <a href="/tags/Adversarial-examples/" rel="tag"># Adversarial examples</a>
+          
+            <a href="/tags/black-attack/" rel="tag"># black-attack</a>
+          
+            <a href="/tags/score-based/" rel="tag"># score-based</a>
+          
+            <a href="/tags/%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91/" rel="tag"># 文献翻译</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/10/02/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Sign-Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/" rel="next" title="【算法】Sign-Opt Attack算法手稿">
+                <i class="fa fa-chevron-left"></i> 【算法】Sign-Opt Attack算法手稿
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/10/07/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Prior-Convictions%E2%80%94%E2%80%94Black-Box-Adversarial-Attacks-with-Bandits-and-Priors/" rel="prev" title="【文献笔记】Prior-Convictions——Black-Box-Adversarial-Attacks-with-Bandits-and-Priors">
+                【文献笔记】Prior-Convictions——Black-Box-Adversarial-Attacks-with-Bandits-and-Priors <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原文链接及源码链接"><span class="nav-number">1.</span> <span class="nav-text">原文链接及源码链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要"><span class="nav-number">2.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-引言"><span class="nav-number">3.</span> <span class="nav-text">1 引言</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-本文的贡献"><span class="nav-number">3.1.</span> <span class="nav-text">1.1 本文的贡献</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-黑盒攻击与梯度估计问题"><span class="nav-number">4.</span> <span class="nav-text">2 黑盒攻击与梯度估计问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-一阶对抗攻击"><span class="nav-number">4.1.</span> <span class="nav-text">2.1 一阶对抗攻击</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-黑盒对抗攻击"><span class="nav-number">5.</span> <span class="nav-text">2.2 黑盒对抗攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-具有-不完全梯度估计-的黑盒攻击"><span class="nav-number">5.1.</span> <span class="nav-text">2.3 具有 不完全梯度估计 的黑盒攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-梯度估计问题"><span class="nav-number">5.2.</span> <span class="nav-text">2.4 梯度估计问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-有先验（priors）的黑盒对抗攻击"><span class="nav-number">6.</span> <span class="nav-text">3  有先验（priors）的黑盒对抗攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-梯度先验"><span class="nav-number">6.1.</span> <span class="nav-text">3.1 梯度先验</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-有先验的梯度估计框架"><span class="nav-number">6.2.</span> <span class="nav-text">3.2 有先验的梯度估计框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-在bandit框架中实现梯度估计"><span class="nav-number">6.3.</span> <span class="nav-text">3.3 在bandit框架中实现梯度估计</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验和评估"><span class="nav-number">7.</span> <span class="nav-text">实验和评估</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-结果"><span class="nav-number">7.1.</span> <span class="nav-text">4.1 结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-最近的工作"><span class="nav-number">8.</span> <span class="nav-text">5 最近的工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-总结"><span class="nav-number">9.</span> <span class="nav-text">6 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

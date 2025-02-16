@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="刷题," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="01背包-2维 https:&#x2F;&#x2F;programmercarl.com&#x2F;%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-1.html  可以理解 123456789101112# 1.定义dp数组，明确dp[i][j]的含义：# 从下标为[0-i]的物品里任意取，放进容量为j的背包，价值总和最大为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【刷题DAY41】背包, 416.md">
+<meta property="og:url" content="http://yoursite.com/2023/02/24/%E3%80%90%E5%88%B7%E9%A2%98DAY41%E3%80%91%E8%83%8C%E5%8C%85,%20416/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="01背包-2维 https:&#x2F;&#x2F;programmercarl.com&#x2F;%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-1.html  可以理解 123456789101112# 1.定义dp数组，明确dp[i][j]的含义：# 从下标为[0-i]的物品里任意取，放进容量为j的背包，价值总和最大为">
+<meta property="article:published_time" content="2023-02-24T15:02:24.000Z">
+<meta property="article:modified_time" content="2023-02-27T03:33:44.000Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="刷题">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2023/02/24/【刷题DAY41】背包, 416/"/>
+
+
+
+
+
+  <title>【刷题DAY41】背包, 416.md | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/02/24/%E3%80%90%E5%88%B7%E9%A2%98DAY41%E3%80%91%E8%83%8C%E5%8C%85,%20416/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【刷题DAY41】背包, 416.md</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-02-24T23:02:24+08:00">
+                2023-02-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%83%8C%E5%8C%85/" itemprop="url" rel="index">
+                    <span itemprop="name">背包</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="01背包-2维"><a href="#01背包-2维" class="headerlink" title="01背包-2维"></a>01背包-2维</h3><ul>
+<li><p><a href="https://programmercarl.com/%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-1.html" target="_blank" rel="noopener">https://programmercarl.com/%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-1.html</a></p>
+</li>
+<li><p>可以理解</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 1.定义dp数组，明确dp<span class="comment">[i]</span><span class="comment">[j]</span>的含义：</span><br><span class="line"># 从下标为<span class="comment">[0-i]</span>的物品里任意取，放进容量为j的背包，价值总和最大为 dp<span class="comment">[i]</span><span class="comment">[j]</span>。</span><br><span class="line"># 2.确定转移公式，</span><br><span class="line"># dp<span class="comment">[i]</span><span class="comment">[j]</span> 从dp<span class="comment">[i-1]</span><span class="comment">[j]</span>来</span><br><span class="line"># 当物品i的重量大于j，放不进来，保持原状 dp<span class="comment">[i-1]</span><span class="comment">[j]</span></span><br><span class="line"># 否则，dp<span class="comment">[i]</span><span class="comment">[j]</span> = max(dp<span class="comment">[i-1]</span><span class="comment">[j]</span>,dp<span class="comment">[i - 1]</span><span class="comment">[j - weight<span class="comment">[i]</span>]</span> + value<span class="comment">[i]</span>)</span><br><span class="line"># dp<span class="comment">[i - 1]</span><span class="comment">[j - weight<span class="comment">[i]</span>]</span> + value<span class="comment">[i]</span>) j - weight<span class="comment">[i]</span>，预留出物品i的重量，放进i，并则增加i的value</span><br><span class="line"># 3.dp数组的初始化</span><br><span class="line"># dp<span class="comment">[i]</span><span class="comment">[0]</span>=0,dp<span class="comment">[0]</span><span class="comment">[j]</span> i为0，存放编号0的物品的时候，各个容量的背包所能存放的最大价值。 j &lt; weight<span class="comment">[0]</span>的时候，dp<span class="comment">[0]</span><span class="comment">[j]</span> 应该是 0;当j &gt;= weight<span class="comment">[0]</span>时，dp<span class="comment">[0]</span><span class="comment">[j]</span> 应该是value<span class="comment">[0]</span></span><br><span class="line"># 4.确定遍历顺序</span><br><span class="line"># 从转移公式看，是从前向后遍历的，可以先遍历物品再遍历重量</span><br><span class="line"># 5.举例推导dp数组</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="0x5-今日收获，记录一下自己的学习时长"><a href="#0x5-今日收获，记录一下自己的学习时长" class="headerlink" title="0x5 今日收获，记录一下自己的学习时长"></a>0x5 今日收获，记录一下自己的学习时长</h4><ul>
+<li>1h</li>
+</ul>
+<hr>
+<h3 id="01背包问题-一维"><a href="#01背包问题-一维" class="headerlink" title="01背包问题 一维"></a>01背包问题 一维</h3><p><a href="https://programmercarl.com/%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-2.html" target="_blank" rel="noopener">https://programmercarl.com/%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-2.html</a></p>
+<ul>
+<li>遍历顺序不好理解</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1.定义dp数组，明确dp[j]的含义：</span></span><br><span class="line"><span class="comment"># 容量为j的背包，所背的物品价值可以最大为dp[j]</span></span><br><span class="line"><span class="comment"># 2.确定转移公式，</span></span><br><span class="line"><span class="comment"># dp[j]有两个选择，一个是取自己dp[j] 相当于 二维dp数组中的dp[i-1][j]，即不放物品i，一个是取dp[j - weight[i]] + value[i]，即放物品i，指定是取最大的</span></span><br><span class="line">dp[j] = max(dp[j], dp[j - weight[i]] + value[i])</span><br><span class="line"><span class="comment"># 3.dp数组的初始化</span></span><br><span class="line"><span class="comment"># dp数组在推导的时候一定是取价值最大的数，如果题目给的价值都是正整数那么非0下标都初始化为0就可以了</span></span><br><span class="line"><span class="comment"># 这样才能让dp数组在递归公式的过程中取的最大的价值，而不是被初始值覆盖了</span></span><br><span class="line"><span class="comment"># 4.确定遍历顺序</span></span><br><span class="line"><span class="comment"># 物品遍历的for循环放在外层，遍历背包的for循环放在内层，且内层for循环倒序遍历！</span></span><br><span class="line"><span class="comment"># 倒序遍历是为了保证物品i只被放入一次！从后往前循环，每次取得状态不会和之前取得状态重合，这样每种物品就只取一次了。</span></span><br><span class="line"><span class="keyword">for</span>(int i = <span class="number">0</span>; i &lt; weight.size(); i++) &#123; // 遍历物品</span><br><span class="line"><span class="keyword">for</span>(int j = bagWeight; j &gt;= weight[i]; j--) &#123; // 遍历背包容量</span><br><span class="line">    dp[j] = max(dp[j], dp[j - weight[i]] + value[i]);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 5.举例推导dp数组</span></span><br></pre></td></tr></table></figure>
+<h4 id="0x5-今日收获，记录一下自己的学习时长-1"><a href="#0x5-今日收获，记录一下自己的学习时长-1" class="headerlink" title="0x5 今日收获，记录一下自己的学习时长"></a>0x5 今日收获，记录一下自己的学习时长</h4><ul>
+<li>1h</li>
+</ul>
+<hr>
+<h3 id="416-分割等和子集"><a href="#416-分割等和子集" class="headerlink" title="416. 分割等和子集"></a>416. 分割等和子集</h3><p>题目链接：<a href="https://leetcode.cn/problems/partition-equal-subset-sum/" target="_blank" rel="noopener">https://leetcode.cn/problems/partition-equal-subset-sum/</a></p>
+<h4 id="0x1-看到题目的第一想法"><a href="#0x1-看到题目的第一想法" class="headerlink" title="0x1 看到题目的第一想法"></a>0x1 看到题目的第一想法</h4><h4 id="0x2-自己实现过程中遇到哪些困难"><a href="#0x2-自己实现过程中遇到哪些困难" class="headerlink" title="0x2 自己实现过程中遇到哪些困难"></a>0x2 自己实现过程中遇到哪些困难</h4><ul>
+<li>一维遍历顺序</li>
+</ul>
+<h4 id="0x3-今日学习的文章链接，或者视频链接"><a href="#0x3-今日学习的文章链接，或者视频链接" class="headerlink" title="0x3 今日学习的文章链接，或者视频链接"></a>0x3 今日学习的文章链接，或者视频链接</h4><ul>
+<li><a href="https://programmercarl.com/0416.分割等和子集.html#" target="_blank" rel="noopener">https://programmercarl.com/0416.分割等和子集.html#</a></li>
+</ul>
+<h4 id="0x4-看完代码随想录之后的想法"><a href="#0x4-看完代码随想录之后的想法" class="headerlink" title="0x4 看完代码随想录之后的想法"></a>0x4 看完代码随想录之后的想法</h4><ul>
+<li>dp[j]表示 背包总容量（所能装的总重量）是j，放进物品后，背的最大重量为dp[j]</li>
+<li>dp[j] = max(dp[j], dp[j - nums[i]] + nums[i])</li>
+<li>如果使用一维dp数组，物品遍历的for循环放在外层，遍历背包的for循环放在内层，且内层for循环倒序遍历<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 开始 <span class="number">01</span>背包</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(nums)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(target, nums[i] - <span class="number">1</span>, <span class="number">-1</span>):</span><br><span class="line">                dp[j] = max(dp[j], dp[j - nums[i]] + nums[i])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="0x5-今日收获，记录一下自己的学习时长-2"><a href="#0x5-今日收获，记录一下自己的学习时长-2" class="headerlink" title="0x5 今日收获，记录一下自己的学习时长"></a>0x5 今日收获，记录一下自己的学习时长</h4><ul>
+<li>1h</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>01背包的一维和二维实现</li>
+</ul>
+<h3 id="复习"><a href="#复习" class="headerlink" title="复习"></a>复习</h3><ul>
+<li>day13 <ul>
+<li>二叉树的前中后序遍历</li>
+</ul>
+</li>
+</ul>
+<h3 id="待重点复习"><a href="#待重点复习" class="headerlink" title="待重点复习"></a>待重点复习</h3><p>416</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%88%B7%E9%A2%98/" rel="tag"># 刷题</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2023/02/23/%E3%80%90%E5%88%B7%E9%A2%98DAY40%E3%80%91343,%2096/" rel="next" title="【刷题DAY40】343, 96.md">
+                <i class="fa fa-chevron-left"></i> 【刷题DAY40】343, 96.md
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2023/02/25/%E3%80%90%E5%88%B7%E9%A2%98DAY42%E3%80%911049,%20494,%20474/" rel="prev" title="【刷题DAY42】1049, 494, 474.md">
+                【刷题DAY42】1049, 494, 474.md <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#01背包-2维"><span class="nav-number">1.</span> <span class="nav-text">01背包-2维</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x5-今日收获，记录一下自己的学习时长"><span class="nav-number">1.1.</span> <span class="nav-text">0x5 今日收获，记录一下自己的学习时长</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#01背包问题-一维"><span class="nav-number">2.</span> <span class="nav-text">01背包问题 一维</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x5-今日收获，记录一下自己的学习时长-1"><span class="nav-number">2.1.</span> <span class="nav-text">0x5 今日收获，记录一下自己的学习时长</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#416-分割等和子集"><span class="nav-number">3.</span> <span class="nav-text">416. 分割等和子集</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x1-看到题目的第一想法"><span class="nav-number">3.1.</span> <span class="nav-text">0x1 看到题目的第一想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x2-自己实现过程中遇到哪些困难"><span class="nav-number">3.2.</span> <span class="nav-text">0x2 自己实现过程中遇到哪些困难</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x3-今日学习的文章链接，或者视频链接"><span class="nav-number">3.3.</span> <span class="nav-text">0x3 今日学习的文章链接，或者视频链接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x4-看完代码随想录之后的想法"><span class="nav-number">3.4.</span> <span class="nav-text">0x4 看完代码随想录之后的想法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x5-今日收获，记录一下自己的学习时长-2"><span class="nav-number">3.5.</span> <span class="nav-text">0x5 今日收获，记录一下自己的学习时长</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复习"><span class="nav-number">5.</span> <span class="nav-text">复习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#待重点复习"><span class="nav-number">6.</span> <span class="nav-text">待重点复习</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

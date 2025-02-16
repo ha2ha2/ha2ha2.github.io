@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="pwn," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x00:1234567891011121314151617181920#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include&lt;string.h&gt;int	main()&amp;#123;	fprintf(stderr,	&quot;Allocating	3	buffers.\n&quot;);	char *a	&#x3D; malloc(9);	char *b	&#x3D; m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.fastbin_dup">
+<meta property="og:url" content="http://yoursite.com/2019/03/01/2.fastbin_dup/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="0x00:1234567891011121314151617181920#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;#include&lt;string.h&gt;int	main()&amp;#123;	fprintf(stderr,	&quot;Allocating	3	buffers.\n&quot;);	char *a	&#x3D; malloc(9);	char *b	&#x3D; m">
+<meta property="article:published_time" content="2019-02-28T16:00:01.000Z">
+<meta property="article:modified_time" content="2021-09-19T05:52:56.000Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/01/2.fastbin_dup/"/>
+
+
+
+
+
+  <title>2.fastbin_dup | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/01/2.fastbin_dup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2.fastbin_dup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-01T00:00:01+08:00">
+                2019-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index">
+                    <span itemprop="name">pwn</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00"><a href="#0x00" class="headerlink" title="0x00:"></a>0x00:</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span>	<span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"Allocating	3	buffers.\n"</span>);</span><br><span class="line">	<span class="keyword">char</span> *a	= <span class="built_in">malloc</span>(<span class="number">9</span>);</span><br><span class="line">	<span class="keyword">char</span> *b	= <span class="built_in">malloc</span>(<span class="number">9</span>);</span><br><span class="line">	<span class="keyword">char</span> *c	= <span class="built_in">malloc</span>(<span class="number">9</span>);</span><br><span class="line">	<span class="built_in">strcpy</span>(a,<span class="string">"AAAAAAAA"</span>);</span><br><span class="line">	<span class="built_in">strcpy</span>(b,<span class="string">"BBBBBBBB"</span>);</span><br><span class="line">	<span class="built_in">strcpy</span>(c,<span class="string">"CCCCCCCC"</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"1st malloc(9) %p points to %s\n"</span>,a,a);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"2nd malloc(9) %p points to %s\n"</span>,b,b);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"3rd malloc(9) %p points to %s\n"</span>,c,c);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"Freeing the first one %p.\n"</span>,	a);</span><br><span class="line">	<span class="built_in">free</span>(a);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"Then freeing another one %p.\n"</span>,	b);</span><br><span class="line">	<span class="built_in">free</span>(b);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"Freeing the first one %p again.\n"</span>,a);</span><br><span class="line">	<span class="built_in">free</span>(a);</span><br></pre></td></tr></table></figure>
+<p>接上<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"Allocating	3 buffers.\n"</span>);</span><br><span class="line">	<span class="keyword">char</span> *d	= <span class="built_in">malloc</span>(<span class="number">9</span>);</span><br><span class="line">	<span class="keyword">char</span> *e	= <span class="built_in">malloc</span>(<span class="number">9</span>);</span><br><span class="line">	<span class="keyword">char</span> *f	= <span class="built_in">malloc</span>(<span class="number">9</span>);</span><br><span class="line">	<span class="built_in">strcpy</span>(d,<span class="string">"DDDDDDDD"</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"4st	malloc(9)	%p	points to %s the first time\n"</span>,d,d);</span><br><span class="line">	<span class="built_in">strcpy</span>(e,<span class="string">"EEEEEEEE"</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"5nd malloc(9) %p points to %s\n"</span>,e,e);</span><br><span class="line">	<span class="built_in">strcpy</span>(f,<span class="string">"FFFFFFFF"</span>);</span><br><span class="line">	<span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,	<span class="string">"6rd malloc(9) %p points to %s the second time\n"</span>,f,f);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>源代码中可以看出， 在前面把a free了两遍。  </p>
+</blockquote>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">user<span class="variable">@ubuntu</span><span class="symbol">:~/workspace/pwn/fastbin_dup</span><span class="variable">$ </span>vim fastbin_dup.c </span><br><span class="line">user<span class="variable">@ubuntu</span><span class="symbol">:~/workspace/pwn/fastbin_dup</span><span class="variable">$ </span>gcc -g fastbin_dup.c -o fastbin_dup</span><br><span class="line">user<span class="variable">@ubuntu</span><span class="symbol">:~/workspace/pwn/fastbin_dup</span><span class="variable">$ </span>./fastbin_dup </span><br><span class="line">Allocating	<span class="number">3</span>	buffers.</span><br><span class="line"><span class="number">1</span>st malloc(<span class="number">9</span>) <span class="number">0x6f4010</span> points to AAAAAAAA</span><br><span class="line"><span class="number">2</span>nd malloc(<span class="number">9</span>) <span class="number">0x6f4030</span> points to BBBBBBBB</span><br><span class="line"><span class="number">3</span>rd malloc(<span class="number">9</span>) <span class="number">0x6f4050</span> points to CCCCCCCC</span><br><span class="line">Freeing the first one <span class="number">0x6f4010</span>.</span><br><span class="line">Then freeing another one <span class="number">0x6f4030</span>.</span><br><span class="line">Freeing the first one <span class="number">0x6f4010</span> again.</span><br><span class="line">Allocating	<span class="number">3</span> buffers.</span><br><span class="line"><span class="number">4</span>st	malloc(<span class="number">9</span>)	<span class="number">0x6f4010</span>	points to DDDDDDDD the first time</span><br><span class="line"><span class="number">5</span>nd malloc(<span class="number">9</span>) <span class="number">0x6f4030</span> points to EEEEEEEE</span><br><span class="line"><span class="number">6</span>rd malloc(<span class="number">9</span>) <span class="number">0x6f4010</span> points to FFFFFFFF the second time</span><br><span class="line">user<span class="variable">@ubuntu</span><span class="symbol">:~/workspace/pwn/fastbin_dup</span>$</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>==这个程序展示了利用fastbins的double-free攻击，可以泄漏出一块已经被分配的内存指针。fastbins可以看成一个LIFO的栈，使用单链表实现，通过    fastbin-&gt;fd来遍历fastbins。由于    free的过程会对free list做检查，我们不能连续两次free同一个chunk，所以这里在两次free之间，增加了一次对其他chunk的free    过程，从而绕过检查顺利执行。然后再malloc三次，就在同一个地址malloc了两次，也就有了两个指向同一块内存区域的指针。==</p>
+</blockquote>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*	Check that the top of the bin is not the record we are going to add</span></span><br><span class="line"><span class="comment">    (i.e.,	double	free).		*/</span></span><br><span class="line">    <span class="keyword">if</span><span class="comment">(__builtin_expect	(old == p, 0)</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		errstr = <span class="string">"double free or corruption (fasttop)"</span>;</span><br><span class="line">		<span class="keyword">goto</span> errout;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x01-三次malloc后"><a href="#0x01-三次malloc后" class="headerlink" title="0x01:三次malloc后"></a>0x01:三次malloc后</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x602060</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x602000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602020</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602040</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fa1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602060</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fa1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">pwndbg&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="0x02-free-a"><a href="#0x02-free-a" class="headerlink" title="0x02:free(a)"></a>0x02:free(a)</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x602060</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x602000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602020</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4242424242424242</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602040</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4343434343434343</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fa1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602060</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fa1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x602000</span> <span class="string">◂—</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">pwndbg&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>被free后，fd 原本被填充的AAAAAAAA被清零，这个chunk也被加入到fastbins中。</p>
+</blockquote>
+<p>但是这个chunk a被free后，并==没有使chunk b的pre_size和size的pre_inuse改变==，不像上一篇的first_fit那个free后chunk b的字段被改变，也没放到unsorted bins中，而是被放到了fastbins中</p>
+<h3 id="0x03-free-b"><a href="#0x03-free-b" class="headerlink" title="0x03:free(b)"></a>0x03:free(b)</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x602060</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x602000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602020</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x602000</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602040</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4343434343434343</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fa1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602060</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fa1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x602020</span> <span class="string">—▸</span> <span class="number">0x602000</span> <span class="string">◂—</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">pwndbg&gt;</span></span><br></pre></td></tr></table></figure>
+<p>==chunk b被放入fastbins中，成为新的表头，chunk b的fd字段里存着上一个chunk的地址，即chunk a 的地址：0x602000==</p>
+<h3 id="0x04-free-a"><a href="#0x04-free-a" class="headerlink" title="0x04:free(a)"></a>0x04:free(a)</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x602060</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x602000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x602020</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602020</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x602000</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602040</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4343434343434343</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fa1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602060</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fa1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x602000</span> <span class="string">—▸</span> <span class="number">0x602020</span> <span class="string">◂—</span> <span class="number">0x602000</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">pwndbg&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>又再次free了 a，此时fastbins的表头变成了chunk a的地址，即0x602000，它的fd里的值是上一个表头里的值，即chunk b的地址，即0x602020。chunk b里的fd值依旧是 chunk a 的值。形成了一个闭环 a -&gt; b -&gt; a </p>
+</blockquote>
+<h3 id="0x05-malloc"><a href="#0x05-malloc" class="headerlink" title="0x05:malloc"></a>0x05:malloc</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *d	= <span class="built_in">malloc</span>(<span class="number">9</span>);</span><br><span class="line"><span class="keyword">char</span> *e	= <span class="built_in">malloc</span>(<span class="number">9</span>);</span><br><span class="line"><span class="keyword">char</span> *f	= <span class="built_in">malloc</span>(<span class="number">9</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x602060</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x602000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x602020</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602020</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x602000</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602040</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4343434343434343</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fa1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602060</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fa1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x602020</span> <span class="string">—▸</span> <span class="number">0x602000</span> <span class="string">◂—</span> <span class="number">0x602020</span> <span class="string">/*</span> <span class="string">'  `'</span> <span class="string">*/</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">pwndbg&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="0x06"><a href="#0x06" class="headerlink" title="0x06:"></a>0x06:</h3><figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strcpy(<span class="name">d</span>,<span class="string">"DDDDDDDD"</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x602060</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x602000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4444444444444444</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602020</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x602000</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602040</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4343434343434343</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fa1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602060</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fa1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bisn</span></span><br><span class="line"><span class="attr">Undefined command:</span> <span class="string">"bisn"</span><span class="string">.</span>  <span class="string">Try</span> <span class="string">"help"</span><span class="string">.</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x602020</span> <span class="string">—▸</span> <span class="number">0x602000</span> <span class="string">◂—</span> <span class="string">'DDDDDDDD'</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strcpy(<span class="name">e</span>,<span class="string">"EEEEEEEE"</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x602060</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x602000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4444444444444444</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602020</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4545454545454545</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602040</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4343434343434343</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fa1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602060</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fa1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x602020</span> <span class="string">◂—</span> <span class="string">'EEEEEEEE'</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">pwndbg&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strcpy(<span class="name">f</span>,<span class="string">"FFFFFFFF"</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">heap</span></span><br><span class="line"><span class="attr">Top Chunk:</span> <span class="number">0x602060</span></span><br><span class="line"><span class="attr">Last Remainder:</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x602000</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4646464646464646</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602020</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4545454545454545</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x21</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602040</span> <span class="string">FASTBIN</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x21</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x4343434343434343</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x20fa1</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="number">0x602060</span> <span class="string">PREV_INUSE</span> <span class="string">&#123;</span></span><br><span class="line">  <span class="string">prev_size</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">size</span> <span class="string">=</span> <span class="number">0x20fa1</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">fd_nextsize</span> <span class="string">=</span> <span class="number">0x0</span><span class="string">,</span> </span><br><span class="line">  <span class="string">bk_nextsize</span> <span class="string">=</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">pwndbg&gt;</span> <span class="string">bins</span></span><br><span class="line"><span class="string">fastbins</span></span><br><span class="line"><span class="attr">0x20:</span> <span class="number">0x602020</span> <span class="string">◂—</span> <span class="string">'EEEEEEEE'</span></span><br><span class="line"><span class="attr">0x30:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x40:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x50:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x60:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x70:</span> <span class="number">0x0</span></span><br><span class="line"><span class="attr">0x80:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">unsortedbin</span></span><br><span class="line"><span class="attr">all:</span> <span class="number">0x0</span></span><br><span class="line"><span class="string">smallbins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">largebins</span></span><br><span class="line"><span class="string">empty</span></span><br><span class="line"><span class="string">pwndbg&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里把chunk a原来的”DDDDDDDD”覆盖为”FFFFFFFF”,即是说d指针与f指针指向同一个chunk mem处。</p>
+<blockquote>
+<p>所以通过double-free可以泄露出一个chunk的指针。  </p>
+</blockquote>
+<hr>
+<blockquote>
+<p>总结：<br>double-free的触发是：==连续==free==同==一个chunk。<br>可以通过double-free泄漏出一个堆块的指针。指向同一个内存区域的指针。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/pwn/" rel="tag"># pwn</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/01/first_fit%20other%20test/" rel="next" title="first_fit other test">
+                <i class="fa fa-chevron-left"></i> first_fit other test
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/01/3.fastbin_dup_into_stack/" rel="prev" title="3.fastbin_dup_into_stack">
+                3.fastbin_dup_into_stack <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00"><span class="nav-number">1.</span> <span class="nav-text">0x00:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-三次malloc后"><span class="nav-number">2.</span> <span class="nav-text">0x01:三次malloc后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-free-a"><span class="nav-number">3.</span> <span class="nav-text">0x02:free(a)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-free-b"><span class="nav-number">4.</span> <span class="nav-text">0x03:free(b)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-free-a"><span class="nav-number">5.</span> <span class="nav-text">0x04:free(a)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-malloc"><span class="nav-number">6.</span> <span class="nav-text">0x05:malloc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06"><span class="nav-number">7.</span> <span class="nav-text">0x06:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

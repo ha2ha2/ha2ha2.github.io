@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>  
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="文献笔记,对样样本,黑盒攻击,Adversarial examples,black-attack,硬标签,hard-label," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1807.04457源码：https:&#x2F;&#x2F;github.com&#x2F;LeMinhThong&#x2F;blackbox-attack     以前的工作Boundary Attack边界攻击，是基于边界上的随机游走。      以前工作的不足需要大量查询，没有收敛保证。    提出的新方法将硬标签黑盒攻击描述为一个实值优化问题，这个问题通常是连">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【文献笔记】Query Efficient Hard label Black box_Attack An Optimization-based Approach">
+<meta property="og:url" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/index.html">
+<meta property="og:site_name" content="ha2&#39;s blog">
+<meta property="og:description" content="原文链接及源码链接原文：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1807.04457源码：https:&#x2F;&#x2F;github.com&#x2F;LeMinhThong&#x2F;blackbox-attack     以前的工作Boundary Attack边界攻击，是基于边界上的随机游走。      以前工作的不足需要大量查询，没有收敛保证。    提出的新方法将硬标签黑盒攻击描述为一个实值优化问题，这个问题通常是连">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924202729702.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924203834716.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924203934558.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924204512418-16328771944511.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924204631925.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924205054515.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924214527286.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210925100529342.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210925125607962.png">
+<meta property="og:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210925125633088.png">
+<meta property="article:published_time" content="2021-09-24T12:37:32.000Z">
+<meta property="article:modified_time" content="2025-02-16T04:32:29.313Z">
+<meta property="article:author" content="ha2">
+<meta property="article:tag" content="文献笔记">
+<meta property="article:tag" content="对样样本">
+<meta property="article:tag" content="黑盒攻击">
+<meta property="article:tag" content="Adversarial examples">
+<meta property="article:tag" content="black-attack">
+<meta property="article:tag" content="硬标签">
+<meta property="article:tag" content="hard-label">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924202729702.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/09/24/【文献笔记】Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/"/>
+
+
+
+
+
+  <title>【文献笔记】Query Efficient Hard label Black box_Attack An Optimization-based Approach | ha2's blog</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ha2's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">（٩（๑>◡<๑）۶）</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ha2">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ha2's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【文献笔记】Query Efficient Hard label Black box_Attack An Optimization-based Approach</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-24T20:37:32+08:00">
+                2021-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/" itemprop="url" rel="index">
+                    <span itemprop="name">对抗样本</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AF%B9%E6%8A%97%E6%A0%B7%E6%9C%AC/ICLR-2019/" itemprop="url" rel="index">
+                    <span itemprop="name">ICLR 2019</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="原文链接及源码链接"><a href="#原文链接及源码链接" class="headerlink" title="原文链接及源码链接"></a>原文链接及源码链接</h3><p>原文：<a href="https://arxiv.org/abs/1807.04457" target="_blank" rel="noopener">https://arxiv.org/abs/1807.04457</a><br>源码：<a href="https://github.com/LeMinhThong/blackbox-attack" target="_blank" rel="noopener">https://github.com/LeMinhThong/blackbox-attack</a>    </p>
+<h3 id="以前的工作"><a href="#以前的工作" class="headerlink" title="以前的工作"></a>以前的工作</h3><p>Boundary Attack边界攻击，是基于边界上的随机游走。     </p>
+<h3 id="以前工作的不足"><a href="#以前工作的不足" class="headerlink" title="以前工作的不足"></a>以前工作的不足</h3><p>需要大量查询，没有收敛保证。   </p>
+<h3 id="提出的新方法"><a href="#提出的新方法" class="headerlink" title="提出的新方法"></a>提出的新方法</h3><p>将硬标签黑盒攻击描述为一个实值优化问题，这个问题通常是连续的，可以用任何零阶优化算法来求解。    </p>
+<h3 id="之前失败的原因"><a href="#之前失败的原因" class="headerlink" title="之前失败的原因"></a>之前失败的原因</h3><p>梯度不能通过反向传播直接计算；<br>由于只观察到硬标签判决，攻击目标函数变得不连续，输出是离散的，很难优化。</p>
+<h3 id="现在具体工作"><a href="#现在具体工作" class="headerlink" title="现在具体工作"></a>现在具体工作</h3><p>开发了一个基于优化的框架，我们通过将硬标签黑盒攻击转化为一个新的实值优化问题，使硬标签黑盒攻击成为可能并提高查询效率，实值优化问题通常是连续的且更容易解决。此外，我们证明了只要边界光滑，通过仔细控制函数计算的数值精度，随机无梯度(RGF)方法可以收敛到固定点。</p>
+<h3 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h3><p>MNIST、CIFAR和ImageNet上对硬标签黑盒CNN模型进行攻击.    </p>
+<h3 id="硬标签（hard-label）黑盒攻击难度："><a href="#硬标签（hard-label）黑盒攻击难度：" class="headerlink" title="硬标签（hard-label）黑盒攻击难度："></a>硬标签（hard-label）黑盒攻击难度：</h3><p>具体地说，攻击者只知道最终判决(TOP-1预测标签)而不是概率输出。<br>在这种情况下进攻是非常具有挑战性的。在图1a中，我们显示了一个简单的三层神经网络的决策边界。请注意，如图1b所示，因为logit层输出是实值函数，$\mathscr{L}(Z(\boldsymbol{x}))$项是连续的。但是，在硬标签黑盒设置中，只有$f(\cdot)$可用而$Z(x)$不可用。由于$f(\cdot)$只能是one-hot向量，如果将$f$带入损失函数，则$\mathscr{L}(f(\boldsymbol{x}))$（如图1c所示）将是不连续的并且具有离散的输出。<br><img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924202729702.png" alt="image-20210924202729702"></p>
+<h3 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h3><p>对于一个给定的样本$x_{0}$、真实的标签$y_{0}$、硬标签黑盒函数$f: \mathbb{R}^{d} \rightarrow\{1, \ldots, K\}$，我们根据攻击类型定义了目标函数$g: \mathbb{R}^{d} \rightarrow \R$。<br>非定向攻击：<img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924203834716.png" alt="image-20210924203834716"><br>定向攻击（给定目标t）：<img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924203934558.png" alt="image-20210924203934558"><br>在这个公式中，θ表示搜索方向，g(θ)是沿θ方向从$x_{0}$到最近的对抗性样本的距离。对于无目标攻击，g(θ)也对应于沿$\theta$方向到决策边界的距离。在图像问题中，f的输入域是有界的，因此我们将在(4)和(5)的定义中添加相应的上下界。<br>不搜索对抗性样本，而是搜索方向θ来最小化失真g(θ)，这个导致了以下优化问题：<br> <img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924204512418-16328771944511.png" alt="\min _{\boldsymbol{\theta}}"><br>  最后，通过<img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924204631925.png" alt="image-20210924204631925">找到对抗样本，其中$θ^{*}$是（6)的最优解。<br>  注意！与C&amp;W或PGD目标函数不同，C&amp;W或PGD目标函数在硬标签设置中是不连续的阶跃函数（见第2节)，但是Opt-Attack中的g(θ)将输入方向映射到实值输出（到决策边界的距离)，这通常是连续的，θ的微小变化通常会导致g(θ)的微小变化，如图2所示。<br> <img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924205054515.png" alt="image-20210924205054515">   </p>
+<p>举例：定义在二维输入空间中的f(x)及其对应的g(θ)的三个例子。在这种情况下，如图3c所示，g(θ)是连续的。此外，在图3b和图1a中，我们显示了GBDT和神经网络分类器生成的决策边界，这两个边界不是连续的。然而，如图3d和图1d所示，即使分类器函数不是连续的，g(θ)仍然是连续的。这使得应用零阶法求解（6）变得容易。<br><img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210924214527286.png" alt="image-20210924214527286"><br>在这里，对于g(θ)函数，我们不能求g的梯度，但是可以对原始函数f使用硬标签查询来计算g(θ)的近似函数值。    </p>
+<p>g(θ)函数值的求法：通过细粒度搜索找到边界的大概区域，然后通过二分查找在该区域中找到近似解。   </p>
+<p>零阶优化：对于只能求函数值而不能求梯度的最佳化问题，可以自然地应用零阶优化算法。 在这里，作者建议使用文献[2，18]中提出的随机无梯度(RGF)方法来求解方程(1)。<br>    <img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210925100529342.png" alt="image-20210925100529342">    </p>
+<p>综上：<br><img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210925125607962.png" alt="image-20210925125607962"></p>
+<p><img src="/2021/09/24/%E3%80%90%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0%E3%80%91Query-Efficient-Hard-label-Black-box-Attack-An-Optimization-based-Approach/image-20210925125633088.png" alt="image-20210925125633088"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%96%87%E7%8C%AE%E7%AC%94%E8%AE%B0/" rel="tag"># 文献笔记</a>
+          
+            <a href="/tags/%E5%AF%B9%E6%A0%B7%E6%A0%B7%E6%9C%AC/" rel="tag"># 对样样本</a>
+          
+            <a href="/tags/%E9%BB%91%E7%9B%92%E6%94%BB%E5%87%BB/" rel="tag"># 黑盒攻击</a>
+          
+            <a href="/tags/Adversarial-examples/" rel="tag"># Adversarial examples</a>
+          
+            <a href="/tags/black-attack/" rel="tag"># black-attack</a>
+          
+            <a href="/tags/%E7%A1%AC%E6%A0%87%E7%AD%BE/" rel="tag"># 硬标签</a>
+          
+            <a href="/tags/hard-label/" rel="tag"># hard-label</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/09/21/%E3%80%90%E6%96%87%E7%8C%AE%E7%BF%BB%E8%AF%91%E3%80%91Query%20Efficient%20Hard%20label%20Black%20box_Attack%20An%20Optimization-based%20Approach/" rel="next" title="【文献翻译】Query Efficient Hard label Black box_Attack An Optimization-based Approach">
+                <i class="fa fa-chevron-left"></i> 【文献翻译】Query Efficient Hard label Black box_Attack An Optimization-based Approach
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/09/27/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91Opt-Attack%E7%AE%97%E6%B3%95%E6%89%8B%E7%A8%BF/" rel="prev" title="【算法】Opt-Attack算法手稿">
+                【算法】Opt-Attack算法手稿 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">ha2</p>
+              <p class="site-description motion-element" itemprop="description">什么都可以不会，但不能学不会。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">101</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                我大佬们
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://f1aming.github.io/" title="f1aming" target="_blank">f1aming</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.hunya.io/" title="昏鸦" target="_blank">昏鸦</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原文链接及源码链接"><span class="nav-number">1.</span> <span class="nav-text">原文链接及源码链接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以前的工作"><span class="nav-number">2.</span> <span class="nav-text">以前的工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以前工作的不足"><span class="nav-number">3.</span> <span class="nav-text">以前工作的不足</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提出的新方法"><span class="nav-number">4.</span> <span class="nav-text">提出的新方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#之前失败的原因"><span class="nav-number">5.</span> <span class="nav-text">之前失败的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#现在具体工作"><span class="nav-number">6.</span> <span class="nav-text">现在具体工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验"><span class="nav-number">7.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬标签（hard-label）黑盒攻击难度："><span class="nav-number">8.</span> <span class="nav-text">硬标签（hard-label）黑盒攻击难度：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法："><span class="nav-number">9.</span> <span class="nav-text">算法：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ha2</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
